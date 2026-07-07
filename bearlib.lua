@@ -1249,7 +1249,7 @@ function bearlib:MakeWindow(Configs)
     
     local InfoFrame = Create("Frame", Screen, {
         Active = true,
-        Size = UDim2.fromOffset(320, 210),
+        Size = UDim2.fromOffset(320, 300), -- Tăng chiều cao từ 210 lên 300
         Position = UDim2.fromScale(0.5, 0.5),
         AnchorPoint = Vector2.new(0.5, 0.5),
         ZIndex = 200
@@ -1257,7 +1257,7 @@ function bearlib:MakeWindow(Configs)
     Make("Gradient", InfoFrame, 270)
     Make("Corner", InfoFrame, UDim.new(0, 12))
     
-    -- Đã xóa các TextLabel ở đây
+    -- Đã xóa các TextLabel
     
     local CloseBtn = Create("ImageButton", InfoFrame, {
         Size = UDim2.new(0, 16, 0, 16),
