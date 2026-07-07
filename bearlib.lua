@@ -1235,146 +1235,93 @@ function bearlib:MakeWindow(Configs)
     })
 
     InfoButton.Activated:Connect(function()
-        if MainFrame:FindFirstChild("InfoFrame") then return end
-        
-        local Screen = InsertTheme(Create("Frame", MainFrame, {
-            BackgroundTransparency = 0.6,
-            Active = true,
-            Size = UDim2.new(1, 0, 1, 0),
-            BackgroundColor3 = Theme["Color Stroke"],
-            Name = "InfoFrame",
-            ZIndex = 150
-        }), "Stroke")
-        ApplyRoundedCorners(Screen, UDim.new(0, 12))
-        
-        local InfoFrame = Create("Frame", Screen, {
-            Active = true,
-            Size = UDim2.fromOffset(320, 210),
-            Position = UDim2.fromScale(0.5, 0.5),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            ZIndex = 200
+    if MainFrame:FindFirstChild("InfoFrame") then return end
+    
+    local Screen = InsertTheme(Create("Frame", MainFrame, {
+        BackgroundTransparency = 0.6,
+        Active = true,
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundColor3 = Theme["Color Stroke"],
+        Name = "InfoFrame",
+        ZIndex = 150
+    }), "Stroke")
+    ApplyRoundedCorners(Screen, UDim.new(0, 12))
+    
+    local InfoFrame = Create("Frame", Screen, {
+        Active = true,
+        Size = UDim2.fromOffset(320, 210),
+        Position = UDim2.fromScale(0.5, 0.5),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        ZIndex = 200
+    })
+    Make("Gradient", InfoFrame, 270)
+    Make("Corner", InfoFrame, UDim.new(0, 12))
+    
+    -- Đã xóa các TextLabel ở đây
+    
+    local CloseBtn = Create("ImageButton", InfoFrame, {
+        Size = UDim2.new(0, 16, 0, 16),
+        Position = UDim2.new(1, -12, 0, 12),
+        AnchorPoint = Vector2.new(1, 0),
+        BackgroundTransparency = 1,
+        Image = "rbxassetid://10747384394",
+        ImageColor3 = Theme["Color Text"],
+        AutoButtonColor = false,
+        ZIndex = 201
+    })
+    
+    -- Đã xóa Divider
+    
+    local ButtonsHolder = Create("Frame", InfoFrame, {
+        Size = UDim2.fromScale(1, 0.25),
+        Position = UDim2.fromScale(0, 1),
+        AnchorPoint = Vector2.new(0, 1),
+        BackgroundColor3 = Theme["Color Hub 2"],
+        BackgroundTransparency = 1,
+        ZIndex = 201
+    }, {
+        Create("UIListLayout", {
+            Padding = UDim.new(0, 10),
+            VerticalAlignment = "Center",
+            FillDirection = "Horizontal",
+            HorizontalAlignment = "Center"
         })
-        Make("Gradient", InfoFrame, 270)
-        Make("Corner", InfoFrame, UDim.new(0, 12))
-        
-        InsertTheme(Create("TextLabel", InfoFrame, {
-            Font = Enum.Font.GothamBold,
-            Size = UDim2.new(1, 0, 0, 25),
-            Text = "📘 Bear Library",
-            TextXAlignment = "Left",
-            TextColor3 = Theme["Color Text"],
-            TextSize = 18,
-            Position = UDim2.fromOffset(15, 8),
-            BackgroundTransparency = 1,
-            ZIndex = 201
-        }), "Text")
-        
-        local CloseBtn = Create("ImageButton", InfoFrame, {
-            Size = UDim2.new(0, 16, 0, 16),
-            Position = UDim2.new(1, -12, 0, 12),
-            AnchorPoint = Vector2.new(1, 0),
-            BackgroundTransparency = 1,
-            Image = "rbxassetid://10747384394",
-            ImageColor3 = Theme["Color Text"],
-            AutoButtonColor = false,
-            ZIndex = 201
-        })
-        
-        InsertTheme(Create("TextLabel", InfoFrame, {
-            Font = Enum.Font.GothamMedium,
-            Size = UDim2.new(1, -25, 0, 20),
-            Text = "⚡ Version: " .. (bearlib.Info.Version or "0.1.1"),
-            TextXAlignment = "Left",
-            TextColor3 = Theme["Color Dark Text"],
-            TextSize = 13,
-            Position = UDim2.fromOffset(15, 38),
-            BackgroundTransparency = 1,
-            ZIndex = 201
-        }), "DarkText")
-        
-        InsertTheme(Create("TextLabel", InfoFrame, {
-            Font = Enum.Font.GothamMedium,
-            Size = UDim2.new(1, -25, 0, 20),
-            Text = "👤 Made by: " .. (bearlib.Info.By or "Quang Huy"),
-            TextXAlignment = "Left",
-            TextColor3 = Theme["Color Dark Text"],
-            TextSize = 13,
-            Position = UDim2.fromOffset(15, 60),
-            BackgroundTransparency = 1,
-            ZIndex = 201
-        }), "DarkText")
-        
-        local Divider = Create("Frame", InfoFrame, {
-            Size = UDim2.new(0.9, 0, 0, 1),
-            Position = UDim2.new(0.05, 0, 0, 85),
-            BackgroundColor3 = Theme["Color Stroke"],
-            BackgroundTransparency = 0.5,
-            ZIndex = 201
-        })
-        
-        InsertTheme(Create("TextLabel", InfoFrame, {
-            Font = Enum.Font.Gotham,
-            Size = UDim2.new(0.9, -15, 0, 45),
-            Position = UDim2.new(0.05, 0, 0, 92),
-            Text = "A modern UI library for Roblox scripts. Easy to use with beautiful design.",
-            TextXAlignment = "Left",
-            TextColor3 = Theme["Color Dark Text"],
-            TextSize = 12,
-            BackgroundTransparency = 1,
-            TextWrapped = true,
-            ZIndex = 201
-        }), "DarkText")
-        
-        local ButtonsHolder = Create("Frame", InfoFrame, {
-            Size = UDim2.fromScale(1, 0.25),
-            Position = UDim2.fromScale(0, 1),
-            AnchorPoint = Vector2.new(0, 1),
-            BackgroundColor3 = Theme["Color Hub 2"],
-            BackgroundTransparency = 1,
-            ZIndex = 201
-        }, {
-            Create("UIListLayout", {
-                Padding = UDim.new(0, 10),
-                VerticalAlignment = "Center",
-                FillDirection = "Horizontal",
-                HorizontalAlignment = "Center"
-            })
-        })
-        
-        local OkButton = Make("Button", ButtonsHolder, {
-            Text = "OK",
-            Font = Enum.Font.GothamBold,
-            TextColor3 = Theme["Color Text"],
-            TextSize = 12,
-            Size = UDim2.new(0.6, 0, 0, 32),
-            ZIndex = 202
-        })
-        Make("Corner", OkButton, UDim.new(0, 8))
-        
-        local function CloseInfo()
-            Screen:Destroy()
-        end
-        
-        CloseBtn.Activated:Connect(CloseInfo)
-        OkButton.Activated:Connect(CloseInfo)
-        
-        Screen.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                local mousePos = input.Position
-                local framePos = InfoFrame.AbsolutePosition
-                local frameSize = InfoFrame.AbsoluteSize
-                
-                local isInside = mousePos.X >= framePos.X and 
-                                mousePos.X <= framePos.X + frameSize.X and
-                                mousePos.Y >= framePos.Y and
-                                mousePos.Y <= framePos.Y + frameSize.Y
-                
-                if not isInside then
-                    CloseInfo()
-                end
+    })
+    
+    local OkButton = Make("Button", ButtonsHolder, {
+        Text = "OK",
+        Font = Enum.Font.GothamBold,
+        TextColor3 = Theme["Color Text"],
+        TextSize = 12,
+        Size = UDim2.new(0.6, 0, 0, 32),
+        ZIndex = 202
+    })
+    Make("Corner", OkButton, UDim.new(0, 8))
+    
+    local function CloseInfo()
+        Screen:Destroy()
+    end
+    
+    CloseBtn.Activated:Connect(CloseInfo)
+    OkButton.Activated:Connect(CloseInfo)
+    
+    Screen.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local mousePos = input.Position
+            local framePos = InfoFrame.AbsolutePosition
+            local frameSize = InfoFrame.AbsoluteSize
+            
+            local isInside = mousePos.X >= framePos.X and 
+                            mousePos.X <= framePos.X + frameSize.X and
+                            mousePos.Y >= framePos.Y and
+                            mousePos.Y <= framePos.Y + frameSize.Y
+            
+            if not isInside then
+                CloseInfo()
             end
-        end)
+        end
     end)
+end)
 
     SetChildren(ButtonsFolder, {
         CloseButton,
