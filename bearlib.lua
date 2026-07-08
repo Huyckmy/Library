@@ -1247,9 +1247,17 @@ function bearlib:MakeWindow(Configs)
     }), "Stroke")
     ApplyRoundedCorners(Screen, UDim.new(0, 12))
     
+    -- Lấy kích thước UI hiện tại
+    local uiWidth = MainFrame.Size.X.Offset
+    local uiHeight = MainFrame.Size.Y.Offset
+    
+    -- Khung chiếm 80% chiều rộng và 60% chiều cao UI
+    local frameWidth = math.min(uiWidth * 0.8, 400)
+    local frameHeight = math.min(uiHeight * 0.6, 280)
+    
     local InfoFrame = Create("Frame", Screen, {
         Active = true,
-        Size = UDim2.fromOffset(380, 220), -- Giảm từ 350 xuống 220
+        Size = UDim2.fromOffset(frameWidth, frameHeight),
         Position = UDim2.fromScale(0.5, 0.5),
         AnchorPoint = Vector2.new(0.5, 0.5),
         ClipsDescendants = true,
@@ -1257,6 +1265,7 @@ function bearlib:MakeWindow(Configs)
     })
     Make("Gradient", InfoFrame, 270)
     Make("Corner", InfoFrame, UDim.new(0, 12))
+    Make("Stroke", InfoFrame, nil, Theme["Color Stroke"], 1.5)
     
     local CloseBtn = Create("ImageButton", InfoFrame, {
         Size = UDim2.new(0, 20, 0, 20),
@@ -1269,7 +1278,7 @@ function bearlib:MakeWindow(Configs)
         ZIndex = 201
     })
     
-    -- ScrollingFrame để cuộn khi có nhiều card
+    -- ScrollContainer
     local ScrollContainer = Create("ScrollingFrame", InfoFrame, {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -1288,14 +1297,13 @@ function bearlib:MakeWindow(Configs)
             PaddingBottom = UDim.new(0, 8)
         }),
         Create("UIListLayout", {
-            Padding = UDim.new(0, 8)
+            Padding = UDim.new(0, 6)
         })
     })
     
-    -- Card nhỏ gọn hơn (giảm chiều cao từ 65 xuống 55)
     local function MakeCard(Title, Desc, Logo, Invite)
         local Holder = Create("Frame", ScrollContainer, {
-            Size = UDim2.new(1, 0, 0, 55),
+            Size = UDim2.new(1, 0, 0, 58),
             BackgroundTransparency = 1
         })
         
@@ -1342,7 +1350,7 @@ function bearlib:MakeWindow(Configs)
         })
         
         local Btn = Create("TextButton", Frame, {
-            Size = UDim2.new(0, 60, 0, 16),
+            Size = UDim2.new(0, 55, 0, 16),
             AnchorPoint = Vector2.new(1, 1),
             Position = UDim2.new(1, -6, 1, -6),
             Text = "Copy",
@@ -1363,9 +1371,10 @@ function bearlib:MakeWindow(Configs)
         end)
     end
     
-    -- Chỉ 2 card để khung không bị dài
+    -- Thêm card
     MakeCard("Bear Library", "Support server", "rbxassetid://76571437829227", "https://discord.gg/bearlib")
     MakeCard("Roblox Studio", "Scripting tips", "rbxassetid://10709752907", "https://discord.gg/roblox")
+    MakeCard("Game Dev", "Connect with devs", "rbxassetid://10709791437", "https://discord.gg/gamedev")
     
     CloseBtn.Activated:Connect(function() Screen:Destroy() end)
     
