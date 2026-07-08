@@ -1251,9 +1251,9 @@ function bearlib:MakeWindow(Configs)
     local uiWidth = MainFrame.Size.X.Offset
     local uiHeight = MainFrame.Size.Y.Offset
     
-    -- Khung chiếm 80% chiều rộng và 60% chiều cao UI
-    local frameWidth = math.min(uiWidth * 0.8, 400)
-    local frameHeight = math.min(uiHeight * 0.6, 280)
+    -- Khung rộng 80% và cao 80% UI
+    local frameWidth = uiWidth * 0.8
+    local frameHeight = uiHeight * 0.8
     
     local InfoFrame = Create("Frame", Screen, {
         Active = true,
@@ -1267,9 +1267,22 @@ function bearlib:MakeWindow(Configs)
     Make("Corner", InfoFrame, UDim.new(0, 12))
     Make("Stroke", InfoFrame, nil, Theme["Color Stroke"], 1.5)
     
+    -- Tiêu đề
+    Create("TextLabel", InfoFrame, {
+        Size = UDim2.new(1, -40, 0, 28),
+        Position = UDim2.new(0, 15, 0, 8),
+        Font = Enum.Font.GothamBold,
+        Text = "📌 Discord Servers",
+        TextColor3 = Theme["Color Text"],
+        TextSize = 15,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1,
+        ZIndex = 201
+    })
+    
     local CloseBtn = Create("ImageButton", InfoFrame, {
         Size = UDim2.new(0, 20, 0, 20),
-        Position = UDim2.new(1, -10, 0, 10),
+        Position = UDim2.new(1, -12, 0, 12),
         AnchorPoint = Vector2.new(1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://10747384394",
@@ -1280,7 +1293,8 @@ function bearlib:MakeWindow(Configs)
     
     -- ScrollContainer
     local ScrollContainer = Create("ScrollingFrame", InfoFrame, {
-        Size = UDim2.new(1, 0, 1, 0),
+        Size = UDim2.new(1, 0, 1, -40),
+        Position = UDim2.new(0, 0, 0, 40),
         BackgroundTransparency = 1,
         ScrollBarThickness = 3,
         ScrollBarImageColor3 = Theme["Color Theme"],
@@ -1375,6 +1389,8 @@ function bearlib:MakeWindow(Configs)
     MakeCard("Bear Library", "Support server", "rbxassetid://76571437829227", "https://discord.gg/bearlib")
     MakeCard("Roblox Studio", "Scripting tips", "rbxassetid://10709752907", "https://discord.gg/roblox")
     MakeCard("Game Dev", "Connect with devs", "rbxassetid://10709791437", "https://discord.gg/gamedev")
+    MakeCard("Scripting Help", "Get help with Lua", "rbxassetid://15637081879", "https://discord.gg/scripting")
+    MakeCard("UI Design", "Design tips", "rbxassetid://10734950309", "https://discord.gg/ui")
     
     CloseBtn.Activated:Connect(function() Screen:Destroy() end)
     
