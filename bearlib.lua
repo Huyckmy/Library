@@ -1251,8 +1251,8 @@ function bearlib:MakeWindow(Configs)
     local uiWidth = MainFrame.Size.X.Offset
     local uiHeight = MainFrame.Size.Y.Offset
     
-    -- Khung rộng 80% và cao 80% UI
-    local frameWidth = uiWidth * 0.8
+    -- Khung rộng 60% và cao 80% UI
+    local frameWidth = uiWidth * 0.6
     local frameHeight = uiHeight * 0.8
     
     local InfoFrame = Create("Frame", Screen, {
