@@ -1249,19 +1249,18 @@ function bearlib:MakeWindow(Configs)
     
     local InfoFrame = Create("Frame", Screen, {
         Active = true,
-        Size = UDim2.fromOffset(320, 300), -- Tăng chiều cao từ 210 lên 300
+        Size = UDim2.fromOffset(380, 350),
         Position = UDim2.fromScale(0.5, 0.5),
         AnchorPoint = Vector2.new(0.5, 0.5),
+        ClipsDescendants = true,
         ZIndex = 200
     })
     Make("Gradient", InfoFrame, 270)
     Make("Corner", InfoFrame, UDim.new(0, 12))
     
-    -- Đã xóa các TextLabel
-    
     local CloseBtn = Create("ImageButton", InfoFrame, {
-        Size = UDim2.new(0, 16, 0, 16),
-        Position = UDim2.new(1, -12, 0, 12),
+        Size = UDim2.new(0, 20, 0, 20),
+        Position = UDim2.new(1, -10, 0, 10),
         AnchorPoint = Vector2.new(1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://10747384394",
@@ -1270,40 +1269,161 @@ function bearlib:MakeWindow(Configs)
         ZIndex = 201
     })
     
-    -- Đã xóa Divider
-    
-    local ButtonsHolder = Create("Frame", InfoFrame, {
-        Size = UDim2.fromScale(1, 0.25),
-        Position = UDim2.fromScale(0, 1),
-        AnchorPoint = Vector2.new(0, 1),
-        BackgroundColor3 = Theme["Color Hub 2"],
+    -- Tạo ScrollingFrame để chứa nhiều Discord cards
+    local ScrollContainer = InsertTheme(Create("ScrollingFrame", InfoFrame, {
+        Size = UDim2.new(1, 0, 1, -55),
+        Position = UDim2.new(0, 0, 0, 0),
         BackgroundTransparency = 1,
-        ZIndex = 201
+        ScrollBarThickness = 3,
+        ScrollBarImageColor3 = Theme["Color Theme"],
+        ScrollBarImageTransparency = 0.3,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        AutomaticCanvasSize = "Y",
+        ScrollingDirection = "Y",
+        BorderSizePixel = 0,
+        ZIndex = 2
     }, {
+        Create("UIPadding", {
+            PaddingLeft = UDim.new(0, 10),
+            PaddingRight = UDim.new(0, 10),
+            PaddingTop = UDim.new(0, 10),
+            PaddingBottom = UDim.new(0, 10)
+        }),
         Create("UIListLayout", {
-            Padding = UDim.new(0, 10),
-            VerticalAlignment = "Center",
-            FillDirection = "Horizontal",
-            HorizontalAlignment = "Center"
+            Padding = UDim.new(0, 8),
+            SortOrder = "LayoutOrder"
         })
-    })
+    }), "ScrollBar")
     
-    local OkButton = Make("Button", ButtonsHolder, {
-        Text = "OK",
-        Font = Enum.Font.GothamBold,
-        TextColor3 = Theme["Color Text"],
-        TextSize = 12,
-        Size = UDim2.new(0.6, 0, 0, 32),
-        ZIndex = 202
-    })
-    Make("Corner", OkButton, UDim.new(0, 8))
+    -- Hàm tạo Discord Card giống DiscordInviteOld
+    local function CreateDiscordCard(Title, Desc, Logo, Invite, LayoutOrder)
+        local InviteHolder = Create("Frame", ScrollContainer, {
+            Size = UDim2.new(1, 0, 0, 65),
+            Name = "Option",
+            BackgroundTransparency = 1,
+            LayoutOrder = LayoutOrder or 1,
+            ZIndex = 1
+        })
+        
+        local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
+            Size = UDim2.new(1, 0, 0, 65),
+            AnchorPoint = Vector2.new(0, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            BackgroundColor3 = Theme["Color Hub 2"],
+            ZIndex = 1
+        }), "Frame")
+        Make("Corner", FrameHolder, UDim.new(0, 8))
+        Make("Stroke", FrameHolder, nil, Theme["Color Stroke"], Theme["Border Thickness"] or 1.5)
+        
+        local ImageLabel = Create("ImageLabel", FrameHolder, {
+            Size = UDim2.new(0, 30, 0, 30),
+            Position = UDim2.new(0, 7, 0, 7),
+            Image = Logo or "rbxassetid://0",
+            BackgroundTransparency = 1,
+            ZIndex = 3
+        })
+        Make("Corner", ImageLabel, UDim.new(0, 4))
+        Make("Stroke", ImageLabel)
+        
+        local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
+            Size = UDim2.new(1, -52, 0, 15),
+            Position = UDim2.new(0, 44, 0, 7),
+            Font = Enum.Font.GothamBold,
+            TextColor3 = Theme["Color Text"],
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1,
+            TextSize = 11,
+            Text = Title or "Discord Server",
+            ZIndex = 3,
+            TextStrokeTransparency = 0.3,
+            TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        }), "Text")
+        
+        local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
+            Size = UDim2.new(1, -52, 0, 0),
+            Position = UDim2.new(0, 44, 0, 22),
+            TextWrapped = "Y",
+            AutomaticSize = "Y",
+            Font = Enum.Font.Gotham,
+            TextColor3 = Theme["Color Dark Text"],
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1,
+            TextSize = 9,
+            Text = Desc or "",
+            ZIndex = 3,
+            TextStrokeTransparency = 0.4,
+            TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        }), "DarkText")
+        
+        local JoinButton = Create("TextButton", FrameHolder, {
+            Size = UDim2.new(1, -14, 0, 18),
+            AnchorPoint = Vector2.new(0.5, 1),
+            Position = UDim2.new(0.5, 0, 1, -7),
+            Text = "Copy Link",
+            Font = Enum.Font.GothamBold,
+            TextSize = 11,
+            TextColor3 = Color3.fromRGB(220, 220, 220),
+            BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+            ZIndex = 4,
+            TextStrokeTransparency = 0.3,
+            TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        })
+        Make("Corner", JoinButton, UDim.new(0, 5))
+        
+        local ClickDelay
+        JoinButton.Activated:Connect(function()
+            setclipboard(Invite or "https://discord.gg/example")
+            if ClickDelay then return end
+            
+            ClickDelay = true
+            SetProps(JoinButton, {
+                Text = "Copied!",
+                BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+                TextColor3 = Color3.fromRGB(150, 150, 150)
+            })
+            task.wait(2)
+            SetProps(JoinButton, {
+                Text = "Copy Link",
+                BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+                TextColor3 = Color3.fromRGB(220, 220, 220)
+            })
+            ClickDelay = false
+        end)
+        
+        return InviteHolder
+    end
     
+    -- Tạo các Discord Card
+    local Card1 = CreateDiscordCard(
+        "Bear Library Discord",
+        "Join our community for support and updates!",
+        "rbxassetid://76571437829227",
+        "https://discord.gg/bearlib",
+        1
+    )
+    
+    local Card2 = CreateDiscordCard(
+        "Roblox Scripting Hub",
+        "Share scripts and get help from developers",
+        "rbxassetid://10709752907",
+        "https://discord.gg/scripting",
+        2
+    )
+    
+    local Card3 = CreateDiscordCard(
+        "Game Development",
+        "Discuss game development and projects",
+        "rbxassetid://10709791437",
+        "https://discord.gg/gamedev",
+        3
+    )
+    
+    -- Nút Close ở cuối
     local function CloseInfo()
         Screen:Destroy()
     end
     
     CloseBtn.Activated:Connect(CloseInfo)
-    OkButton.Activated:Connect(CloseInfo)
     
     Screen.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
