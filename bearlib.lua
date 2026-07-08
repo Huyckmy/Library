@@ -1267,19 +1267,6 @@ function bearlib:MakeWindow(Configs)
     Make("Corner", InfoFrame, UDim.new(0, 12))
     Make("Stroke", InfoFrame, nil, Theme["Color Stroke"], 1.5)
     
-    -- Tiêu đề
-    Create("TextLabel", InfoFrame, {
-        Size = UDim2.new(1, -40, 0, 28),
-        Position = UDim2.new(0, 15, 0, 8),
-        Font = Enum.Font.GothamBold,
-        Text = "📌 Discord Servers",
-        TextColor3 = Theme["Color Text"],
-        TextSize = 15,
-        TextXAlignment = "Left",
-        BackgroundTransparency = 1,
-        ZIndex = 201
-    })
-    
     local CloseBtn = Create("ImageButton", InfoFrame, {
         Size = UDim2.new(0, 20, 0, 20),
         Position = UDim2.new(1, -12, 0, 12),
@@ -1291,106 +1278,7 @@ function bearlib:MakeWindow(Configs)
         ZIndex = 201
     })
     
-    -- ScrollContainer
-    local ScrollContainer = Create("ScrollingFrame", InfoFrame, {
-        Size = UDim2.new(1, 0, 1, -40),
-        Position = UDim2.new(0, 0, 0, 40),
-        BackgroundTransparency = 1,
-        ScrollBarThickness = 3,
-        ScrollBarImageColor3 = Theme["Color Theme"],
-        CanvasSize = UDim2.new(),
-        AutomaticCanvasSize = "Y",
-        ScrollingDirection = "Y",
-        BorderSizePixel = 0,
-        ZIndex = 2
-    }, {
-        Create("UIPadding", {
-            PaddingLeft = UDim.new(0, 8),
-            PaddingRight = UDim.new(0, 8),
-            PaddingTop = UDim.new(0, 8),
-            PaddingBottom = UDim.new(0, 8)
-        }),
-        Create("UIListLayout", {
-            Padding = UDim.new(0, 6)
-        })
-    })
-    
-    local function MakeCard(Title, Desc, Logo, Invite)
-        local Holder = Create("Frame", ScrollContainer, {
-            Size = UDim2.new(1, 0, 0, 58),
-            BackgroundTransparency = 1
-        })
-        
-        local Frame = Create("Frame", Holder, {
-            Size = UDim2.new(1, 0, 1, 0),
-            BackgroundColor3 = Theme["Color Hub 2"]
-        })
-        Make("Corner", Frame, UDim.new(0, 8))
-        Make("Stroke", Frame, nil, Theme["Color Stroke"], 1.5)
-        
-        Create("ImageLabel", Frame, {
-            Size = UDim2.new(0, 30, 0, 30),
-            Position = UDim2.new(0, 8, 0, 6),
-            Image = Logo,
-            BackgroundTransparency = 1
-        })
-        Make("Corner", Create("ImageLabel", Frame, {
-            Size = UDim2.new(0, 30, 0, 30),
-            Position = UDim2.new(0, 8, 0, 6),
-            Image = Logo,
-            BackgroundTransparency = 1
-        }), UDim.new(0, 6))
-        
-        Create("TextLabel", Frame, {
-            Size = UDim2.new(1, -58, 0, 14),
-            Position = UDim2.new(0, 46, 0, 6),
-            Font = Enum.Font.GothamBold,
-            Text = Title,
-            TextColor3 = Theme["Color Text"],
-            TextSize = 11,
-            TextXAlignment = "Left",
-            BackgroundTransparency = 1
-        })
-        
-        Create("TextLabel", Frame, {
-            Size = UDim2.new(1, -58, 0, 14),
-            Position = UDim2.new(0, 46, 0, 22),
-            Font = Enum.Font.Gotham,
-            Text = Desc,
-            TextColor3 = Theme["Color Dark Text"],
-            TextSize = 9,
-            TextXAlignment = "Left",
-            BackgroundTransparency = 1
-        })
-        
-        local Btn = Create("TextButton", Frame, {
-            Size = UDim2.new(0, 55, 0, 16),
-            AnchorPoint = Vector2.new(1, 1),
-            Position = UDim2.new(1, -6, 1, -6),
-            Text = "Copy",
-            Font = Enum.Font.GothamBold,
-            TextSize = 10,
-            TextColor3 = Color3.fromRGB(220, 220, 220),
-            BackgroundColor3 = Color3.fromRGB(50, 150, 50)
-        })
-        Make("Corner", Btn, UDim.new(0, 4))
-        
-        Btn.Activated:Connect(function()
-            setclipboard(Invite)
-            Btn.Text = "✓"
-            Btn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-            task.wait(1.5)
-            Btn.Text = "Copy"
-            Btn.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
-        end)
-    end
-    
-    -- Thêm card
-    MakeCard("Bear Library", "Support server", "rbxassetid://76571437829227", "https://discord.gg/bearlib")
-    MakeCard("Roblox Studio", "Scripting tips", "rbxassetid://10709752907", "https://discord.gg/roblox")
-    MakeCard("Game Dev", "Connect with devs", "rbxassetid://10709791437", "https://discord.gg/gamedev")
-    MakeCard("Scripting Help", "Get help with Lua", "rbxassetid://15637081879", "https://discord.gg/scripting")
-    MakeCard("UI Design", "Design tips", "rbxassetid://10734950309", "https://discord.gg/ui")
+    -- Khung trống, không có gì bên trong
     
     CloseBtn.Activated:Connect(function() Screen:Destroy() end)
     
