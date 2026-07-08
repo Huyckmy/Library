@@ -1249,7 +1249,7 @@ function bearlib:MakeWindow(Configs)
     
     local InfoFrame = Create("Frame", Screen, {
         Active = true,
-        Size = UDim2.fromOffset(380, 350),
+        Size = UDim2.fromOffset(380, 400),
         Position = UDim2.fromScale(0.5, 0.5),
         AnchorPoint = Vector2.new(0.5, 0.5),
         ClipsDescendants = true,
@@ -1257,10 +1257,12 @@ function bearlib:MakeWindow(Configs)
     })
     Make("Gradient", InfoFrame, 270)
     Make("Corner", InfoFrame, UDim.new(0, 12))
+    Make("Stroke", InfoFrame, nil, Theme["Color Stroke"], Theme["Border Thickness"] or 1.5)
     
+    -- Nút Close (X)
     local CloseBtn = Create("ImageButton", InfoFrame, {
-        Size = UDim2.new(0, 20, 0, 20),
-        Position = UDim2.new(1, -10, 0, 10),
+        Size = UDim2.new(0, 22, 0, 22),
+        Position = UDim2.new(1, -12, 0, 12),
         AnchorPoint = Vector2.new(1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://10747384394",
@@ -1269,10 +1271,23 @@ function bearlib:MakeWindow(Configs)
         ZIndex = 201
     })
     
-    -- Tạo ScrollingFrame để chứa nhiều Discord cards
+    -- Tiêu đề cho khung
+    local TitleLabel = InsertTheme(Create("TextLabel", InfoFrame, {
+        Size = UDim2.new(1, -40, 0, 30),
+        Position = UDim2.new(0, 15, 0, 8),
+        BackgroundTransparency = 1,
+        Font = Enum.Font.GothamBold,
+        Text = "📌 Discord Servers",
+        TextColor3 = Theme["Color Text"],
+        TextSize = 16,
+        TextXAlignment = "Left",
+        ZIndex = 201
+    }), "Text")
+    
+    -- ScrollingFrame để chứa các Discord Card
     local ScrollContainer = InsertTheme(Create("ScrollingFrame", InfoFrame, {
-        Size = UDim2.new(1, 0, 1, -55),
-        Position = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(1, 0, 1, -50),
+        Position = UDim2.new(0, 0, 0, 40),
         BackgroundTransparency = 1,
         ScrollBarThickness = 3,
         ScrollBarImageColor3 = Theme["Color Theme"],
@@ -1284,10 +1299,10 @@ function bearlib:MakeWindow(Configs)
         ZIndex = 2
     }, {
         Create("UIPadding", {
-            PaddingLeft = UDim.new(0, 10),
-            PaddingRight = UDim.new(0, 10),
-            PaddingTop = UDim.new(0, 10),
-            PaddingBottom = UDim.new(0, 10)
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 8),
+            PaddingBottom = UDim.new(0, 8)
         }),
         Create("UIListLayout", {
             Padding = UDim.new(0, 8),
@@ -1295,7 +1310,7 @@ function bearlib:MakeWindow(Configs)
         })
     }), "ScrollBar")
     
-    -- Hàm tạo Discord Card giống DiscordInviteOld
+    -- Hàm tạo Discord Card (giống hệt DiscordInviteOld)
     local function CreateDiscordCard(Title, Desc, Logo, Invite, LayoutOrder)
         local InviteHolder = Create("Frame", ScrollContainer, {
             Size = UDim2.new(1, 0, 0, 65),
@@ -1316,23 +1331,23 @@ function bearlib:MakeWindow(Configs)
         Make("Stroke", FrameHolder, nil, Theme["Color Stroke"], Theme["Border Thickness"] or 1.5)
         
         local ImageLabel = Create("ImageLabel", FrameHolder, {
-            Size = UDim2.new(0, 30, 0, 30),
-            Position = UDim2.new(0, 7, 0, 7),
+            Size = UDim2.new(0, 35, 0, 35),
+            Position = UDim2.new(0, 8, 0, 8),
             Image = Logo or "rbxassetid://0",
             BackgroundTransparency = 1,
             ZIndex = 3
         })
-        Make("Corner", ImageLabel, UDim.new(0, 4))
+        Make("Corner", ImageLabel, UDim.new(0, 6))
         Make("Stroke", ImageLabel)
         
         local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
-            Size = UDim2.new(1, -52, 0, 15),
-            Position = UDim2.new(0, 44, 0, 7),
+            Size = UDim2.new(1, -58, 0, 16),
+            Position = UDim2.new(0, 50, 0, 8),
             Font = Enum.Font.GothamBold,
             TextColor3 = Theme["Color Text"],
             TextXAlignment = "Left",
             BackgroundTransparency = 1,
-            TextSize = 11,
+            TextSize = 12,
             Text = Title or "Discord Server",
             ZIndex = 3,
             TextStrokeTransparency = 0.3,
@@ -1340,8 +1355,8 @@ function bearlib:MakeWindow(Configs)
         }), "Text")
         
         local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
-            Size = UDim2.new(1, -52, 0, 0),
-            Position = UDim2.new(0, 44, 0, 22),
+            Size = UDim2.new(1, -58, 0, 0),
+            Position = UDim2.new(0, 50, 0, 25),
             TextWrapped = "Y",
             AutomaticSize = "Y",
             Font = Enum.Font.Gotham,
@@ -1356,9 +1371,9 @@ function bearlib:MakeWindow(Configs)
         }), "DarkText")
         
         local JoinButton = Create("TextButton", FrameHolder, {
-            Size = UDim2.new(1, -14, 0, 18),
+            Size = UDim2.new(1, -16, 0, 18),
             AnchorPoint = Vector2.new(0.5, 1),
-            Position = UDim2.new(0.5, 0, 1, -7),
+            Position = UDim2.new(0.5, 0, 1, -8),
             Text = "Copy Link",
             Font = Enum.Font.GothamBold,
             TextSize = 11,
@@ -1393,32 +1408,40 @@ function bearlib:MakeWindow(Configs)
         return InviteHolder
     end
     
-    -- Tạo các Discord Card
+    -- Tạo các Discord Card (giống DiscordInviteOld)
     local Card1 = CreateDiscordCard(
-        "Bear Library Discord",
-        "Join our community for support and updates!",
+        "Bear Library",
+        "Support server for Bear Library users",
         "rbxassetid://76571437829227",
         "https://discord.gg/bearlib",
         1
     )
     
     local Card2 = CreateDiscordCard(
-        "Roblox Scripting Hub",
-        "Share scripts and get help from developers",
+        "Roblox Studio",
+        "Learn and share Roblox scripting tips",
         "rbxassetid://10709752907",
-        "https://discord.gg/scripting",
+        "https://discord.gg/robloxstudio",
         2
     )
     
     local Card3 = CreateDiscordCard(
-        "Game Development",
-        "Discuss game development and projects",
+        "Game Dev Community",
+        "Connect with other game developers",
         "rbxassetid://10709791437",
         "https://discord.gg/gamedev",
         3
     )
     
-    -- Nút Close ở cuối
+    local Card4 = CreateDiscordCard(
+        "Scripting Help",
+        "Get help with your Lua scripts",
+        "rbxassetid://15637081879",
+        "https://discord.gg/scriptinghelp",
+        4
+    )
+    
+    -- Đóng khung
     local function CloseInfo()
         Screen:Destroy()
     end
