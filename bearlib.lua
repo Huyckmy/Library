@@ -1212,6 +1212,7 @@ function bearlib:MakeWindow(Configs)
         Name = "Minimize"
     })
 
+    -- Settings Button - chỉ có 1 nút Settings duy nhất
     SettingsButton = Create("ImageButton", {
         Size = UDim2.new(0, 14, 0, 14),
         Position = UDim2.new(1, -85, 0.5),
@@ -1223,84 +1224,14 @@ function bearlib:MakeWindow(Configs)
         Name = "Settings"
     })
 
-    local InfoButton = Create("ImageButton", {
-        Size = UDim2.new(0, 14, 0, 14),
-        Position = UDim2.new(1, -110, 0.5),
-        AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundTransparency = 1,
-        Image = "rbxassetid://73132811772878",
-        ImageColor3 = Theme["Color Text"],
-        AutoButtonColor = false,
-        Name = "InfoButton"
-    })
-
-    InfoButton.Activated:Connect(function()
-    if MainFrame:FindFirstChild("InfoFrame") then return end
-    
-    local Screen = InsertTheme(Create("Frame", MainFrame, {
-        BackgroundTransparency = 0.6,
-        Active = true,
-        Size = UDim2.new(1, 0, 1, 0),
-        BackgroundColor3 = Theme["Color Stroke"],
-        Name = "InfoFrame",
-        ZIndex = 150
-    }), "Stroke")
-    ApplyRoundedCorners(Screen, UDim.new(0, 12))
-    
-    -- Lấy kích thước UI hiện tại
-    local uiWidth = MainFrame.Size.X.Offset
-    local uiHeight = MainFrame.Size.Y.Offset
-    
-    -- Khung rộng 60% và cao 80% UI
-    local frameWidth = uiWidth * 0.6
-    local frameHeight = uiHeight * 0.8
-    
-    local InfoFrame = Create("Frame", Screen, {
-        Active = true,
-        Size = UDim2.fromOffset(frameWidth, frameHeight),
-        Position = UDim2.fromScale(0.5, 0.5),
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        ClipsDescendants = true,
-        ZIndex = 200
-    })
-    Make("Gradient", InfoFrame, 270)
-    Make("Corner", InfoFrame, UDim.new(0, 12))
-    Make("Stroke", InfoFrame, nil, Theme["Color Stroke"], 1.5)
-    
-    local CloseBtn = Create("ImageButton", InfoFrame, {
-        Size = UDim2.new(0, 20, 0, 20),
-        Position = UDim2.new(1, -12, 0, 12),
-        AnchorPoint = Vector2.new(1, 0),
-        BackgroundTransparency = 1,
-        Image = "rbxassetid://10747384394",
-        ImageColor3 = Theme["Color Text"],
-        AutoButtonColor = false,
-        ZIndex = 201
-    })
-    
-    -- Khung trống, không có gì bên trong
-    
-    CloseBtn.Activated:Connect(function() Screen:Destroy() end)
-    
-    Screen.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local mousePos = input.Position
-            local framePos = InfoFrame.AbsolutePosition
-            local frameSize = InfoFrame.AbsoluteSize
-            if not (mousePos.X >= framePos.X and mousePos.X <= framePos.X + frameSize.X and
-                    mousePos.Y >= framePos.Y and mousePos.Y <= framePos.Y + frameSize.Y) then
-                Screen:Destroy()
-            end
-        end
-    end)
-end)
+    -- KHÔNG có InfoButton
 
     SetChildren(ButtonsFolder, {
         CloseButton,
         MaximizeButton,
         MinimizeButton,
-        SettingsButton,
-        InfoButton
+        SettingsButton
+        -- Chỉ có 4 button, không có InfoButton
     })
 
     local Window = {}
@@ -3876,7 +3807,7 @@ end)
     end
 
     function Window:MakeTabGroup(Configs)
-        -- Tab Group functionality (same as before)
+        -- Tab Group functionality
         local TName = Configs[1] or Configs.Title or Configs.Name or "Group"
         local TIcon = Configs[2] or Configs.Icon or ""
 
@@ -6009,6 +5940,270 @@ end)
 
     CloseButton.Activated:Connect(Window.CloseBtn)
     MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+
+    -- ===== SETTINGS BUTTON VỚI SETTINGS FRAME =====
+    SettingsButton.Activated:Connect(function()
+        -- Kiểm tra nếu đã có Settings Frame thì đóng
+        if ScreenGui:FindFirstChild("SettingsFrameGUI") then
+            ScreenGui:FindFirstChild("SettingsFrameGUI"):Destroy()
+            return
+        end
+        
+        -- Tạo ScreenGui con
+        local SettingsScreenGui = Instance.new("ScreenGui")
+        SettingsScreenGui.Name = "SettingsFrameGUI"
+        SettingsScreenGui.Parent = ScreenGui
+        SettingsScreenGui.ResetOnSpawn = false
+        SettingsScreenGui.ZIndex = 1000
+
+        -- Background overlay
+        local Overlay = Instance.new("Frame")
+        Overlay.Name = "Overlay"
+        Overlay.Size = UDim2.new(1, 0, 1, 0)
+        Overlay.BackgroundColor3 = Theme["Color Stroke"]
+        Overlay.BackgroundTransparency = 0.5
+        Overlay.Parent = SettingsScreenGui
+        Overlay.ZIndex = 1000
+
+        -- Khung chính
+        local SettingsMainFrame = Instance.new("Frame")
+        SettingsMainFrame.Name = "SettingsMainFrame"
+        SettingsMainFrame.Size = UDim2.new(0, 0, 0, 0)
+        SettingsMainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        SettingsMainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+        SettingsMainFrame.BackgroundColor3 = Theme["Color Hub 2"]
+        SettingsMainFrame.BackgroundTransparency = 0
+        SettingsMainFrame.Parent = SettingsScreenGui
+        SettingsMainFrame.ZIndex = 1001
+        SettingsMainFrame.ClipsDescendants = true
+
+        -- Gradient
+        local SettingsGradient = Instance.new("UIGradient")
+        SettingsGradient.Color = ColorSequence.new(Theme["Color Hub 1"])
+        SettingsGradient.Rotation = 270
+        SettingsGradient.Parent = SettingsMainFrame
+
+        -- Corner
+        local SettingsCorner = Instance.new("UICorner")
+        SettingsCorner.CornerRadius = UDim.new(0, Theme["Corner Radius"] or 12)
+        SettingsCorner.Parent = SettingsMainFrame
+
+        -- Stroke
+        local SettingsStroke = Instance.new("UIStroke")
+        SettingsStroke.Color = Theme["UI Border Color"]
+        SettingsStroke.Thickness = Theme["Border Thickness"] or 1.5
+        SettingsStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        SettingsStroke.LineJoinMode = Enum.LineJoinMode.Round
+        SettingsStroke.Parent = SettingsMainFrame
+
+        -- Header
+        local SettingsHeader = Instance.new("Frame")
+        SettingsHeader.Name = "Header"
+        SettingsHeader.Size = UDim2.new(1, 0, 0, 40)
+        SettingsHeader.BackgroundTransparency = 1
+        SettingsHeader.Parent = SettingsMainFrame
+        SettingsHeader.ZIndex = 1002
+
+        -- Title
+        local SettingsTitle = Instance.new("TextLabel")
+        SettingsTitle.Size = UDim2.new(1, -50, 1, 0)
+        SettingsTitle.Position = UDim2.new(0, 15, 0.5, 0)
+        SettingsTitle.AnchorPoint = Vector2.new(0, 0.5)
+        SettingsTitle.BackgroundTransparency = 1
+        SettingsTitle.Font = Enum.Font.GothamBold
+        SettingsTitle.Text = "⚙️ Settings"
+        SettingsTitle.TextColor3 = Theme["Color Text"]
+        SettingsTitle.TextSize = 18
+        SettingsTitle.TextXAlignment = Enum.TextXAlignment.Left
+        SettingsTitle.Parent = SettingsHeader
+        SettingsTitle.ZIndex = 1003
+
+        -- Subtitle
+        local SettingsSubtitle = Instance.new("TextLabel")
+        SettingsSubtitle.Size = UDim2.new(1, -50, 1, 0)
+        SettingsSubtitle.Position = UDim2.new(0, 15, 0, 28)
+        SettingsSubtitle.BackgroundTransparency = 1
+        SettingsSubtitle.Font = Enum.Font.Gotham
+        SettingsSubtitle.Text = "Customize your UI"
+        SettingsSubtitle.TextColor3 = Theme["Color Dark Text"]
+        SettingsSubtitle.TextSize = 10
+        SettingsSubtitle.TextXAlignment = Enum.TextXAlignment.Left
+        SettingsSubtitle.Parent = SettingsHeader
+        SettingsSubtitle.ZIndex = 1003
+
+        -- Close button
+        local SettingsCloseBtn = Instance.new("ImageButton")
+        SettingsCloseBtn.Size = UDim2.new(0, 20, 0, 20)
+        SettingsCloseBtn.Position = UDim2.new(1, -12, 0.5, 0)
+        SettingsCloseBtn.AnchorPoint = Vector2.new(1, 0.5)
+        SettingsCloseBtn.BackgroundTransparency = 1
+        SettingsCloseBtn.Image = "rbxassetid://10747384394"
+        SettingsCloseBtn.ImageColor3 = Theme["Color Text"]
+        SettingsCloseBtn.AutoButtonColor = false
+        SettingsCloseBtn.Parent = SettingsHeader
+        SettingsCloseBtn.ZIndex = 1003
+
+        -- Divider
+        local SettingsDivider = Instance.new("Frame")
+        SettingsDivider.Size = UDim2.new(1, -30, 0, 1)
+        SettingsDivider.Position = UDim2.new(0.5, 0, 0, 40)
+        SettingsDivider.AnchorPoint = Vector2.new(0.5, 0)
+        SettingsDivider.BackgroundColor3 = Theme["Color Theme"]
+        SettingsDivider.BackgroundTransparency = 0.8
+        SettingsDivider.Parent = SettingsMainFrame
+        SettingsDivider.ZIndex = 1002
+
+        -- Content
+        local SettingsContent = Instance.new("ScrollingFrame")
+        SettingsContent.Size = UDim2.new(1, 0, 1, -80)
+        SettingsContent.Position = UDim2.new(0, 0, 0, 45)
+        SettingsContent.BackgroundTransparency = 1
+        SettingsContent.ScrollBarThickness = 1.5
+        SettingsContent.ScrollBarImageTransparency = 0.2
+        SettingsContent.ScrollBarImageColor3 = Theme["Color Theme"]
+        SettingsContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        SettingsContent.ScrollingDirection = Enum.ScrollingDirection.Y
+        SettingsContent.CanvasSize = UDim2.new()
+        SettingsContent.BorderSizePixel = 0
+        SettingsContent.Parent = SettingsMainFrame
+        SettingsContent.ZIndex = 1002
+
+        -- Padding
+        local SettingsPadding = Instance.new("UIPadding")
+        SettingsPadding.PaddingLeft = UDim.new(0, 20)
+        SettingsPadding.PaddingRight = UDim.new(0, 20)
+        SettingsPadding.PaddingTop = UDim.new(0, 8)
+        SettingsPadding.PaddingBottom = UDim.new(0, 8)
+        SettingsPadding.Parent = SettingsContent
+
+        -- Layout
+        local SettingsLayout = Instance.new("UIListLayout")
+        SettingsLayout.Padding = UDim.new(0, 8)
+        SettingsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        SettingsLayout.Parent = SettingsContent
+
+        -- Hàm tạo item settings
+        local function AddSettingItem(label, value, valueColor, layoutOrder)
+            local Item = Instance.new("Frame")
+            Item.Size = UDim2.new(1, 0, 0, 28)
+            Item.BackgroundTransparency = 1
+            Item.Parent = SettingsContent
+            Item.ZIndex = 1003
+            if layoutOrder then
+                Item.LayoutOrder = layoutOrder
+            end
+
+            local LabelTxt = Instance.new("TextLabel")
+            LabelTxt.Size = UDim2.new(0, 0, 1, 0)
+            LabelTxt.Position = UDim2.new(0, 0, 0.5, 0)
+            LabelTxt.AnchorPoint = Vector2.new(0, 0.5)
+            LabelTxt.AutomaticSize = Enum.AutomaticSize.X
+            LabelTxt.BackgroundTransparency = 1
+            LabelTxt.Font = Enum.Font.Gotham
+            LabelTxt.Text = label
+            LabelTxt.TextColor3 = Theme["Color Dark Text"]
+            LabelTxt.TextSize = 12
+            LabelTxt.TextXAlignment = Enum.TextXAlignment.Left
+            LabelTxt.Parent = Item
+            LabelTxt.ZIndex = 1004
+
+            local ValueTxt = Instance.new("TextLabel")
+            ValueTxt.Size = UDim2.new(0, 0, 1, 0)
+            ValueTxt.Position = UDim2.new(1, 0, 0.5, 0)
+            ValueTxt.AnchorPoint = Vector2.new(1, 0.5)
+            ValueTxt.AutomaticSize = Enum.AutomaticSize.X
+            ValueTxt.BackgroundTransparency = 1
+            ValueTxt.Font = Enum.Font.GothamBold
+            ValueTxt.Text = value
+            ValueTxt.TextColor3 = valueColor or Theme["Color Theme"]
+            ValueTxt.TextSize = 12
+            ValueTxt.TextXAlignment = Enum.TextXAlignment.Right
+            ValueTxt.Parent = Item
+            ValueTxt.ZIndex = 1004
+        end
+
+        -- Thêm các mục cài đặt
+        local function AddSettingHeader(text)
+            local Header = Instance.new("TextLabel")
+            Header.Size = UDim2.new(1, 0, 0, 20)
+            Header.BackgroundTransparency = 1
+            Header.Font = Enum.Font.GothamBold
+            Header.Text = text
+            Header.TextColor3 = Theme["Color Theme"]
+            Header.TextSize = 13
+            Header.TextXAlignment = Enum.TextXAlignment.Left
+            Header.Parent = SettingsContent
+            Header.ZIndex = 1003
+        end
+
+        AddSettingHeader("📋 GENERAL")
+        AddSettingItem("Library Name", WTitle or "Bear Library", Theme["Color Text"])
+        AddSettingItem("Version", "1.2.0", Color3.fromRGB(100, 200, 255))
+        AddSettingItem("Author", "Quang Huy", Theme["Color Text"])
+        AddSettingItem("Status", "● Online", Color3.fromRGB(0, 255, 0))
+
+        AddSettingHeader("📊 STATISTICS")
+        AddSettingItem("UI Elements", "Loaded", Color3.fromRGB(255, 200, 100))
+        AddSettingItem("Tabs", #bearlib.Tabs .. " Active", Theme["Color Theme"])
+        AddSettingItem("Players", #Players:GetPlayers() .. " Online", Color3.fromRGB(88, 101, 242))
+        AddSettingItem("FPS", "60", Color3.fromRGB(0, 255, 100))
+
+        AddSettingHeader("🎨 THEME COLORS")
+        AddSettingItem("UI Border", "White", Theme["UI Border Color"])
+        AddSettingItem("Toggle On", "Yellow", Theme["Color Toggle On"])
+        AddSettingItem("Toggle Off", "Black", Theme["Color Toggle Off"])
+
+        -- Footer
+        local SettingsFooter = Instance.new("Frame")
+        SettingsFooter.Size = UDim2.new(1, 0, 0, 30)
+        SettingsFooter.Position = UDim2.new(0, 0, 1, -30)
+        SettingsFooter.AnchorPoint = Vector2.new(0, 1)
+        SettingsFooter.BackgroundTransparency = 1
+        SettingsFooter.Parent = SettingsMainFrame
+        SettingsFooter.ZIndex = 1002
+
+        local SettingsFooterText = Instance.new("TextLabel")
+        SettingsFooterText.Size = UDim2.new(1, -20, 1, 0)
+        SettingsFooterText.Position = UDim2.new(0.5, 0, 0.5, 0)
+        SettingsFooterText.AnchorPoint = Vector2.new(0.5, 0.5)
+        SettingsFooterText.BackgroundTransparency = 1
+        SettingsFooterText.Font = Enum.Font.Gotham
+        SettingsFooterText.Text = "Click outside to close"
+        SettingsFooterText.TextColor3 = Color3.fromRGB(150, 150, 150)
+        SettingsFooterText.TextSize = 10
+        SettingsFooterText.TextXAlignment = Enum.TextXAlignment.Center
+        SettingsFooterText.Parent = SettingsFooter
+        SettingsFooterText.ZIndex = 1004
+
+        -- Xử lý đóng
+        SettingsCloseBtn.MouseButton1Click:Connect(function()
+            SettingsScreenGui:Destroy()
+        end)
+
+        -- Click outside
+        Overlay.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                local mousePos = input.Position
+                local framePos = SettingsMainFrame.AbsolutePosition
+                local frameSize = SettingsMainFrame.AbsoluteSize
+                
+                local isInside = mousePos.X >= framePos.X and mousePos.X <= framePos.X + frameSize.X and
+                                mousePos.Y >= framePos.Y and mousePos.Y <= framePos.Y + frameSize.Y
+                
+                if not isInside then
+                    SettingsScreenGui:Destroy()
+                end
+            end
+        end)
+
+        -- Animation mở ra
+        task.wait(0.05)
+
+        local tween = TweenService:Create(SettingsMainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 380, 0, 320)
+        })
+        tween:Play()
+    end)
 
     task.spawn(function()
         task.wait(0.5)
