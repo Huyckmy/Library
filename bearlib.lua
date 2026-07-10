@@ -1834,8 +1834,7 @@ function bearlib:MakeWindow(Configs)
             if bearlib.Tabs[TabSelect] then
                 bearlib.Tabs[TabSelect].func:Enable()
             end
-        else
-            for _, Tab in pairs(bearlib.Tabs) do
+        else            for _, Tab in pairs(bearlib.Tabs) do
                 if Tab.Cont == TabSelect.Cont then
                     Tab.func:Enable()
                 end
@@ -3807,7 +3806,7 @@ function bearlib:MakeWindow(Configs)
     end
 
     function Window:MakeTabGroup(Configs)
-        -- Tab Group functionality
+        -- Tab Group functionality (same as before)
         local TName = Configs[1] or Configs.Title or Configs.Name or "Group"
         local TIcon = Configs[2] or Configs.Icon or ""
 
@@ -5941,7 +5940,7 @@ function bearlib:MakeWindow(Configs)
     CloseButton.Activated:Connect(Window.CloseBtn)
     MinimizeButton.Activated:Connect(Window.MinimizeBtn)
 
-    -- ===== SETTINGS BUTTON VỚI SETTINGS FRAME =====
+    -- ===== SETTINGS BUTTON VỚI SETTINGS FRAME - ĐẶT SAU KHI TẠO WINDOW =====
     SettingsButton.Activated:Connect(function()
         -- Kiểm tra nếu đã có Settings Frame thì đóng
         if ScreenGui:FindFirstChild("SettingsFrameGUI") then
