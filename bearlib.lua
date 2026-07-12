@@ -551,7 +551,6 @@ local ToggleGui = nil
 local MinimizedBar = nil
 local NotificationHolder = nil
 local MaximizeButton = nil
-local SettingsButton = nil
 local IsMaximized = false
 local OriginalUISize = nil
 local SmallBar = nil
@@ -717,9 +716,6 @@ local function RefreshAllUIElements()
     end
     if MaximizeButton then
         MaximizeButton.ImageColor3 = Theme["Color Text"]
-    end
-    if SettingsButton then
-        SettingsButton.ImageColor3 = Theme["Color Text"]
     end
 
     if MinimizedBar then
