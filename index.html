@@ -327,12 +327,12 @@
 
         <!-- Header -->
         <header class="header">
-            <div class="badge">🐻 Lua UI Framework</div>
+            <div class="badge">Bear Lua UI Framework</div>
             <h1>Bear Library UI</h1>
             <p>Complete Documentation &amp; API Reference</p>
-            <div class="version">v1.2.0 &nbsp;·&nbsp; by Quang Huy</div>
+            <div class="version">v1.2.0  ·  by Quang Huy</div>
             <a class="repo-link" href="https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua" target="_blank">
-                📦 Load UI: bearlib.lua
+                Load UI: bearlib.lua
             </a>
         </header>
 
@@ -350,38 +350,38 @@
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 📥 Tải thư viện từ repository</span>
+                    <div class="code-block"><span class="comment">-- Load library from repository</span>
 <span class="keyword">local</span> bearlib = <span class="func">loadstring</span>(<span class="func">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua"</span>))()
 
-<span class="comment">-- 🪟 Tạo cửa sổ chính</span>
+<span class="comment">-- Create main window</span>
 <span class="keyword">local</span> win = bearlib:MakeWindow({
-    <span class="string">"My Awesome Hub"</span>,   <span class="comment">-- Tiêu đề</span>
-    <span class="string">"by YourName"</span>,       <span class="comment">-- Phụ đề</span>
-    <span class="string">"flags.json"</span>         <span class="comment">-- File lưu flags (tự động)</span>
+    <span class="string">"My Awesome Hub"</span>,   <span class="comment">-- Title</span>
+    <span class="string">"by YourName"</span>,       <span class="comment">-- Subtitle</span>
+    <span class="string">"flags.json"</span>         <span class="comment">-- Auto-save flags file</span>
 })</div>
                 </div>
-                <div class="note-vi">💡 <strong>Gợi ý:</strong> Tham số thứ 3 là tên file JSON để tự động lưu trạng thái toggle, slider, dropdown.</div>
+                <div class="note-vi">The third parameter is the JSON filename for auto-saving toggle, slider, and dropdown states.</div>
             </div>
 
             <div class="card">
                 <div class="icon">📁</div>
-                <h3>Tabs &amp; Sections</h3>
+                <h3>Tabs and Sections</h3>
                 <p>Organize your UI with tabs and sections for clarity.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 📑 Tạo tab mới</span>
+                    <div class="code-block"><span class="comment">-- Create a new tab</span>
 <span class="keyword">local</span> mainTab = win:MakeTab({
     <span class="string">"Main"</span>,
     <span class="string">"rbxassetid://10709791437"</span>  <span class="comment">-- Icon (optional)</span>
 })
 
-<span class="comment">-- 📂 Thêm section để nhóm các thành phần</span>
-<span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"⚙️ Settings"</span>)</div>
+<span class="comment">-- Add a section to group components</span>
+<span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"Settings"</span>)</div>
                 </div>
-                <div class="note-vi">📌 <strong>Chú thích:</strong> Section giúp phân chia rõ ràng các nhóm chức năng trong tab.</div>
+                <div class="note-vi">Sections help organize related UI elements within a tab.</div>
             </div>
 
             <div class="card">
@@ -393,13 +393,13 @@
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 🔘 Button</span>
+                    <div class="code-block"><span class="comment">-- Button</span>
 mainTab:AddButton({ <span class="string">"Click Me"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"Hello!"</span>) <span class="keyword">end</span> })
 
-<span class="comment">-- 🔁 Toggle với flag tự động lưu</span>
+<span class="comment">-- Toggle with auto-save flag</span>
 mainTab:AddToggle({ <span class="string">"Auto Farm"</span>, <span class="keyword">true</span>, <span class="keyword">nil</span>, <span class="string">"auto_farm"</span> })</div>
                 </div>
-                <div class="note-vi">🧠 <strong>Mẹo:</strong> Sử dụng <code>Flags</code> để lưu trạng thái và đồng bộ giữa các lần chạy script.</div>
+                <div class="note-vi">Use Flags to persist state across script executions.</div>
             </div>
         </div>
 
@@ -407,14 +407,14 @@ mainTab:AddToggle({ <span class="string">"Auto Farm"</span>, <span class="keywor
         <!-- COMPONENTS DETAIL -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📦 UI Components Reference</h2>
+        <h2 class="section-title">UI Components Reference</h2>
         <p class="section-subtitle">Detailed usage for each element in Bear Library.</p>
 
         <div class="grid">
 
             <!-- Button -->
             <div class="card">
-                <h3>🔘 Button</h3>
+                <h3>Button</h3>
                 <p>Clickable button with title, description, and callback.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -422,24 +422,24 @@ mainTab:AddToggle({ <span class="string">"Auto Farm"</span>, <span class="keywor
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> btn = tab:AddButton({
-    <span class="string">"Execute"</span>,            <span class="comment">-- Tiêu đề</span>
-    <span class="string">"Run the main script"</span>, <span class="comment">-- Mô tả</span>
+    <span class="string">"Execute"</span>,            <span class="comment">-- Title</span>
+    <span class="string">"Run the main script"</span>, <span class="comment">-- Description</span>
     <span class="keyword">function</span>()            <span class="comment">-- Callback</span>
-        <span class="func">print</span>(<span class="string">"✅ Executed!"</span>)
+        <span class="func">print</span>(<span class="string">"Executed!"</span>)
     <span class="keyword">end</span>,
     <span class="string">"exec_flag"</span>             <span class="comment">-- Flag (optional)</span>
 })
 
-<span class="comment">-- 📝 Các method hỗ trợ</span>
+<span class="comment">-- Available methods</span>
 btn:Set(<span class="string">"New Title"</span>, <span class="string">"New Description"</span>)
-btn:Visible(<span class="keyword">false</span>)   <span class="comment">-- Ẩn button</span>
-btn:Destroy()            <span class="comment">-- Xóa button</span></div>
+btn:Visible(<span class="keyword">false</span>)   <span class="comment">-- Hide button</span>
+btn:Destroy()            <span class="comment">-- Remove button</span></div>
                 </div>
             </div>
 
             <!-- Toggle -->
             <div class="card">
-                <h3>🔁 Toggle</h3>
+                <h3>Toggle</h3>
                 <p>On/off switch with automatic flag saving.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -447,25 +447,25 @@ btn:Destroy()            <span class="comment">-- Xóa button</span></div>
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> tog = tab:AddToggle({
-    <span class="string">"Auto Reconnect"</span>,    <span class="comment">-- Tiêu đề</span>
-    <span class="keyword">false</span>,               <span class="comment">-- Giá trị mặc định</span>
-    <span class="keyword">function</span>(v)          <span class="comment">-- Callback khi thay đổi</span>
+    <span class="string">"Auto Reconnect"</span>,    <span class="comment">-- Title</span>
+    <span class="keyword">false</span>,               <span class="comment">-- Default value</span>
+    <span class="keyword">function</span>(v)          <span class="comment">-- Callback on change</span>
         <span class="func">print</span>(<span class="string">"Reconnect:"</span>, v)
     <span class="keyword">end</span>,
-    <span class="string">"reconnect"</span>            <span class="comment">-- Flag để lưu</span>
+    <span class="string">"reconnect"</span>            <span class="comment">-- Flag for saving</span>
 })
 
-<span class="comment">-- 🔄 Thay đổi giá trị bằng code</span>
+<span class="comment">-- Change value via code</span>
 tog:Set(<span class="keyword">true</span>)
-<span class="comment">-- 📖 Đọc giá trị từ flag</span>
+<span class="comment">-- Read value from flag</span>
 <span class="func">print</span>(<span class="func">bearlib.Flags.reconnect</span>)</div>
                 </div>
-                <div class="note-vi">💾 Flag tự động được lưu vào file JSON mỗi khi thay đổi.</div>
+                <div class="note-vi">Flags are automatically saved to the JSON file on every change.</div>
             </div>
 
             <!-- Slider -->
             <div class="card">
-                <h3>📊 Slider</h3>
+                <h3>Slider</h3>
                 <p>Numeric slider with min, max, step, and default value.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -473,25 +473,25 @@ tog:Set(<span class="keyword">true</span>)
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> sld = tab:AddSlider({
-    <span class="string">"Speed"</span>,              <span class="comment">-- Tiêu đề</span>
-    <span class="string">"Movement speed"</span>,      <span class="comment">-- Mô tả</span>
+    <span class="string">"Speed"</span>,              <span class="comment">-- Title</span>
+    <span class="string">"Movement speed"</span>,      <span class="comment">-- Description</span>
     <span class="number">1</span>, <span class="number">100</span>,                <span class="comment">-- Min, Max</span>
-    <span class="number">1</span>,                   <span class="comment">-- Step (bước nhảy)</span>
-    <span class="number">50</span>,                  <span class="comment">-- Giá trị mặc định</span>
+    <span class="number">1</span>,                   <span class="comment">-- Step increment</span>
+    <span class="number">50</span>,                  <span class="comment">-- Default value</span>
     <span class="keyword">function</span>(v)          <span class="comment">-- Callback</span>
         <span class="func">print</span>(<span class="string">"Speed:"</span>, v)
     <span class="keyword">end</span>,
     <span class="string">"speed"</span>                <span class="comment">-- Flag</span>
 })
 
-<span class="comment">-- 🎯 Set giá trị mới</span>
+<span class="comment">-- Set new value</span>
 sld:Set(<span class="number">75</span>)</div>
                 </div>
             </div>
 
             <!-- Dropdown -->
             <div class="card">
-                <h3>📋 Dropdown</h3>
+                <h3>Dropdown</h3>
                 <p>Single or multi-select dropdown with search and flags.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -499,26 +499,26 @@ sld:Set(<span class="number">75</span>)</div>
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> ddown = tab:AddDropdown({
-    <span class="string">"Server"</span>,             <span class="comment">-- Tiêu đề</span>
-    { <span class="string">"EU"</span>, <span class="string">"US"</span>, <span class="string">"AS"</span> }, <span class="comment">-- Danh sách options</span>
-    <span class="string">"US"</span>,                <span class="comment">-- Giá trị mặc định</span>
+    <span class="string">"Server"</span>,             <span class="comment">-- Title</span>
+    { <span class="string">"EU"</span>, <span class="string">"US"</span>, <span class="string">"AS"</span> }, <span class="comment">-- Options list</span>
+    <span class="string">"US"</span>,                <span class="comment">-- Default value</span>
     <span class="keyword">function</span>(v)          <span class="comment">-- Callback</span>
         <span class="func">print</span>(<span class="string">"Selected:"</span>, v)
     <span class="keyword">end</span>,
     <span class="string">"server"</span>,              <span class="comment">-- Flag</span>
-    <span class="keyword">true</span>                  <span class="comment">-- MultiSelect (chọn nhiều)</span>
+    <span class="keyword">true</span>                  <span class="comment">-- MultiSelect (allow multiple)</span>
 })
 
-<span class="comment">-- ➕ Thêm option mới</span>
+<span class="comment">-- Add new option</span>
 ddown:Add(<span class="string">"AU"</span>)
-<span class="comment">-- 🎯 Chọn option</span>
+<span class="comment">-- Select option</span>
 ddown:Select(<span class="string">"EU"</span>)</div>
                 </div>
             </div>
 
             <!-- TextBox -->
             <div class="card">
-                <h3>✏️ TextBox</h3>
+                <h3>TextBox</h3>
                 <p>Text input with placeholder, clear-on-focus, and callback.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -526,25 +526,25 @@ ddown:Select(<span class="string">"EU"</span>)</div>
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> tb = tab:AddTextBox({
-    <span class="string">"Username"</span>,           <span class="comment">-- Tiêu đề</span>
-    <span class="string">"Player1"</span>,            <span class="comment">-- Giá trị mặc định</span>
+    <span class="string">"Username"</span>,           <span class="comment">-- Title</span>
+    <span class="string">"Player1"</span>,            <span class="comment">-- Default value</span>
     <span class="keyword">false</span>,               <span class="comment">-- Clear on focus</span>
-    <span class="keyword">function</span>(t)          <span class="comment">-- Callback khi mất focus</span>
+    <span class="keyword">function</span>(t)          <span class="comment">-- Callback on focus lost</span>
         <span class="func">print</span>(<span class="string">"Input:"</span>, t)
     <span class="keyword">end</span>,
     <span class="string">"Enter name..."</span>       <span class="comment">-- Placeholder</span>
 })
 
-<span class="comment">-- 🔄 Xử lý input real-time</span>
+<span class="comment">-- Real-time input processing</span>
 tb.OnChanging = <span class="keyword">function</span>(t)
-    <span class="keyword">return</span> <span class="func">string.upper</span>(t)  <span class="comment">-- Tự động viết hoa</span>
+    <span class="keyword">return</span> <span class="func">string.upper</span>(t)  <span class="comment">-- Auto uppercase</span>
 <span class="keyword">end</span></div>
                 </div>
             </div>
 
             <!-- Profile -->
             <div class="card">
-                <h3>👤 Profile</h3>
+                <h3>Profile</h3>
                 <p>Display user info with avatar, cover image, and bio.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -552,14 +552,14 @@ tb.OnChanging = <span class="keyword">function</span>(t)
                         Copy
                     </button>
                     <div class="code-block"><span class="keyword">local</span> prof = tab:AddProfile({
-    <span class="string">"Quang Huy"</span>,          <span class="comment">-- Tên</span>
+    <span class="string">"Quang Huy"</span>,          <span class="comment">-- Name</span>
     <span class="string">"Lua Developer"</span>,      <span class="comment">-- Bio</span>
     Avatar = <span class="string">"rbxassetid://123"</span>,
     Cover  = <span class="string">"rbxassetid://456"</span>,
     Verified = <span class="keyword">true</span>
 })
 
-<span class="comment">-- ✏️ Cập nhật thông tin</span>
+<span class="comment">-- Update information</span>
 prof:SetBio(<span class="string">"New bio here"</span>)
 prof:SetBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">200</span>,<span class="number">100</span>))</div>
                 </div>
@@ -567,7 +567,7 @@ prof:SetBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="
 
             <!-- Discord Card -->
             <div class="card">
-                <h3>💬 Discord Card</h3>
+                <h3>Discord Card</h3>
                 <p>Single Discord server card with invite link.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -576,7 +576,7 @@ prof:SetBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="
                     </button>
                     <div class="code-block"><span class="keyword">local</span> dc = tab:AddSingleDiscordCard({
     Title = <span class="string">"Bear Community"</span>,
-    Description = <span class="string">"Support &amp; Updates"</span>,
+    Description = <span class="string">"Support and Updates"</span>,
     Logo = <span class="string">"rbxassetid://..."</span>,
     BannerColor = Color3.fromRGB(<span class="number">88</span>,<span class="number">101</span>,<span class="number">242</span>),
     Online = <span class="number">42</span>,
@@ -585,7 +585,7 @@ prof:SetBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="
     Verified = <span class="keyword">true</span>
 })
 
-<span class="comment">-- 🔄 Cập nhật</span>
+<span class="comment">-- Update card</span>
 dc:SetTitle(<span class="string">"New Server"</span>)
 dc:SetStats(<span class="number">99</span>, <span class="number">2000</span>)
 dc:SetInviteLink(<span class="string">"https://discord.gg/new"</span>)</div>
@@ -594,7 +594,7 @@ dc:SetInviteLink(<span class="string">"https://discord.gg/new"</span>)</div>
 
             <!-- Discord Invite -->
             <div class="card">
-                <h3>📨 Discord Invite (2 Cards)</h3>
+                <h3>Discord Invite (2 Cards)</h3>
                 <p>Two Discord cards side by side.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -606,7 +606,7 @@ dc:SetInviteLink(<span class="string">"https://discord.gg/new"</span>)</div>
     { <span class="string">"Server 2"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span>, Color3.fromRGB(<span class="number">255</span>,<span class="number">70</span>,<span class="number">70</span>), <span class="number">5</span>, <span class="number">50</span>, <span class="string">"https://discord.gg/..."</span> }
 })
 
-<span class="comment">-- 🔄 Cập nhật từng card</span>
+<span class="comment">-- Update individual cards</span>
 inv:UpdateCard1({ <span class="string">"New Card 1"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span> })
 inv:UpdateCard2({ <span class="string">"New Card 2"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span> })</div>
                 </div>
@@ -614,7 +614,7 @@ inv:UpdateCard2({ <span class="string">"New Card 2"</span>, <span class="string"
 
             <!-- Dialog -->
             <div class="card">
-                <h3>💬 Dialog</h3>
+                <h3>Dialog</h3>
                 <p>Confirmation dialog with custom buttons.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -630,26 +630,26 @@ inv:UpdateCard2({ <span class="string">"New Card 2"</span>, <span class="string"
     }
 })</div>
                 </div>
-                <div class="note-vi">⚠️ Dialog tự động hiển thị trên cùng và chặn tương tác với các thành phần khác.</div>
+                <div class="note-vi">Dialog appears on top and blocks interaction with other components.</div>
             </div>
 
             <!-- Bar / Badge -->
             <div class="card">
-                <h3>🏷️ Top Bar Badges</h3>
+                <h3>Top Bar Badges</h3>
                 <p>Display small badges on the window title bar.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- Có 5 thanh bar: Bar, Bar2, Bar3, Bar4, Bar5</span>
+                    <div class="code-block"><span class="comment">-- 5 bars available: Bar, Bar2, Bar3, Bar4, Bar5</span>
 win:Bar(<span class="string">"Online"</span>, Color3.fromRGB(<span class="number">0</span>,<span class="number">200</span>,<span class="number">0</span>), <span class="keyword">nil</span>, <span class="keyword">nil</span>, <span class="string">"rbxassetid://..."</span>)
 win:Bar2(<span class="string">"VIP"</span>, Color3.fromRGB(<span class="number">200</span>,<span class="number">150</span>,<span class="number">0</span>))
 win:Bar3(<span class="string">"Beta"</span>, Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
 win:Bar4(<span class="string">"v1.2.0"</span>)
-win:Bar5(<span class="string">"🐻"</span>)</div>
+win:Bar5(<span class="string">"Bear"</span>)</div>
                 </div>
-                <div class="note-vi">🎨 Mỗi bar có thể tùy chỉnh màu nền, màu viền, màu chữ và icon.</div>
+                <div class="note-vi">Each bar can customize background, border, text color, and icon.</div>
             </div>
 
         </div><!-- end grid -->
@@ -658,7 +658,7 @@ win:Bar5(<span class="string">"🐻"</span>)</div>
         <!-- TAB GROUP -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📂 Tab Group (SubTabs)</h2>
+        <h2 class="section-title">Tab Group (SubTabs)</h2>
         <p class="section-subtitle">Group multiple subtabs under one parent tab with expand/collapse.</p>
 
         <div class="grid">
@@ -668,13 +668,13 @@ win:Bar5(<span class="string">"🐻"</span>)</div>
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 📁 Tạo group tab</span>
+                    <div class="code-block"><span class="comment">-- Create tab group</span>
 <span class="keyword">local</span> group = win:MakeTabGroup({
-    <span class="string">"🎮 Game Settings"</span>,
+    <span class="string">"Game Settings"</span>,
     <span class="string">"rbxassetid://..."</span>  <span class="comment">-- Icon</span>
 })
 
-<span class="comment">-- 📑 Thêm subtab</span>
+<span class="comment">-- Add subtabs</span>
 <span class="keyword">local</span> sub1 = group:AddTab({ <span class="string">"General"</span> })
 sub1:AddToggle({ <span class="string">"Auto Reconnect"</span>, <span class="keyword">true</span> })
 
@@ -682,13 +682,13 @@ sub1:AddToggle({ <span class="string">"Auto Reconnect"</span>, <span class="keyw
 sub2:AddSlider({ <span class="string">"FPS"</span>, <span class="number">30</span>, <span class="number">240</span>, <span class="number">1</span>, <span class="number">60</span> })
 
 <span class="keyword">local</span> sub3 = group:AddTab({ <span class="string">"Audio"</span> })
-sub3:AddButton({ <span class="string">"Test Sound"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"🔊"</span>) <span class="keyword">end</span> })
+sub3:AddButton({ <span class="string">"Test Sound"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"Sound test"</span>) <span class="keyword">end</span> })
 
-<span class="comment">-- 🔽 Mở rộng / thu gọn</span>
+<span class="comment">-- Expand / collapse</span>
 group:Expand()
 group:Collapse()</div>
                 </div>
-                <div class="note-vi">📌 SubTab hoạt động như một tab độc lập nhưng nằm gọn trong group cha.</div>
+                <div class="note-vi">SubTabs function as independent tabs but are grouped under a parent.</div>
             </div>
         </div>
 
@@ -696,68 +696,68 @@ group:Collapse()</div>
         <!-- THEME & CUSTOMIZATION -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">🎨 Theme &amp; Customization</h2>
+        <h2 class="section-title">Theme and Customization</h2>
         <p class="section-subtitle">Change colors, borders, and scale of the UI.</p>
 
         <div class="grid">
 
             <div class="card">
-                <h3>🌈 Color Settings</h3>
+                <h3>Color Settings</h3>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 🎨 Thay đổi màu sắc chính</span>
+                    <div class="code-block"><span class="comment">-- Main colors</span>
 bearlib:SetHubColor(Color3.fromRGB(<span class="number">20</span>,<span class="number">20</span>,<span class="number">40</span>))
 bearlib:SetTextColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>))
 bearlib:SetStrokeColor(Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
 
-<span class="comment">-- 🖌️ Màu viền cho từng thành phần</span>
+<span class="comment">-- Border colors for specific components</span>
 bearlib:SetUIBorderColor(Color3.fromRGB(<span class="number">200</span>,<span class="number">200</span>,<span class="number">255</span>))
 bearlib:SetDiscordBorderColor(Color3.fromRGB(<span class="number">150</span>,<span class="number">150</span>,<span class="number">255</span>))
 bearlib:SetProfileBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">200</span>,<span class="number">100</span>))
 
-<span class="comment">-- 📏 Độ dày viền</span>
+<span class="comment">-- Border thickness</span>
 bearlib:SetBorderThickness(<span class="number">2</span>)</div>
                 </div>
             </div>
 
             <div class="card">
-                <h3>🔁 Toggle Colors</h3>
+                <h3>Toggle Colors</h3>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 📖 Lấy màu toggle hiện tại</span>
+                    <div class="code-block"><span class="comment">-- Get current toggle colors</span>
 <span class="keyword">local</span> colors = bearlib:GetToggleColors()
 <span class="func">print</span>(colors.ToggleOn)
 
-<span class="comment">-- 🔄 Reset về mặc định</span>
+<span class="comment">-- Reset to defaults</span>
 bearlib:ResetToggleColors()
 bearlib:ResetBorderColors()</div>
                 </div>
-                <div class="note-vi">🔄 Reset sẽ đưa các màu về thiết lập gốc của thư viện.</div>
+                <div class="note-vi">Reset restores colors to the library's original settings.</div>
             </div>
 
             <div class="card">
-                <h3>📐 Scale &amp; Size</h3>
+                <h3>Scale and Size</h3>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 🔍 Thay đổi tỉ lệ UI (mặc định: 450)</span>
+                    <div class="code-block"><span class="comment">-- Change UI scale (default: 450)</span>
 bearlib:SetScale(<span class="number">500</span>)
 
-<span class="comment">-- 💾 Kích thước cửa sổ tự động lưu vào bearlib.json</span>
-<span class="comment">-- Bạn có thể kéo góc dưới phải để thay đổi kích thước</span></div>
+<span class="comment">-- Window size auto-saves to bearlib.json</span>
+<span class="comment">-- Drag bottom-right corner to resize</span></div>
                 </div>
             </div>
 
             <div class="card">
-                <h3>🔔 Notifications</h3>
+                <h3>Notifications</h3>
                 <p>Show toast notifications with custom icon and duration.</p>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)" title="Copy code">
@@ -768,10 +768,10 @@ bearlib:SetScale(<span class="number">500</span>)
     Title = <span class="string">"Success"</span>,
     Message = <span class="string">"Connected successfully!"</span>,
     Icon = <span class="string">"rbxassetid://..."</span>,
-    Duration = <span class="number">5</span>  <span class="comment">-- Giây</span>
+    Duration = <span class="number">5</span>  <span class="comment">-- Seconds</span>
 })</div>
                 </div>
-                <div class="note-vi">🔔 Notification tự động xếp hàng và hiển thị lần lượt.</div>
+                <div class="note-vi">Notifications auto-queue and display sequentially.</div>
             </div>
 
         </div>
@@ -780,7 +780,7 @@ bearlib:SetScale(<span class="number">500</span>)
         <!-- FLAGS & STORAGE -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">💾 Flags &amp; Persistent Storage</h2>
+        <h2 class="section-title">Flags and Persistent Storage</h2>
         <p class="section-subtitle">Manage state and auto-save to JSON file.</p>
 
         <div class="grid">
@@ -790,28 +790,28 @@ bearlib:SetScale(<span class="number">500</span>)
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block"><span class="comment">-- 📁 Khai báo file lưu khi tạo cửa sổ</span>
+                    <div class="code-block"><span class="comment">-- Specify save file when creating window</span>
 <span class="keyword">local</span> win = bearlib:MakeWindow({
     <span class="string">"My Hub"</span>,
     <span class="string">"by ..."</span>,
-    <span class="string">"my_flags.json"</span>   <span class="comment">-- Tự động lưu flags</span>
+    <span class="string">"my_flags.json"</span>   <span class="comment">-- Auto-save flags</span>
 })
 
-<span class="comment">-- 📖 Truy cập flags</span>
+<span class="comment">-- Access flags</span>
 <span class="func">print</span>(<span class="func">bearlib.Flags.auto_farm</span>)
 
-<span class="comment">-- ✏️ Thay đổi flag bằng code</span>
+<span class="comment">-- Change flag via code</span>
 <span class="func">bearlib:SetFlag</span>(<span class="string">"auto_farm"</span>, <span class="keyword">true</span>)
 
-<span class="comment">-- 👂 Lắng nghe sự kiện flag thay đổi</span>
+<span class="comment">-- Listen to flag changes</span>
 <span class="func">bearlib.Connection.FlagsChanged:Connect</span>(<span class="keyword">function</span>(flag, value)
     <span class="func">print</span>(<span class="string">"Flag changed:"</span>, flag, value)
 <span class="keyword">end</span>)
 
-<span class="comment">-- 💾 Lưu manual (thường không cần vì tự động)</span>
+<span class="comment">-- Manual save (usually auto-saved)</span>
 <span class="func">bearlib.Connection:FireConnection</span>(<span class="string">"FileSaved"</span>)</div>
                 </div>
-                <div class="note-vi">💡 Flag tự động được lưu mỗi khi giá trị thay đổi (có debounce 0.1s).</div>
+                <div class="note-vi">Flags auto-save on every change with a 0.1s debounce.</div>
             </div>
         </div>
 
@@ -819,7 +819,7 @@ bearlib:SetScale(<span class="number">500</span>)
         <!-- COMPLETE EXAMPLE -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📝 Complete Example</h2>
+        <h2 class="section-title">Complete Example</h2>
 
         <div class="grid">
             <div class="card full-width">
@@ -828,32 +828,32 @@ bearlib:SetScale(<span class="number">500</span>)
                         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy
                     </button>
-                    <div class="code-block" style="font-size:0.73rem;"><span class="comment">-- 📥 Load thư viện từ repository</span>
+                    <div class="code-block" style="font-size:0.73rem;"><span class="comment">-- Load library from repository</span>
 <span class="keyword">local</span> bearlib = <span class="func">loadstring</span>(<span class="func">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua"</span>))()
 
-<span class="comment">-- 🪟 Tạo cửa sổ chính</span>
+<span class="comment">-- Create main window</span>
 <span class="keyword">local</span> win = bearlib:MakeWindow({
-    <span class="string">"🐻 Bear Hub"</span>,
+    <span class="string">"Bear Hub"</span>,
     <span class="string">"by Quang Huy"</span>,
     <span class="string">"hub_flags.json"</span>
 })
 
-<span class="comment">-- 📑 Tạo tabs</span>
+<span class="comment">-- Create tabs</span>
 <span class="keyword">local</span> mainTab = win:MakeTab({ <span class="string">"Main"</span>, <span class="string">"rbxassetid://10709791437"</span> })
 <span class="keyword">local</span> settingsTab = win:MakeTab({ <span class="string">"Settings"</span> })
 
-<span class="comment">-- 📂 Section &amp; Button</span>
+<span class="comment">-- Section and Button</span>
 <span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"Controls"</span>)
 mainTab:AddButton({
     <span class="string">"Run Script"</span>,
     <span class="string">"Execute main function"</span>,
     <span class="keyword">function</span>()
-        <span class="func">print</span>(<span class="string">"✅ Script executed!"</span>)
+        <span class="func">print</span>(<span class="string">"Script executed!"</span>)
         <span class="func">bearlib:Notify</span>({ Title = <span class="string">"Success"</span>, Message = <span class="string">"Script executed"</span> })
     <span class="keyword">end</span>
 })
 
-<span class="comment">-- 🔁 Toggle với flag</span>
+<span class="comment">-- Toggle with flag</span>
 mainTab:AddToggle({
     <span class="string">"Auto Farm"</span>,
     <span class="string">"Enable auto farming"</span>,
@@ -862,7 +862,7 @@ mainTab:AddToggle({
     <span class="string">"auto_farm"</span>
 })
 
-<span class="comment">-- 📊 Slider</span>
+<span class="comment">-- Slider</span>
 mainTab:AddSlider({
     <span class="string">"Speed"</span>,
     <span class="string">"Adjust movement speed"</span>,
@@ -872,7 +872,7 @@ mainTab:AddSlider({
     <span class="string">"speed"</span>
 })
 
-<span class="comment">-- 📋 Dropdown</span>
+<span class="comment">-- Dropdown</span>
 mainTab:AddDropdown({
     <span class="string">"Server"</span>,
     { <span class="string">"NA"</span>, <span class="string">"EU"</span>, <span class="string">"AS"</span> },
@@ -881,19 +881,19 @@ mainTab:AddDropdown({
     <span class="string">"server"</span>
 })
 
-<span class="comment">-- 👤 Profile</span>
+<span class="comment">-- Profile</span>
 settingsTab:AddProfile({
     <span class="string">"Quang Huy"</span>,
-    <span class="string">"Lua Developer &amp; UI Designer"</span>,
+    <span class="string">"Lua Developer and UI Designer"</span>,
     Avatar = <span class="string">"rbxassetid://123456789"</span>,
     Cover = <span class="string">"rbxassetid://987654321"</span>,
     Verified = <span class="keyword">true</span>
 })
 
-<span class="comment">-- 💬 Discord Card</span>
+<span class="comment">-- Discord Card</span>
 settingsTab:AddSingleDiscordCard({
     Title = <span class="string">"Bear Community"</span>,
-    Description = <span class="string">"Support &amp; updates channel"</span>,
+    Description = <span class="string">"Support and updates channel"</span>,
     Logo = <span class="string">"rbxassetid://..."</span>,
     BannerColor = Color3.fromRGB(<span class="number">88</span>, <span class="number">101</span>, <span class="number">242</span>),
     Online = <span class="number">42</span>,
@@ -902,12 +902,12 @@ settingsTab:AddSingleDiscordCard({
     Verified = <span class="keyword">true</span>
 })
 
-<span class="comment">-- 🏷️ Badges</span>
+<span class="comment">-- Badges</span>
 win:Bar(<span class="string">"Online"</span>, Color3.fromRGB(<span class="number">0</span>,<span class="number">200</span>,<span class="number">0</span>))
 win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
 
-<span class="comment">-- 🔔 Notification khởi tạo</span>
-<span class="func">bearlib:Notify</span>({ Title = <span class="string">"🚀 Bear Hub"</span>, Message = <span class="string">"Loaded successfully!"</span>, Duration = <span class="number">3</span> })</div>
+<span class="comment">-- Initial notification</span>
+<span class="func">bearlib:Notify</span>({ Title = <span class="string">"Bear Hub"</span>, Message = <span class="string">"Loaded successfully!"</span>, Duration = <span class="number">3</span> })</div>
                 </div>
             </div>
         </div>
@@ -916,11 +916,11 @@ win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="numbe
         <!-- API REFERENCE -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📚 API Reference</h2>
+        <h2 class="section-title">API Reference</h2>
         <p class="section-subtitle">Complete list of all functions and methods.</p>
 
         <div class="card" style="margin-bottom:2rem;">
-            <h3 style="margin-bottom:1rem;">🔹 bearlib (Global)</h3>
+            <h3 style="margin-bottom:1rem;">bearlib (Global)</h3>
             <ul class="api-list">
                 <li><span class="name">MakeWindow()</span><span class="desc">Create main window</span></li>
                 <li><span class="name">Notify()</span><span class="desc">Show notification toast</span></li>
@@ -943,7 +943,7 @@ win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="numbe
         </div>
 
         <div class="card" style="margin-bottom:2rem;">
-            <h3 style="margin-bottom:1rem;">🔸 Window (win)</h3>
+            <h3 style="margin-bottom:1rem;">Window (win)</h3>
             <ul class="api-list">
                 <li><span class="name">MakeTab()</span><span class="desc">Create a new tab</span></li>
                 <li><span class="name">MakeTabGroup()</span><span class="desc">Create a tab group with subtabs</span></li>
@@ -957,7 +957,7 @@ win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="numbe
         </div>
 
         <div class="card" style="margin-bottom:2rem;">
-            <h3 style="margin-bottom:1rem;">🔹 Tab &amp; SubTab</h3>
+            <h3 style="margin-bottom:1rem;">Tab and SubTab</h3>
             <ul class="api-list">
                 <li><span class="name">AddSection()</span><span class="desc">Add a section header</span></li>
                 <li><span class="name">AddButton()</span><span class="desc">Add a button</span></li>
@@ -975,7 +975,7 @@ win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="numbe
         </div>
 
         <div class="card">
-            <h3 style="margin-bottom:1rem;">🔸 Element Methods (Common)</h3>
+            <h3 style="margin-bottom:1rem;">Element Methods (Common)</h3>
             <ul class="api-list">
                 <li><span class="name">Set()</span><span class="desc">Change value / title / description</span></li>
                 <li><span class="name">Visible()</span><span class="desc">Show/hide element</span></li>
@@ -986,8 +986,8 @@ win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="numbe
 
         <!-- Footer -->
         <div class="footer">
-            Bear Library UI v1.2.0 &nbsp;·&nbsp;
-            <a href="https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua" target="_blank">Load UI</a> &nbsp;·&nbsp;
+            Bear Library UI v1.2.0  ·
+            <a href="https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua" target="_blank">Load UI</a>  ·
             by Quang Huy
         </div>
 
