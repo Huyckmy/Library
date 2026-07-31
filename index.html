@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bear Library UI - Hướng Dẫn</title>
+    <title>Bear Library UI - Documentation</title>
     <style>
         * {
             margin: 0;
@@ -65,7 +65,25 @@
             margin-top: 0.25rem;
         }
 
-        /* Grid layout */
+        .header .repo-link {
+            display: inline-block;
+            margin-top: 1rem;
+            background: #1a1a2e;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #2a2a4a;
+            color: #8888cc;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .header .repo-link:hover {
+            border-color: #4444aa;
+            color: #bbbbff;
+        }
+
+        /* Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -111,17 +129,19 @@
             border-radius: 10px;
             padding: 0.9rem 1.2rem;
             font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #b8b8e0;
             overflow-x: auto;
             border: 1px solid #1a1a2e;
             margin-top: 0.5rem;
             white-space: pre-wrap;
             word-break: break-word;
+            line-height: 1.6;
         }
 
         .card .code-block .comment {
-            color: #4a4a6a;
+            color: #4a6a5a;
+            font-style: italic;
         }
 
         .card .code-block .keyword {
@@ -136,7 +156,15 @@
             color: #ddaa66;
         }
 
-        /* Full width sections */
+        .card .code-block .number {
+            color: #cc88dd;
+        }
+
+        .card .code-block .variable {
+            color: #88ccdd;
+        }
+
+        /* Section titles */
         .section-title {
             font-size: 1.8rem;
             font-weight: 600;
@@ -152,36 +180,7 @@
             margin-bottom: 2rem;
         }
 
-        /* Theme showcase */
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0 2rem;
-        }
-
-        .theme-swatch {
-            background: #12121e;
-            border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid #22223a;
-            text-align: center;
-        }
-
-        .theme-swatch .color-box {
-            width: 100%;
-            height: 40px;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            border: 1px solid #2a2a4a;
-        }
-
-        .theme-swatch .label {
-            font-size: 0.8rem;
-            color: #8888bb;
-        }
-
-        /* API list */
+        /* API List */
         .api-list {
             list-style: none;
             padding: 0;
@@ -204,7 +203,7 @@
             font-weight: 600;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            min-width: 120px;
+            min-width: 140px;
         }
 
         .api-list .desc {
@@ -218,41 +217,7 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            .header h1 {
-                font-size: 2rem;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .api-list li {
-                flex-wrap: wrap;
-            }
-            .api-list .name {
-                min-width: 100%;
-            }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a12;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2a2a4a;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3a3a6a;
-        }
-
+        /* Footer */
         .footer {
             text-align: center;
             padding: 2rem 0 1rem;
@@ -268,6 +233,28 @@
         .footer a:hover {
             color: #8888dd;
         }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .api-list li { flex-wrap: wrap; }
+            .api-list .name { min-width: 100%; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a12; }
+        ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a6a; }
+
+        .note-vi {
+            color: #4a7a6a;
+            font-size: 0.85rem;
+            border-left: 2px solid #4a7a6a;
+            padding-left: 0.75rem;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -277,127 +264,161 @@
         <header class="header">
             <div class="badge">🐻 Lua UI Framework</div>
             <h1>Bear Library UI</h1>
-            <p>Hướng dẫn sử dụng &amp; tham khảo API</p>
+            <p>Complete Documentation &amp; API Reference</p>
             <div class="version">v1.2.0 &nbsp;·&nbsp; by Quang Huy</div>
+            <a class="repo-link" href="https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua" target="_blank">
+                📦 Load UI: bearlib.lua
+            </a>
         </header>
 
-        <!-- Overview -->
+        <!-- ============================================================ -->
+        <!-- GETTING STARTED -->
+        <!-- ============================================================ -->
+
         <div class="grid">
             <div class="card">
                 <div class="icon">🚀</div>
-                <h3>Bắt đầu nhanh</h3>
-                <p>Tạo cửa sổ chính và thêm các thành phần UI chỉ với vài dòng code.</p>
+                <h3>Getting Started</h3>
+                <p>Load the library and create your main window in seconds.</p>
                 <div class="code-block">
+                    <span class="comment">-- 📥 Tải thư viện từ repository</span>
+                    <span class="keyword">local</span> bearlib = <span class="func">loadstring</span>(<span class="func">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua"</span>))()
+
+                    <span class="comment">-- 🪟 Tạo cửa sổ chính</span>
                     <span class="keyword">local</span> win = bearlib:MakeWindow({
-                        <span class="string">"Bear Hub"</span>,
-                        <span class="string">"by Quang Huy"</span>,
-                        <span class="string">"flags.json"</span>
+                        <span class="string">"My Awesome Hub"</span>,   <span class="comment">-- Tiêu đề</span>
+                        <span class="string">"by YourName"</span>,       <span class="comment">-- Phụ đề</span>
+                        <span class="string">"flags.json"</span>         <span class="comment">-- File lưu flags (tự động)</span>
                     })
                 </div>
+                <div class="note-vi">💡 <strong>Gợi ý:</strong> Tham số thứ 3 là tên file JSON để tự động lưu trạng thái toggle, slider, dropdown.</div>
             </div>
 
             <div class="card">
                 <div class="icon">📁</div>
-                <h3>Tab &amp; Section</h3>
-                <p>Tổ chức giao diện với các tab và section rõ ràng.</p>
+                <h3>Tabs &amp; Sections</h3>
+                <p>Organize your UI with tabs and sections for clarity.</p>
                 <div class="code-block">
-                    <span class="keyword">local</span> tab = win:MakeTab({
-                        <span class="string">"Cài đặt"</span>,
-                        <span class="string">"rbxassetid://123"</span>
+                    <span class="comment">-- 📑 Tạo tab mới</span>
+                    <span class="keyword">local</span> mainTab = win:MakeTab({
+                        <span class="string">"Main"</span>,
+                        <span class="string">"rbxassetid://10709791437"</span>  <span class="comment">-- Icon (optional)</span>
                     })
-                    <span class="keyword">local</span> section = tab:AddSection(<span class="string">"Tùy chỉnh"</span>)
+
+                    <span class="comment">-- 📂 Thêm section để nhóm các thành phần</span>
+                    <span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"⚙️ Settings"</span>)
                 </div>
+                <div class="note-vi">📌 <strong>Chú thích:</strong> Section giúp phân chia rõ ràng các nhóm chức năng trong tab.</div>
             </div>
 
             <div class="card">
                 <div class="icon">🎛️</div>
-                <h3>Thành phần đa dạng</h3>
-                <p>Button, Toggle, Slider, Dropdown, TextBox, Profile, Discord Cards,...</p>
+                <h3>UI Components</h3>
+                <p>All available elements: Button, Toggle, Slider, Dropdown, TextBox, Profile, Discord Cards, and more.</p>
                 <div class="code-block">
-                    tab:AddButton({ <span class="string">"Click me"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"Hello!"</span>) <span class="keyword">end</span> })
-                    tab:AddToggle({ <span class="string">"Auto Farm"</span>, <span class="keyword">true</span> })
+                    <span class="comment">-- 🔘 Button</span>
+                    mainTab:AddButton({ <span class="string">"Click Me"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"Hello!"</span>) <span class="keyword">end</span> })
+
+                    <span class="comment">-- 🔁 Toggle với flag tự động lưu</span>
+                    mainTab:AddToggle({ <span class="string">"Auto Farm"</span>, <span class="keyword">true</span>, <span class="keyword">nil</span>, <span class="string">"auto_farm"</span> })
                 </div>
+                <div class="note-vi">🧠 <strong>Mẹo:</strong> Sử dụng <code>Flags</code> để lưu trạng thái và đồng bộ giữa các lần chạy script.</div>
             </div>
         </div>
 
         <!-- ============================================================ -->
-        <!-- THÀNH PHẦN CHI TIẾT -->
+        <!-- COMPONENTS DETAIL -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📦 Các thành phần UI</h2>
-        <p class="section-subtitle">Chi tiết cách sử dụng từng loại element trong Bear Library.</p>
+        <h2 class="section-title">📦 UI Components Reference</h2>
+        <p class="section-subtitle">Detailed usage for each element in Bear Library.</p>
 
         <div class="grid">
 
             <!-- Button -->
             <div class="card">
                 <h3>🔘 Button</h3>
-                <p>Nút bấm với tiêu đề, mô tả và callback.</p>
+                <p>Clickable button with title, description, and callback.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> btn = tab:AddButton({
-                        <span class="string">"Tiêu đề"</span>,
-                        <span class="string">"Mô tả"</span>,
-                        <span class="keyword">function</span>()
-                            <span class="func">print</span>(<span class="string">"Đã bấm!"</span>)
+                        <span class="string">"Execute"</span>,            <span class="comment">-- Tiêu đề</span>
+                        <span class="string">"Run the main script"</span>, <span class="comment">-- Mô tả</span>
+                        <span class="keyword">function</span>()            <span class="comment">-- Callback</span>
+                            <span class="func">print</span>(<span class="string">"✅ Executed!"</span>)
                         <span class="keyword">end</span>,
-                        <span class="string">"flag_name"</span>  <span class="comment">-- optional</span>
+                        <span class="string">"exec_flag"</span>             <span class="comment">-- Flag (optional)</span>
                     })
-                    <span class="comment">-- Các method</span>
-                    btn:Set(<span class="string">"Tên mới"</span>, <span class="string">"Mô tả mới"</span>)
-                    btn:Visible(<span class="keyword">false</span>)
-                    btn:Destroy()
+
+                    <span class="comment">-- 📝 Các method hỗ trợ</span>
+                    btn:Set(<span class="string">"New Title"</span>, <span class="string">"New Description"</span>)
+                    btn:Visible(<span class="keyword">false</span>)   <span class="comment">-- Ẩn button</span>
+                    btn:Destroy()            <span class="comment">-- Xóa button</span>
                 </div>
             </div>
 
             <!-- Toggle -->
             <div class="card">
                 <h3>🔁 Toggle</h3>
-                <p>Công tắc bật/tắt với flag lưu trạng thái.</p>
+                <p>On/off switch with automatic flag saving.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> tog = tab:AddToggle({
-                        <span class="string">"Auto Farm"</span>,
-                        <span class="keyword">true</span>,          <span class="comment">-- default</span>
-                        <span class="keyword">function</span>(v) <span class="func">print</span>(v) <span class="keyword">end</span>,
-                        <span class="string">"auto_farm"</span>      <span class="comment">-- flag</span>
+                        <span class="string">"Auto Reconnect"</span>,    <span class="comment">-- Tiêu đề</span>
+                        <span class="keyword">false</span>,               <span class="comment">-- Giá trị mặc định</span>
+                        <span class="keyword">function</span>(v)          <span class="comment">-- Callback khi thay đổi</span>
+                            <span class="func">print</span>(<span class="string">"Reconnect:"</span>, v)
+                        <span class="keyword">end</span>,
+                        <span class="string">"reconnect"</span>            <span class="comment">-- Flag để lưu</span>
                     })
-                    <span class="comment">-- Set value</span>
-                    tog:Set(<span class="keyword">false</span>)
-                    <span class="comment">-- Lấy giá trị</span>
-                    <span class="func">print</span>(<span class="func">bearlib.Flags.auto_farm</span>)
+
+                    <span class="comment">-- 🔄 Thay đổi giá trị bằng code</span>
+                    tog:Set(<span class="keyword">true</span>)
+                    <span class="comment">-- 📖 Đọc giá trị từ flag</span>
+                    <span class="func">print</span>(<span class="func">bearlib.Flags.reconnect</span>)
                 </div>
+                <div class="note-vi">💾 Flag tự động được lưu vào file JSON mỗi khi thay đổi.</div>
             </div>
 
             <!-- Slider -->
             <div class="card">
                 <h3>📊 Slider</h3>
-                <p>Thanh trượt với giá trị số học.</p>
+                <p>Numeric slider with min, max, step, and default value.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> sld = tab:AddSlider({
-                        <span class="string">"Tốc độ"</span>,
-                        <span class="number">1</span>, <span class="number">100</span>,   <span class="comment">-- min, max</span>
-                        <span class="number">1</span>,             <span class="comment">-- step</span>
-                        <span class="number">50</span>,            <span class="comment">-- default</span>
-                        <span class="keyword">function</span>(v) <span class="func">print</span>(v) <span class="keyword">end</span>,
-                        <span class="string">"speed"</span>         <span class="comment">-- flag</span>
+                        <span class="string">"Speed"</span>,              <span class="comment">-- Tiêu đề</span>
+                        <span class="string">"Movement speed"</span>,      <span class="comment">-- Mô tả</span>
+                        <span class="number">1</span>, <span class="number">100</span>,                <span class="comment">-- Min, Max</span>
+                        <span class="number">1</span>,                   <span class="comment">-- Step (bước nhảy)</span>
+                        <span class="number">50</span>,                  <span class="comment">-- Giá trị mặc định</span>
+                        <span class="keyword">function</span>(v)          <span class="comment">-- Callback</span>
+                            <span class="func">print</span>(<span class="string">"Speed:"</span>, v)
+                        <span class="keyword">end</span>,
+                        <span class="string">"speed"</span>                <span class="comment">-- Flag</span>
                     })
-                    sld:Set(<span class="number">75</span>)  <span class="comment">-- thay đổi giá trị</span>
+
+                    <span class="comment">-- 🎯 Set giá trị mới</span>
+                    sld:Set(<span class="number">75</span>)
                 </div>
             </div>
 
             <!-- Dropdown -->
             <div class="card">
                 <h3>📋 Dropdown</h3>
-                <p>Chọn một hoặc nhiều tùy chọn từ danh sách.</p>
+                <p>Single or multi-select dropdown with search and flags.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> ddown = tab:AddDropdown({
-                        <span class="string">"Chọn server"</span>,
-                        { <span class="string">"EU"</span>, <span class="string">"US"</span>, <span class="string">"AS"</span> },
-                        <span class="string">"US"</span>,           <span class="comment">-- default</span>
-                        <span class="keyword">function</span>(v) <span class="func">print</span>(v) <span class="keyword">end</span>,
-                        <span class="string">"server"</span>,       <span class="comment">-- flag</span>
-                        <span class="keyword">true</span>            <span class="comment">-- MultiSelect</span>
+                        <span class="string">"Server"</span>,             <span class="comment">-- Tiêu đề</span>
+                        { <span class="string">"EU"</span>, <span class="string">"US"</span>, <span class="string">"AS"</span> }, <span class="comment">-- Danh sách options</span>
+                        <span class="string">"US"</span>,                <span class="comment">-- Giá trị mặc định</span>
+                        <span class="keyword">function</span>(v)          <span class="comment">-- Callback</span>
+                            <span class="func">print</span>(<span class="string">"Selected:"</span>, v)
+                        <span class="keyword">end</span>,
+                        <span class="string">"server"</span>,              <span class="comment">-- Flag</span>
+                        <span class="keyword">true</span>                  <span class="comment">-- MultiSelect (chọn nhiều)</span>
                     })
-                    ddown:Add(<span class="string">"AU"</span>)   <span class="comment">-- thêm option</span>
+
+                    <span class="comment">-- ➕ Thêm option mới</span>
+                    ddown:Add(<span class="string">"AU"</span>)
+                    <span class="comment">-- 🎯 Chọn option</span>
                     ddown:Select(<span class="string">"EU"</span>)
                 </div>
             </div>
@@ -405,32 +426,40 @@
             <!-- TextBox -->
             <div class="card">
                 <h3>✏️ TextBox</h3>
-                <p>Ô nhập văn bản với callback khi focus mất.</p>
+                <p>Text input with placeholder, clear-on-focus, and callback.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> tb = tab:AddTextBox({
-                        <span class="string">"Tên"</span>,
-                        <span class="string">"Player1"</span>,       <span class="comment">-- default</span>
-                        <span class="keyword">false</span>,          <span class="comment">-- clear on focus</span>
-                        <span class="keyword">function</span>(t) <span class="func">print</span>(t) <span class="keyword">end</span>,
-                        <span class="string">"Nhập tên..."</span>    <span class="comment">-- placeholder</span>
+                        <span class="string">"Username"</span>,           <span class="comment">-- Tiêu đề</span>
+                        <span class="string">"Player1"</span>,            <span class="comment">-- Giá trị mặc định</span>
+                        <span class="keyword">false</span>,               <span class="comment">-- Clear on focus</span>
+                        <span class="keyword">function</span>(t)          <span class="comment">-- Callback khi mất focus</span>
+                            <span class="func">print</span>(<span class="string">"Input:"</span>, t)
+                        <span class="keyword">end</span>,
+                        <span class="string">"Enter name..."</span>       <span class="comment">-- Placeholder</span>
                     })
-                    tb.OnChanging = <span class="keyword">function</span>(t) <span class="keyword">return</span> <span class="func">string.upper</span>(t) <span class="keyword">end</span>
+
+                    <span class="comment">-- 🔄 Xử lý input real-time</span>
+                    tb.OnChanging = <span class="keyword">function</span>(t)
+                        <span class="keyword">return</span> <span class="func">string.upper</span>(t)  <span class="comment">-- Tự động viết hoa</span>
+                    <span class="keyword">end</span>
                 </div>
             </div>
 
             <!-- Profile -->
             <div class="card">
                 <h3>👤 Profile</h3>
-                <p>Hiển thị thông tin người dùng với avatar, cover, bio.</p>
+                <p>Display user info with avatar, cover image, and bio.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> prof = tab:AddProfile({
-                        <span class="string">"Quang Huy"</span>,
-                        <span class="string">"Dev &amp; Designer"</span>,
-                        Avatar = <span class="string">"rbxassetid://..."</span>,
-                        Cover  = <span class="string">"rbxassetid://..."</span>,
+                        <span class="string">"Quang Huy"</span>,          <span class="comment">-- Tên</span>
+                        <span class="string">"Lua Developer"</span>,      <span class="comment">-- Bio</span>
+                        Avatar = <span class="string">"rbxassetid://123"</span>,
+                        Cover  = <span class="string">"rbxassetid://456"</span>,
                         Verified = <span class="keyword">true</span>
                     })
-                    prof:SetBio(<span class="string">"New bio"</span>)
+
+                    <span class="comment">-- ✏️ Cập nhật thông tin</span>
+                    prof:SetBio(<span class="string">"New bio here"</span>)
                     prof:SetBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">200</span>,<span class="number">100</span>))
                 </div>
             </div>
@@ -438,11 +467,11 @@
             <!-- Discord Card -->
             <div class="card">
                 <h3>💬 Discord Card</h3>
-                <p>Card hiển thị server Discord với link mời.</p>
+                <p>Single Discord server card with invite link.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> dc = tab:AddSingleDiscordCard({
                         Title = <span class="string">"Bear Community"</span>,
-                        Description = <span class="string">"Kênh hỗ trợ &amp; cập nhật"</span>,
+                        Description = <span class="string">"Support &amp; Updates"</span>,
                         Logo = <span class="string">"rbxassetid://..."</span>,
                         BannerColor = Color3.fromRGB(<span class="number">88</span>,<span class="number">101</span>,<span class="number">242</span>),
                         Online = <span class="number">42</span>,
@@ -450,70 +479,81 @@
                         Invite = <span class="string">"https://discord.gg/..."</span>,
                         Verified = <span class="keyword">true</span>
                     })
+
+                    <span class="comment">-- 🔄 Cập nhật</span>
                     dc:SetTitle(<span class="string">"New Server"</span>)
                     dc:SetStats(<span class="number">99</span>, <span class="number">2000</span>)
+                    dc:SetInviteLink(<span class="string">"https://discord.gg/new"</span>)
                 </div>
             </div>
 
             <!-- Discord Invite (2 cards) -->
             <div class="card">
-                <h3>📨 Discord Invite (2 cards)</h3>
-                <p>Hiển thị 2 card Discord cạnh nhau.</p>
+                <h3>📨 Discord Invite (2 Cards)</h3>
+                <p>Two Discord cards side by side.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> inv = tab:AddDiscordInvite({
                         { <span class="string">"Server 1"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span>, Color3.fromRGB(<span class="number">88</span>,<span class="number">101</span>,<span class="number">242</span>), <span class="number">10</span>, <span class="number">100</span>, <span class="string">"https://discord.gg/..."</span> },
                         { <span class="string">"Server 2"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span>, Color3.fromRGB(<span class="number">255</span>,<span class="number">70</span>,<span class="number">70</span>), <span class="number">5</span>, <span class="number">50</span>, <span class="string">"https://discord.gg/..."</span> }
                     })
+
+                    <span class="comment">-- 🔄 Cập nhật từng card</span>
                     inv:UpdateCard1({ <span class="string">"New Card 1"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span> })
+                    inv:UpdateCard2({ <span class="string">"New Card 2"</span>, <span class="string">"..."</span>, <span class="string">"rbxassetid://..."</span> })
                 </div>
             </div>
 
             <!-- Dialog -->
             <div class="card">
                 <h3>💬 Dialog</h3>
-                <p>Hộp thoại xác nhận với các nút tùy chỉnh.</p>
+                <p>Confirmation dialog with custom buttons.</p>
                 <div class="code-block">
                     <span class="keyword">local</span> dialog = win:Dialog({
-                        Title = <span class="string">"Xác nhận"</span>,
-                        Text = <span class="string">"Bạn có muốn thoát?"</span>,
+                        Title = <span class="string">"Confirm"</span>,
+                        Text = <span class="string">"Do you want to exit?"</span>,
                         Options = {
-                            { <span class="string">"Thoát"</span>, <span class="keyword">function</span>() <span class="func">game:Shutdown</span>() <span class="keyword">end</span> },
-                            { <span class="string">"Hủy"</span> }
+                            { <span class="string">"Exit"</span>, <span class="keyword">function</span>() <span class="func">game:Shutdown</span>() <span class="keyword">end</span> },
+                            { <span class="string">"Cancel"</span> }
                         }
                     })
                 </div>
+                <div class="note-vi">⚠️ Dialog tự động hiển thị trên cùng và chặn tương tác với các thành phần khác.</div>
             </div>
 
             <!-- Bar / Badge -->
             <div class="card">
-                <h3>🏷️ Bar (Badge)</h3>
-                <p>Hiển thị các badge nhỏ trên thanh tiêu đề.</p>
+                <h3>🏷️ Top Bar Badges</h3>
+                <p>Display small badges on the window title bar.</p>
                 <div class="code-block">
+                    <span class="comment">-- Có 5 thanh bar: Bar, Bar2, Bar3, Bar4, Bar5</span>
                     win:Bar(<span class="string">"Online"</span>, Color3.fromRGB(<span class="number">0</span>,<span class="number">200</span>,<span class="number">0</span>), <span class="keyword">nil</span>, <span class="keyword">nil</span>, <span class="string">"rbxassetid://..."</span>)
                     win:Bar2(<span class="string">"VIP"</span>, Color3.fromRGB(<span class="number">200</span>,<span class="number">150</span>,<span class="number">0</span>))
                     win:Bar3(<span class="string">"Beta"</span>, Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
                     win:Bar4(<span class="string">"v1.2.0"</span>)
                     win:Bar5(<span class="string">"🐻"</span>)
                 </div>
+                <div class="note-vi">🎨 Mỗi bar có thể tùy chỉnh màu nền, màu viền, màu chữ và icon.</div>
             </div>
 
         </div><!-- end grid -->
 
         <!-- ============================================================ -->
-        <!-- TAB GROUP (SubTab) -->
+        <!-- TAB GROUP -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📂 Tab Group (SubTab)</h2>
-        <p class="section-subtitle">Nhóm các tab con dưới một tab cha, có thể mở rộng/thu gọn.</p>
+        <h2 class="section-title">📂 Tab Group (SubTabs)</h2>
+        <p class="section-subtitle">Group multiple subtabs under one parent tab with expand/collapse.</p>
 
         <div class="grid">
             <div class="card" style="grid-column: 1 / -1;">
                 <div class="code-block">
+                    <span class="comment">-- 📁 Tạo group tab</span>
                     <span class="keyword">local</span> group = win:MakeTabGroup({
                         <span class="string">"🎮 Game Settings"</span>,
-                        <span class="string">"rbxassetid://..."</span>  <span class="comment">-- icon</span>
+                        <span class="string">"rbxassetid://..."</span>  <span class="comment">-- Icon</span>
                     })
 
+                    <span class="comment">-- 📑 Thêm subtab</span>
                     <span class="keyword">local</span> sub1 = group:AddTab({ <span class="string">"General"</span> })
                     sub1:AddToggle({ <span class="string">"Auto Reconnect"</span>, <span class="keyword">true</span> })
 
@@ -523,10 +563,11 @@
                     <span class="keyword">local</span> sub3 = group:AddTab({ <span class="string">"Audio"</span> })
                     sub3:AddButton({ <span class="string">"Test Sound"</span>, <span class="keyword">function</span>() <span class="func">print</span>(<span class="string">"🔊"</span>) <span class="keyword">end</span> })
 
-                    <span class="comment">-- Mở rộng/thu gọn</span>
+                    <span class="comment">-- 🔽 Mở rộng / thu gọn</span>
                     group:Expand()
                     group:Collapse()
                 </div>
+                <div class="note-vi">📌 SubTab hoạt động như một tab độc lập nhưng nằm gọn trong group cha.</div>
             </div>
         </div>
 
@@ -534,20 +575,25 @@
         <!-- THEME & CUSTOMIZATION -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">🎨 Tùy chỉnh giao diện</h2>
-        <p class="section-subtitle">Các hàm thay đổi màu sắc và border của UI.</p>
+        <h2 class="section-title">🎨 Theme &amp; Customization</h2>
+        <p class="section-subtitle">Change colors, borders, and scale of the UI.</p>
 
         <div class="grid">
 
             <div class="card">
-                <h3>🌈 Màu sắc</h3>
+                <h3>🌈 Color Settings</h3>
                 <div class="code-block">
+                    <span class="comment">-- 🎨 Thay đổi màu sắc chính</span>
                     bearlib:SetHubColor(Color3.fromRGB(<span class="number">20</span>,<span class="number">20</span>,<span class="number">40</span>))
                     bearlib:SetTextColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>))
                     bearlib:SetStrokeColor(Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
+
+                    <span class="comment">-- 🖌️ Màu viền cho từng thành phần</span>
                     bearlib:SetUIBorderColor(Color3.fromRGB(<span class="number">200</span>,<span class="number">200</span>,<span class="number">255</span>))
                     bearlib:SetDiscordBorderColor(Color3.fromRGB(<span class="number">150</span>,<span class="number">150</span>,<span class="number">255</span>))
                     bearlib:SetProfileBorderColor(Color3.fromRGB(<span class="number">255</span>,<span class="number">200</span>,<span class="number">100</span>))
+
+                    <span class="comment">-- 📏 Độ dày viền</span>
                     bearlib:SetBorderThickness(<span class="number">2</span>)
                 </div>
             </div>
@@ -555,72 +601,76 @@
             <div class="card">
                 <h3>🔁 Toggle Colors</h3>
                 <div class="code-block">
-                    <span class="comment">-- Lấy màu hiện tại</span>
+                    <span class="comment">-- 📖 Lấy màu toggle hiện tại</span>
                     <span class="keyword">local</span> colors = bearlib:GetToggleColors()
                     <span class="func">print</span>(colors.ToggleOn)
 
-                    <span class="comment">-- Reset về mặc định</span>
+                    <span class="comment">-- 🔄 Reset về mặc định</span>
                     bearlib:ResetToggleColors()
                     bearlib:ResetBorderColors()
                 </div>
+                <div class="note-vi">🔄 Reset sẽ đưa các màu về thiết lập gốc của thư viện.</div>
             </div>
 
             <div class="card">
-                <h3>📐 Scale &amp; Kích thước</h3>
+                <h3>📐 Scale &amp; Size</h3>
                 <div class="code-block">
-                    <span class="comment">-- Thay đổi tỉ lệ UI (mặc định 450)</span>
+                    <span class="comment">-- 🔍 Thay đổi tỉ lệ UI (mặc định: 450)</span>
                     bearlib:SetScale(<span class="number">500</span>)
 
-                    <span class="comment">-- Lưu kích thước cửa sổ tự động</span>
-                    <span class="comment">-- File: bearlib.json</span>
+                    <span class="comment">-- 💾 Kích thước cửa sổ tự động lưu vào bearlib.json</span>
+                    <span class="comment">-- Bạn có thể kéo góc dưới phải để thay đổi kích thước</span>
                 </div>
             </div>
 
             <div class="card">
                 <h3>🔔 Notifications</h3>
+                <p>Show toast notifications with custom icon and duration.</p>
                 <div class="code-block">
                     bearlib:Notify({
-                        Title = <span class="string">"Thông báo"</span>,
-                        Message = <span class="string">"Đã kết nối thành công!"</span>,
+                        Title = <span class="string">"Success"</span>,
+                        Message = <span class="string">"Connected successfully!"</span>,
                         Icon = <span class="string">"rbxassetid://..."</span>,
-                        Duration = <span class="number">5</span>
+                        Duration = <span class="number">5</span>  <span class="comment">-- Giây</span>
                     })
                 </div>
+                <div class="note-vi">🔔 Notification tự động xếp hàng và hiển thị lần lượt.</div>
             </div>
 
         </div>
 
         <!-- ============================================================ -->
-        <!-- FLAGS & SAVE -->
+        <!-- FLAGS & STORAGE -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">💾 Flags &amp; Lưu trữ</h2>
-        <p class="section-subtitle">Quản lý trạng thái và tự động lưu vào file JSON.</p>
+        <h2 class="section-title">💾 Flags &amp; Persistent Storage</h2>
+        <p class="section-subtitle">Manage state and auto-save to JSON file.</p>
 
         <div class="grid">
             <div class="card" style="grid-column: 1 / -1;">
                 <div class="code-block">
-                    <span class="comment">-- Khi tạo cửa sổ, truyền tên file lưu</span>
+                    <span class="comment">-- 📁 Khai báo file lưu khi tạo cửa sổ</span>
                     <span class="keyword">local</span> win = bearlib:MakeWindow({
                         <span class="string">"My Hub"</span>,
                         <span class="string">"by ..."</span>,
-                        <span class="string">"my_flags.json"</span>   <span class="comment">-- tự động lưu flags</span>
+                        <span class="string">"my_flags.json"</span>   <span class="comment">-- Tự động lưu flags</span>
                     })
 
-                    <span class="comment">-- Truy cập flags</span>
+                    <span class="comment">-- 📖 Truy cập flags</span>
                     <span class="func">print</span>(<span class="func">bearlib.Flags.auto_farm</span>)
 
-                    <span class="comment">-- Thay đổi flag bằng code</span>
+                    <span class="comment">-- ✏️ Thay đổi flag bằng code</span>
                     <span class="func">bearlib:SetFlag</span>(<span class="string">"auto_farm"</span>, <span class="keyword">true</span>)
 
-                    <span class="comment">-- Lắng nghe sự kiện flags thay đổi</span>
+                    <span class="comment">-- 👂 Lắng nghe sự kiện flag thay đổi</span>
                     <span class="func">bearlib.Connection.FlagsChanged:Connect</span>(<span class="keyword">function</span>(flag, value)
                         <span class="func">print</span>(<span class="string">"Flag changed:"</span>, flag, value)
                     <span class="keyword">end</span>)
 
-                    <span class="comment">-- Lưu manual</span>
+                    <span class="comment">-- 💾 Lưu manual (thường không cần vì tự động)</span>
                     <span class="func">bearlib.Connection:FireConnection</span>(<span class="string">"FileSaved"</span>)
                 </div>
+                <div class="note-vi">💡 Flag tự động được lưu mỗi khi giá trị thay đổi (có debounce 0.1s).</div>
             </div>
         </div>
 
@@ -628,52 +678,56 @@
         <!-- FULL EXAMPLE -->
         <!-- ============================================================ -->
 
-        <h2 class="section-title">📝 Ví dụ đầy đủ</h2>
+        <h2 class="section-title">📝 Complete Example</h2>
 
         <div class="grid">
             <div class="card" style="grid-column: 1 / -1;">
                 <div class="code-block" style="font-size:0.75rem;">
-                    <span class="keyword">local</span> bearlib = <span class="func">loadstring</span>(<span class="func">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/.../bearlib.lua"</span>))()
+                    <span class="comment">-- 📥 Load thư viện từ repository</span>
+                    <span class="keyword">local</span> bearlib = <span class="func">loadstring</span>(<span class="func">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua"</span>))()
+
+                    <span class="comment">-- 🪟 Tạo cửa sổ chính</span>
                     <span class="keyword">local</span> win = bearlib:MakeWindow({
                         <span class="string">"🐻 Bear Hub"</span>,
                         <span class="string">"by Quang Huy"</span>,
                         <span class="string">"hub_flags.json"</span>
                     })
 
-                    <span class="keyword">local</span> mainTab = win:MakeTab({ <span class="string">"Chính"</span>, <span class="string">"rbxassetid://10709791437"</span> })
-                    <span class="keyword">local</span> settingsTab = win:MakeTab({ <span class="string">"Cài đặt"</span> })
+                    <span class="comment">-- 📑 Tạo tabs</span>
+                    <span class="keyword">local</span> mainTab = win:MakeTab({ <span class="string">"Main"</span>, <span class="string">"rbxassetid://10709791437"</span> })
+                    <span class="keyword">local</span> settingsTab = win:MakeTab({ <span class="string">"Settings"</span> })
 
-                    <span class="comment">-- Section &amp; Button</span>
-                    <span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"Điều khiển"</span>)
+                    <span class="comment">-- 📂 Section &amp; Button</span>
+                    <span class="keyword">local</span> sec = mainTab:AddSection(<span class="string">"Controls"</span>)
                     mainTab:AddButton({
-                        <span class="string">"Chạy script"</span>,
-                        <span class="string">"Kích hoạt tính năng chính"</span>,
+                        <span class="string">"Run Script"</span>,
+                        <span class="string">"Execute main function"</span>,
                         <span class="keyword">function</span>()
-                            <span class="func">print</span>(<span class="string">"✅ Script đã chạy!"</span>)
-                            <span class="func">bearlib:Notify</span>({ Title = <span class="string">"Thành công"</span>, Message = <span class="string">"Script đã được kích hoạt"</span> })
+                            <span class="func">print</span>(<span class="string">"✅ Script executed!"</span>)
+                            <span class="func">bearlib:Notify</span>({ Title = <span class="string">"Success"</span>, Message = <span class="string">"Script executed"</span> })
                         <span class="keyword">end</span>
                     })
 
-                    <span class="comment">-- Toggle</span>
+                    <span class="comment">-- 🔁 Toggle với flag</span>
                     mainTab:AddToggle({
                         <span class="string">"Auto Farm"</span>,
-                        <span class="string">"Tự động farm khi vào game"</span>,
+                        <span class="string">"Enable auto farming"</span>,
                         <span class="keyword">false</span>,
                         <span class="keyword">function</span>(v) <span class="func">print</span>(<span class="string">"Auto Farm:"</span>, v) <span class="keyword">end</span>,
                         <span class="string">"auto_farm"</span>
                     })
 
-                    <span class="comment">-- Slider</span>
+                    <span class="comment">-- 📊 Slider</span>
                     mainTab:AddSlider({
-                        <span class="string">"Tốc độ"</span>,
-                        <span class="string">"Điều chỉnh tốc độ di chuyển"</span>,
+                        <span class="string">"Speed"</span>,
+                        <span class="string">"Adjust movement speed"</span>,
                         <span class="number">1</span>, <span class="number">20</span>, <span class="number">0.5</span>,
                         <span class="number">5</span>,
-                        <span class="keyword">function</span>(v) <span class="func">print</span>(<span class="string">"Tốc độ:"</span>, v) <span class="keyword">end</span>,
+                        <span class="keyword">function</span>(v) <span class="func">print</span>(<span class="string">"Speed:"</span>, v) <span class="keyword">end</span>,
                         <span class="string">"speed"</span>
                     })
 
-                    <span class="comment">-- Dropdown</span>
+                    <span class="comment">-- 📋 Dropdown</span>
                     mainTab:AddDropdown({
                         <span class="string">"Server"</span>,
                         { <span class="string">"NA"</span>, <span class="string">"EU"</span>, <span class="string">"AS"</span> },
@@ -682,7 +736,7 @@
                         <span class="string">"server"</span>
                     })
 
-                    <span class="comment">-- Profile</span>
+                    <span class="comment">-- 👤 Profile</span>
                     settingsTab:AddProfile({
                         <span class="string">"Quang Huy"</span>,
                         <span class="string">"Lua Developer &amp; UI Designer"</span>,
@@ -691,10 +745,10 @@
                         Verified = <span class="keyword">true</span>
                     })
 
-                    <span class="comment">-- Discord Card</span>
+                    <span class="comment">-- 💬 Discord Card</span>
                     settingsTab:AddSingleDiscordCard({
                         Title = <span class="string">"Bear Community"</span>,
-                        Description = <span class="string">"Kênh hỗ trợ và cập nhật mới nhất"</span>,
+                        Description = <span class="string">"Support &amp; updates channel"</span>,
                         Logo = <span class="string">"rbxassetid://..."</span>,
                         BannerColor = Color3.fromRGB(<span class="number">88</span>, <span class="number">101</span>, <span class="number">242</span>),
                         Online = <span class="number">42</span>,
@@ -703,12 +757,12 @@
                         Verified = <span class="keyword">true</span>
                     })
 
-                    <span class="comment">-- Badge</span>
+                    <span class="comment">-- 🏷️ Badges</span>
                     win:Bar(<span class="string">"Online"</span>, Color3.fromRGB(<span class="number">0</span>,<span class="number">200</span>,<span class="number">0</span>))
                     win:Bar2(<span class="string">"v1.2.0"</span>, Color3.fromRGB(<span class="number">100</span>,<span class="number">100</span>,<span class="number">200</span>))
 
-                    <span class="comment">-- Notification</span>
-                    <span class="func">bearlib:Notify</span>({ Title = <span class="string">"🚀 Bear Hub"</span>, Message = <span class="string">"Đã tải thành công!"</span>, Duration = <span class="number">3</span> })
+                    <span class="comment">-- 🔔 Notification khởi tạo</span>
+                    <span class="func">bearlib:Notify</span>({ Title = <span class="string">"🚀 Bear Hub"</span>, Message = <span class="string">"Loaded successfully!"</span>, Duration = <span class="number">3</span> })
                 </div>
             </div>
         </div>
@@ -718,76 +772,78 @@
         <!-- ============================================================ -->
 
         <h2 class="section-title">📚 API Reference</h2>
-        <p class="section-subtitle">Danh sách các hàm và method có sẵn.</p>
+        <p class="section-subtitle">Complete list of all functions and methods.</p>
 
         <div class="card" style="margin-bottom:2rem;">
             <h3 style="margin-bottom:1rem;">🔹 bearlib (Global)</h3>
             <ul class="api-list">
-                <li><span class="name">MakeWindow()</span><span class="desc">Tạo cửa sổ chính</span></li>
-                <li><span class="name">Notify()</span><span class="desc">Hiển thị thông báo</span></li>
-                <li><span class="name">SetScale()</span><span class="desc">Thay đổi tỉ lệ UI</span></li>
-                <li><span class="name">SetHubColor()</span><span class="desc">Màu nền chính</span></li>
-                <li><span class="name">SetTextColor()</span><span class="desc">Màu chữ</span></li>
-                <li><span class="name">SetStrokeColor()</span><span class="desc">Màu viền</span></li>
-                <li><span class="name">SetUIBorderColor()</span><span class="desc">Màu viền cửa sổ</span></li>
-                <li><span class="name">SetDiscordBorderColor()</span><span class="desc">Màu viền Discord card</span></li>
-                <li><span class="name">SetProfileBorderColor()</span><span class="desc">Màu viền Profile</span></li>
-                <li><span class="name">SetBorderThickness()</span><span class="desc">Độ dày viền</span></li>
-                <li><span class="name">GetToggleColors()</span><span class="desc">Lấy màu toggle</span></li>
-                <li><span class="name">ResetToggleColors()</span><span class="desc">Reset màu toggle</span></li>
-                <li><span class="name">ResetBorderColors()</span><span class="desc">Reset màu viền</span></li>
-                <li><span class="name">GetFlag()</span><span class="desc">Lấy giá trị flag</span></li>
-                <li><span class="name">SetFlag()</span><span class="desc">Set giá trị flag</span></li>
-                <li><span class="name">Connection.FlagsChanged</span><span class="desc">Event khi flag thay đổi</span></li>
-                <li><span class="name">Connection.FileSaved</span><span class="desc">Event khi file được lưu</span></li>
+                <li><span class="name">MakeWindow()</span><span class="desc">Create main window</span></li>
+                <li><span class="name">Notify()</span><span class="desc">Show notification toast</span></li>
+                <li><span class="name">SetScale()</span><span class="desc">Change UI scale</span></li>
+                <li><span class="name">SetHubColor()</span><span class="desc">Set main background color</span></li>
+                <li><span class="name">SetTextColor()</span><span class="desc">Set text color</span></li>
+                <li><span class="name">SetStrokeColor()</span><span class="desc">Set stroke/border color</span></li>
+                <li><span class="name">SetUIBorderColor()</span><span class="desc">Set window border color</span></li>
+                <li><span class="name">SetDiscordBorderColor()</span><span class="desc">Set Discord card border</span></li>
+                <li><span class="name">SetProfileBorderColor()</span><span class="desc">Set profile border color</span></li>
+                <li><span class="name">SetBorderThickness()</span><span class="desc">Set border thickness</span></li>
+                <li><span class="name">GetToggleColors()</span><span class="desc">Get current toggle colors</span></li>
+                <li><span class="name">ResetToggleColors()</span><span class="desc">Reset toggle colors to default</span></li>
+                <li><span class="name">ResetBorderColors()</span><span class="desc">Reset border colors to default</span></li>
+                <li><span class="name">GetFlag()</span><span class="desc">Get flag value</span></li>
+                <li><span class="name">SetFlag()</span><span class="desc">Set flag value</span></li>
+                <li><span class="name">Connection.FlagsChanged</span><span class="desc">Event fired when flag changes</span></li>
+                <li><span class="name">Connection.FileSaved</span><span class="desc">Event fired when file is saved</span></li>
             </ul>
         </div>
 
         <div class="card" style="margin-bottom:2rem;">
             <h3 style="margin-bottom:1rem;">🔸 Window (win)</h3>
             <ul class="api-list">
-                <li><span class="name">MakeTab()</span><span class="desc">Tạo tab mới</span></li>
-                <li><span class="name">MakeTabGroup()</span><span class="desc">Tạo nhóm tab (SubTab)</span></li>
-                <li><span class="name">Dialog()</span><span class="desc">Tạo hộp thoại</span></li>
-                <li><span class="name">Bar() / Bar2() ...</span><span class="desc">Badge trên thanh tiêu đề</span></li>
-                <li><span class="name">Set()</span><span class="desc">Đổi tên cửa sổ</span></li>
-                <li><span class="name">CloseBtn()</span><span class="desc">Đóng cửa sổ</span></li>
-                <li><span class="name">MinimizeBtn()</span><span class="desc">Thu nhỏ cửa sổ</span></li>
-                <li><span class="name">SelectTab()</span><span class="desc">Chọn tab theo index hoặc tên</span></li>
+                <li><span class="name">MakeTab()</span><span class="desc">Create a new tab</span></li>
+                <li><span class="name">MakeTabGroup()</span><span class="desc">Create a tab group with subtabs</span></li>
+                <li><span class="name">Dialog()</span><span class="desc">Create a confirmation dialog</span></li>
+                <li><span class="name">Bar() / Bar2() ...</span><span class="desc">Add badges to title bar</span></li>
+                <li><span class="name">Set()</span><span class="desc">Change window title/subtitle</span></li>
+                <li><span class="name">CloseBtn()</span><span class="desc">Close the window</span></li>
+                <li><span class="name">MinimizeBtn()</span><span class="desc">Minimize the window</span></li>
+                <li><span class="name">SelectTab()</span><span class="desc">Select tab by index or reference</span></li>
             </ul>
         </div>
 
         <div class="card" style="margin-bottom:2rem;">
             <h3 style="margin-bottom:1rem;">🔹 Tab &amp; SubTab</h3>
             <ul class="api-list">
-                <li><span class="name">AddSection()</span><span class="desc">Thêm section</span></li>
-                <li><span class="name">AddButton()</span><span class="desc">Thêm nút bấm</span></li>
-                <li><span class="name">AddToggle()</span><span class="desc">Thêm toggle</span></li>
-                <li><span class="name">AddSlider()</span><span class="desc">Thêm slider</span></li>
-                <li><span class="name">AddTextBox()</span><span class="desc">Thêm textbox</span></li>
-                <li><span class="name">AddDropdown()</span><span class="desc">Thêm dropdown</span></li>
-                <li><span class="name">AddProfile()</span><span class="desc">Thêm profile card</span></li>
-                <li><span class="name">AddSingleDiscordCard()</span><span class="desc">Thêm 1 Discord card</span></li>
-                <li><span class="name">AddDiscordInvite()</span><span class="desc">Thêm 2 Discord card</span></li>
-                <li><span class="name">AddDiscordInviteOld()</span><span class="desc">Phiên bản cũ</span></li>
-                <li><span class="name">Enable() / Disable()</span><span class="desc">Hiển thị/ẩn tab</span></li>
-                <li><span class="name">Visible()</span><span class="desc">Ẩn/hiện tab</span></li>
-                <li><span class="name">Destroy()</span><span class="desc">Xóa tab</span></li>
+                <li><span class="name">AddSection()</span><span class="desc">Add a section header</span></li>
+                <li><span class="name">AddButton()</span><span class="desc">Add a button</span></li>
+                <li><span class="name">AddToggle()</span><span class="desc">Add a toggle switch</span></li>
+                <li><span class="name">AddSlider()</span><span class="desc">Add a numeric slider</span></li>
+                <li><span class="name">AddTextBox()</span><span class="desc">Add a text input box</span></li>
+                <li><span class="name">AddDropdown()</span><span class="desc">Add a dropdown selector</span></li>
+                <li><span class="name">AddProfile()</span><span class="desc">Add a profile card</span></li>
+                <li><span class="name">AddSingleDiscordCard()</span><span class="desc">Add a Discord server card</span></li>
+                <li><span class="name">AddDiscordInvite()</span><span class="desc">Add two Discord cards side by side</span></li>
+                <li><span class="name">Enable() / Disable()</span><span class="desc">Show/hide tab</span></li>
+                <li><span class="name">Visible()</span><span class="desc">Toggle visibility</span></li>
+                <li><span class="name">Destroy()</span><span class="desc">Remove tab</span></li>
             </ul>
         </div>
 
         <div class="card">
-            <h3 style="margin-bottom:1rem;">🔸 Element Methods (chung)</h3>
+            <h3 style="margin-bottom:1rem;">🔸 Element Methods (Common)</h3>
             <ul class="api-list">
-                <li><span class="name">Set()</span><span class="desc">Thay đổi giá trị / tiêu đề / mô tả</span></li>
-                <li><span class="name">Visible()</span><span class="desc">Ẩn/hiện element</span></li>
-                <li><span class="name">Destroy()</span><span class="desc">Xóa element</span></li>
-                <li><span class="name">Callback()</span><span class="desc">Gọi callback (nếu có)</span></li>
+                <li><span class="name">Set()</span><span class="desc">Change value / title / description</span></li>
+                <li><span class="name">Visible()</span><span class="desc">Show/hide element</span></li>
+                <li><span class="name">Destroy()</span><span class="desc">Remove element</span></li>
+                <li><span class="name">Callback()</span><span class="desc">Trigger callback (if available)</span></li>
             </ul>
         </div>
 
+        <!-- Footer -->
         <div class="footer">
-            Bear Library UI v1.2.0 &nbsp;·&nbsp; <a href="#" target="_blank">GitHub</a> &nbsp;·&nbsp; by Quang Huy
+            Bear Library UI v1.2.0 &nbsp;·&nbsp;
+            <a href="https://raw.githubusercontent.com/Huyckmy/Library/refs/heads/Ui_OS/bearlib.lua" target="_blank">Load UI</a> &nbsp;·&nbsp;
+            by Quang Huy
         </div>
 
     </div><!-- end container -->
