@@ -98,8 +98,6 @@ local bearlib = {
             ["UI Border Color"] = Color3.fromRGB(180, 100, 255),
         }
     },
-    -- Phần còn lại giữ nguyên...
-}
     Info = {
         Version = "1.2.0"
     },
