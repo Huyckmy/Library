@@ -32,125 +32,6 @@ local bearlib = {
         ["Corner Radius"] = 12,
         ["ShowVNFlag"] = false,
     },
-    -- Các theme có sẵn
-    Themes = {
-        -- Theme 1: Classic (Default)
-        Classic = {
-            ["Color Hub 1"] = Color3.fromRGB(0, 0, 0),
-            ["Color Hub 2"] = Color3.fromRGB(15, 15, 15),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(0, 0, 0),
-            ["Color Stroke"] = Color3.fromRGB(0, 0, 0),
-            ["Color Theme"] = Color3.fromRGB(255, 255, 255),
-            ["Color Text"] = Color3.fromRGB(255, 255, 255),
-            ["Color Dark Text"] = Color3.fromRGB(170, 170, 170),
-            ["Color Discord Text"] = Color3.fromRGB(255, 255, 255),
-            ["Color Discord Stats"] = Color3.fromRGB(255, 255, 255),
-            ["Color Discord Border"] = Color3.fromRGB(255, 255, 255),
-            ["Color Profile Border"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle On"] = Color3.fromRGB(255, 255, 0),
-            ["Color Toggle Off"] = Color3.fromRGB(0, 0, 0),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(255, 255, 0),
-            ["Color Toggle Border"] = Color3.fromRGB(255, 255, 255),
-            ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(255, 255, 255),
-            ["Corner Radius"] = 12,
-        },
-        -- Theme 2: Dark Blue
-        DarkBlue = {
-            ["Color Hub 1"] = Color3.fromRGB(10, 14, 30),
-            ["Color Hub 2"] = Color3.fromRGB(20, 30, 50),
-            ["Color Hub 3"] = Color3.fromRGB(100, 180, 255),
-            ["Color Background Main"] = Color3.fromRGB(10, 14, 30),
-            ["Color Stroke"] = Color3.fromRGB(40, 80, 120),
-            ["Color Theme"] = Color3.fromRGB(100, 180, 255),
-            ["Color Text"] = Color3.fromRGB(200, 220, 255),
-            ["Color Dark Text"] = Color3.fromRGB(130, 160, 200),
-            ["Color Discord Text"] = Color3.fromRGB(200, 220, 255),
-            ["Color Discord Stats"] = Color3.fromRGB(130, 160, 200),
-            ["Color Discord Border"] = Color3.fromRGB(60, 120, 200),
-            ["Color Profile Border"] = Color3.fromRGB(60, 120, 200),
-            ["Color Toggle On"] = Color3.fromRGB(0, 150, 255),
-            ["Color Toggle Off"] = Color3.fromRGB(30, 40, 60),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(100, 180, 255),
-            ["Color Toggle Border"] = Color3.fromRGB(60, 120, 200),
-            ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(60, 120, 200),
-            ["Corner Radius"] = 12,
-        },
-        -- Theme 3: Neon Purple
-        NeonPurple = {
-            ["Color Hub 1"] = Color3.fromRGB(20, 0, 40),
-            ["Color Hub 2"] = Color3.fromRGB(40, 10, 70),
-            ["Color Hub 3"] = Color3.fromRGB(200, 100, 255),
-            ["Color Background Main"] = Color3.fromRGB(20, 0, 40),
-            ["Color Stroke"] = Color3.fromRGB(120, 50, 180),
-            ["Color Theme"] = Color3.fromRGB(200, 100, 255),
-            ["Color Text"] = Color3.fromRGB(230, 200, 255),
-            ["Color Dark Text"] = Color3.fromRGB(180, 150, 210),
-            ["Color Discord Text"] = Color3.fromRGB(230, 200, 255),
-            ["Color Discord Stats"] = Color3.fromRGB(180, 150, 210),
-            ["Color Discord Border"] = Color3.fromRGB(160, 80, 220),
-            ["Color Profile Border"] = Color3.fromRGB(160, 80, 220),
-            ["Color Toggle On"] = Color3.fromRGB(200, 0, 255),
-            ["Color Toggle Off"] = Color3.fromRGB(50, 20, 80),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 100, 255),
-            ["Color Toggle Border"] = Color3.fromRGB(160, 80, 220),
-            ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(160, 80, 220),
-            ["Corner Radius"] = 12,
-        },
-        -- Theme 4: Nature Green
-        NatureGreen = {
-            ["Color Hub 1"] = Color3.fromRGB(10, 30, 10),
-            ["Color Hub 2"] = Color3.fromRGB(20, 50, 20),
-            ["Color Hub 3"] = Color3.fromRGB(100, 255, 100),
-            ["Color Background Main"] = Color3.fromRGB(10, 30, 10),
-            ["Color Stroke"] = Color3.fromRGB(40, 120, 40),
-            ["Color Theme"] = Color3.fromRGB(100, 255, 100),
-            ["Color Text"] = Color3.fromRGB(200, 255, 200),
-            ["Color Dark Text"] = Color3.fromRGB(150, 200, 150),
-            ["Color Discord Text"] = Color3.fromRGB(200, 255, 200),
-            ["Color Discord Stats"] = Color3.fromRGB(150, 200, 150),
-            ["Color Discord Border"] = Color3.fromRGB(60, 180, 60),
-            ["Color Profile Border"] = Color3.fromRGB(60, 180, 60),
-            ["Color Toggle On"] = Color3.fromRGB(0, 255, 0),
-            ["Color Toggle Off"] = Color3.fromRGB(30, 60, 30),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(100, 255, 100),
-            ["Color Toggle Border"] = Color3.fromRGB(60, 180, 60),
-            ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(60, 180, 60),
-            ["Corner Radius"] = 12,
-        },
-        -- Theme 5: Cherry Red
-        CherryRed = {
-            ["Color Hub 1"] = Color3.fromRGB(30, 5, 5),
-            ["Color Hub 2"] = Color3.fromRGB(60, 15, 15),
-            ["Color Hub 3"] = Color3.fromRGB(255, 100, 100),
-            ["Color Background Main"] = Color3.fromRGB(30, 5, 5),
-            ["Color Stroke"] = Color3.fromRGB(140, 40, 40),
-            ["Color Theme"] = Color3.fromRGB(255, 100, 100),
-            ["Color Text"] = Color3.fromRGB(255, 200, 200),
-            ["Color Dark Text"] = Color3.fromRGB(200, 150, 150),
-            ["Color Discord Text"] = Color3.fromRGB(255, 200, 200),
-            ["Color Discord Stats"] = Color3.fromRGB(200, 150, 150),
-            ["Color Discord Border"] = Color3.fromRGB(200, 60, 60),
-            ["Color Profile Border"] = Color3.fromRGB(200, 60, 60),
-            ["Color Toggle On"] = Color3.fromRGB(255, 0, 0),
-            ["Color Toggle Off"] = Color3.fromRGB(60, 20, 20),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(255, 100, 100),
-            ["Color Toggle Border"] = Color3.fromRGB(200, 60, 60),
-            ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(200, 60, 60),
-            ["Corner Radius"] = 12,
-        },
-    },
-    CurrentTheme = "Classic",
     Info = {
         Name = "Bear Library",
         By = "Quang Huy",
@@ -159,8 +40,7 @@ local bearlib = {
     Save = {
         UISize = {550, 380},
         TabSize = 160,
-        BarPosition = {X = 350, Y = -65},
-        Theme = "Classic"
+        BarPosition = {X = 350, Y = -65}
     },
     Settings = {},
     Connection = {},
@@ -238,9 +118,6 @@ local SetProps, SetChildren, InsertTheme, Create do
                 if rawget(decode, "TabSize") then bearlib.Save["TabSize"] = decode["TabSize"] end
                 if rawget(decode, "BarPosition") then
                     bearlib.Save["BarPosition"] = decode["BarPosition"]
-                end
-                if rawget(decode, "Theme") then
-                    bearlib.Save["Theme"] = decode["Theme"]
                 end
             end
         end
@@ -338,7 +215,7 @@ local Connections, Connection = {}, bearlib.Connection do
         end
     end
 
-    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded", "ThemeChanged"})
+    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded"})
 end
 
 local GetFlag, SetFlag, CheckFlag do
@@ -394,87 +271,6 @@ if ScreenFind and ScreenFind ~= ScreenGui then
 end
 
 local Theme = bearlib.Theme
-
--- Hàm áp dụng theme
-local function ApplyTheme(themeName)
-    local theme = bearlib.Themes[themeName]
-    if not theme then return end
-    
-    -- Lưu theme hiện tại
-    bearlib.CurrentTheme = themeName
-    bearlib.Save.Theme = themeName
-    
-    -- Áp dụng theme
-    for key, value in pairs(theme) do
-        bearlib.Theme[key] = value
-    end
-    
-    -- Lưu vào file
-    if writefile then
-        local success, err = pcall(function()
-            return HttpService:JSONEncode(bearlib.Save)
-        end)
-        if success then
-            pcall(writefile, "bearlib.json", err)
-        end
-    end
-    
-    -- Refresh UI
-    RefreshAllUIElements()
-    
-    -- Fire event
-    Connection:FireConnection("ThemeChanged", themeName)
-end
-
--- Hàm lấy danh sách theme
-function bearlib:GetThemes()
-    local themes = {}
-    for name, _ in pairs(self.Themes) do
-        table.insert(themes, name)
-    end
-    return themes
-end
-
--- Hàm đổi theme
-function bearlib:SetTheme(themeName)
-    if self.Themes[themeName] then
-        ApplyTheme(themeName)
-        return true
-    end
-    return false
-end
-
--- Hàm lấy theme hiện tại
-function bearlib:GetCurrentTheme()
-    return self.CurrentTheme
-end
-
--- Hàm thêm theme mới
-function bearlib:AddTheme(themeName, themeData)
-    if not themeName or type(themeName) ~= "string" then return false end
-    if not themeData or type(themeData) ~= "table" then return false end
-    
-    -- Kiểm tra các key cần thiết
-    local requiredKeys = {
-        "Color Hub 1", "Color Hub 2", "Color Hub 3",
-        "Color Background Main", "Color Stroke", "Color Theme",
-        "Color Text", "Color Dark Text"
-    }
-    
-    for _, key in ipairs(requiredKeys) do
-        if themeData[key] == nil then
-            return false
-        end
-    end
-    
-    self.Themes[themeName] = themeData
-    return true
-end
-
-local ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
-if ScreenFind and ScreenFind ~= ScreenGui then
-    ScreenFind:Destroy()
-end
 
 local function GetStr(val)
     if type(val) == "function" then
@@ -1037,11 +833,6 @@ local SaveSize = nil
 local BarPosition = bearlib.Save.BarPosition
 local WaitClick = false
 local bgTransparency = 0.03
-
--- Áp dụng theme đã lưu khi khởi động
-if bearlib.Save.Theme and bearlib.Themes[bearlib.Save.Theme] then
-    ApplyTheme(bearlib.Save.Theme)
-end
 
 local function SaveBarPosition()
     if MinimizedBar and MinimizedBar.Parent then
@@ -2029,47 +1820,6 @@ function bearlib:MakeWindow(Configs)
                 end
             end
         end
-    end
-
-    -- Hàm thêm tab chọn theme
-    function Window:AddThemeSelector(Configs)
-        local Tab = Window:MakeTab(Configs)
-        local ThemeSection = Tab:AddSection("Theme Settings")
-        
-        -- Dropdown chọn theme
-        local themeNames = bearlib:GetThemes()
-        local currentTheme = bearlib:GetCurrentTheme()
-        
-        local ThemeDropdown = Tab:AddDropdown({
-            Name = "Select Theme",
-            Desc = "Choose your preferred theme",
-            Options = themeNames,
-            Default = currentTheme or "Classic",
-            Flag = "SelectedTheme",
-            Callback = function(theme)
-                if theme and theme ~= "" then
-                    bearlib:SetTheme(theme)
-                end
-            end
-        })
-        
-        -- Nút Reset theme
-        Tab:AddButton({
-            Name = "Reset to Classic",
-            Desc = "Reset theme to default",
-            Callback = function()
-                bearlib:SetTheme("Classic")
-                ThemeDropdown:Set("Classic")
-            end
-        })
-        
-        -- Nút thông tin theme hiện tại
-        Tab:AddParagraph({
-            Title = "Current Theme",
-            Text = "Active: " .. (bearlib:GetCurrentTheme() or "Classic")
-        })
-        
-        return Tab
     end
 
     function Window:MakeTab(Configs)
@@ -6595,7 +6345,7 @@ task.spawn(function()
     task.wait(2)
     bearlib:Notify({
         Title = "Bear Library",
-        Message = "UI Bear Library v1.2.0\nAvailable themes: Classic, DarkBlue, NeonPurple, NatureGreen, CherryRed",
+        Message = "UI Bear Library v1.2.0",
         Duration = 10
     })
 end)
