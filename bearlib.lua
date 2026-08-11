@@ -9,170 +9,161 @@ local Player = Players.LocalPlayer
 local PlayerMouse = Player:GetMouse()
 
 local bearlib = {
+    -- Định nghĩa các theme mới với nền chính khác nhau
     Themes = {
-        Darker = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(25, 25, 25)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(25, 25, 25))
-            }),
+        Dark = {
+            ["Color Background Main"] = Color3.fromRGB(10, 10, 10),
+            ["Color Hub 1"] = Color3.fromRGB(20, 20, 20),
             ["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
             ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(20, 20, 20),
+            ["Color Stroke"] = Color3.fromRGB(50, 50, 50),
+            ["Color Theme"] = Color3.fromRGB(65, 150, 255),
+            ["Color Text"] = Color3.fromRGB(255, 255, 255),
+            ["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
+            ["Color Discord Border"] = Color3.fromRGB(65, 150, 255),
+            ["Color Profile Border"] = Color3.fromRGB(65, 150, 255),
+            ["UI Border Color"] = Color3.fromRGB(65, 150, 255),
+            ["Border Thickness"] = 1.5,
+            ["Corner Radius"] = 12,
+        },
+        Darker = {
+            ["Color Background Main"] = Color3.fromRGB(0, 0, 0),
+            ["Color Hub 1"] = Color3.fromRGB(15, 15, 15),
+            ["Color Hub 2"] = Color3.fromRGB(25, 25, 25),
+            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
             ["Color Stroke"] = Color3.fromRGB(40, 40, 40),
             ["Color Theme"] = Color3.fromRGB(88, 101, 242),
             ["Color Text"] = Color3.fromRGB(243, 243, 243),
             ["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
-            ["Color Discord Text"] = Color3.fromRGB(243, 243, 243),
-            ["Color Discord Stats"] = Color3.fromRGB(180, 180, 180),
-            ["Color Discord Border"] = Color3.fromRGB(40, 40, 40),
-            ["Color Profile Border"] = Color3.fromRGB(40, 40, 40),
-            ["Color Toggle On"] = Color3.fromRGB(88, 101, 242),
-            ["Color Toggle Off"] = Color3.fromRGB(30, 30, 30),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(40, 40, 40),
-            ["Border Thickness"] = 1.5,
+            ["Color Discord Border"] = Color3.fromRGB(88, 101, 242),
+            ["Color Profile Border"] = Color3.fromRGB(88, 101, 242),
             ["UI Border Color"] = Color3.fromRGB(88, 101, 242),
-            ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
-        },
-        Dark = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(47.5, 47.5, 47.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(40, 40, 40))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(45, 45, 45),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(35, 35, 35),
-            ["Color Stroke"] = Color3.fromRGB(65, 65, 65),
-            ["Color Theme"] = Color3.fromRGB(65, 150, 255),
-            ["Color Text"] = Color3.fromRGB(245, 245, 245),
-            ["Color Dark Text"] = Color3.fromRGB(190, 190, 190),
-            ["Color Discord Text"] = Color3.fromRGB(245, 245, 245),
-            ["Color Discord Stats"] = Color3.fromRGB(190, 190, 190),
-            ["Color Discord Border"] = Color3.fromRGB(65, 65, 65),
-            ["Color Profile Border"] = Color3.fromRGB(65, 65, 65),
-            ["Color Toggle On"] = Color3.fromRGB(65, 150, 255),
-            ["Color Toggle Off"] = Color3.fromRGB(45, 45, 45),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(65, 65, 65),
             ["Border Thickness"] = 1.5,
-            ["UI Border Color"] = Color3.fromRGB(65, 150, 255),
             ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
         },
         Purple = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(27.5, 25, 30)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(27.5, 25, 30))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(25, 22, 28),
-            ["Color Stroke"] = Color3.fromRGB(40, 40, 40),
+            ["Color Background Main"] = Color3.fromRGB(15, 10, 20),
+            ["Color Hub 1"] = Color3.fromRGB(25, 20, 30),
+            ["Color Hub 2"] = Color3.fromRGB(35, 28, 42),
+            ["Color Hub 3"] = Color3.fromRGB(200, 150, 255),
+            ["Color Stroke"] = Color3.fromRGB(60, 45, 80),
             ["Color Theme"] = Color3.fromRGB(150, 0, 255),
-            ["Color Text"] = Color3.fromRGB(240, 240, 240),
-            ["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
-            ["Color Discord Text"] = Color3.fromRGB(240, 240, 240),
-            ["Color Discord Stats"] = Color3.fromRGB(180, 180, 180),
-            ["Color Discord Border"] = Color3.fromRGB(40, 40, 40),
-            ["Color Profile Border"] = Color3.fromRGB(40, 40, 40),
-            ["Color Toggle On"] = Color3.fromRGB(150, 0, 255),
-            ["Color Toggle Off"] = Color3.fromRGB(30, 30, 30),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(40, 40, 40),
-            ["Border Thickness"] = 1.5,
+            ["Color Text"] = Color3.fromRGB(240, 230, 255),
+            ["Color Dark Text"] = Color3.fromRGB(180, 160, 200),
+            ["Color Discord Border"] = Color3.fromRGB(150, 0, 255),
+            ["Color Profile Border"] = Color3.fromRGB(150, 0, 255),
             ["UI Border Color"] = Color3.fromRGB(150, 0, 255),
+            ["Border Thickness"] = 1.5,
             ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
         },
         Ocean = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 30, 50)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(25, 45, 65)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 30, 50))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(20, 40, 60),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(12, 28, 45),
-            ["Color Stroke"] = Color3.fromRGB(40, 70, 100),
+            ["Color Background Main"] = Color3.fromRGB(8, 25, 40),
+            ["Color Hub 1"] = Color3.fromRGB(15, 35, 55),
+            ["Color Hub 2"] = Color3.fromRGB(25, 45, 65),
+            ["Color Hub 3"] = Color3.fromRGB(100, 200, 255),
+            ["Color Stroke"] = Color3.fromRGB(40, 80, 120),
             ["Color Theme"] = Color3.fromRGB(0, 180, 255),
             ["Color Text"] = Color3.fromRGB(220, 240, 255),
             ["Color Dark Text"] = Color3.fromRGB(150, 200, 230),
-            ["Color Discord Text"] = Color3.fromRGB(220, 240, 255),
-            ["Color Discord Stats"] = Color3.fromRGB(150, 200, 230),
-            ["Color Discord Border"] = Color3.fromRGB(40, 70, 100),
-            ["Color Profile Border"] = Color3.fromRGB(40, 70, 100),
-            ["Color Toggle On"] = Color3.fromRGB(0, 180, 255),
-            ["Color Toggle Off"] = Color3.fromRGB(20, 40, 60),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(40, 70, 100),
-            ["Border Thickness"] = 1.5,
+            ["Color Discord Border"] = Color3.fromRGB(0, 180, 255),
+            ["Color Profile Border"] = Color3.fromRGB(0, 180, 255),
             ["UI Border Color"] = Color3.fromRGB(0, 180, 255),
+            ["Border Thickness"] = 1.5,
             ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
         },
         Sunset = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(50, 20, 30)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 35, 25)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(50, 20, 30))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(55, 25, 30),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(45, 18, 25),
-            ["Color Stroke"] = Color3.fromRGB(80, 50, 40),
+            ["Color Background Main"] = Color3.fromRGB(40, 15, 20),
+            ["Color Hub 1"] = Color3.fromRGB(55, 25, 30),
+            ["Color Hub 2"] = Color3.fromRGB(70, 35, 40),
+            ["Color Hub 3"] = Color3.fromRGB(255, 200, 150),
+            ["Color Stroke"] = Color3.fromRGB(90, 55, 50),
             ["Color Theme"] = Color3.fromRGB(255, 120, 50),
             ["Color Text"] = Color3.fromRGB(255, 230, 210),
-            ["Color Dark Text"] = Color3.fromRGB(200, 160, 140),
-            ["Color Discord Text"] = Color3.fromRGB(255, 230, 210),
-            ["Color Discord Stats"] = Color3.fromRGB(200, 160, 140),
-            ["Color Discord Border"] = Color3.fromRGB(80, 50, 40),
-            ["Color Profile Border"] = Color3.fromRGB(80, 50, 40),
-            ["Color Toggle On"] = Color3.fromRGB(255, 120, 50),
-            ["Color Toggle Off"] = Color3.fromRGB(55, 25, 30),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(80, 50, 40),
-            ["Border Thickness"] = 1.5,
+            ["Color Dark Text"] = Color3.fromRGB(200, 170, 150),
+            ["Color Discord Border"] = Color3.fromRGB(255, 120, 50),
+            ["Color Profile Border"] = Color3.fromRGB(255, 120, 50),
             ["UI Border Color"] = Color3.fromRGB(255, 120, 50),
+            ["Border Thickness"] = 1.5,
             ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
         },
         Forest = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 40, 20)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(30, 55, 30)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 40, 20))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(25, 45, 25),
-            ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
-            ["Color Background Main"] = Color3.fromRGB(18, 35, 18),
-            ["Color Stroke"] = Color3.fromRGB(45, 75, 45),
+            ["Color Background Main"] = Color3.fromRGB(10, 30, 10),
+            ["Color Hub 1"] = Color3.fromRGB(20, 45, 20),
+            ["Color Hub 2"] = Color3.fromRGB(30, 55, 30),
+            ["Color Hub 3"] = Color3.fromRGB(150, 255, 150),
+            ["Color Stroke"] = Color3.fromRGB(50, 80, 50),
             ["Color Theme"] = Color3.fromRGB(50, 220, 50),
             ["Color Text"] = Color3.fromRGB(220, 255, 220),
             ["Color Dark Text"] = Color3.fromRGB(160, 210, 160),
-            ["Color Discord Text"] = Color3.fromRGB(220, 255, 220),
-            ["Color Discord Stats"] = Color3.fromRGB(160, 210, 160),
-            ["Color Discord Border"] = Color3.fromRGB(45, 75, 45),
-            ["Color Profile Border"] = Color3.fromRGB(45, 75, 45),
-            ["Color Toggle On"] = Color3.fromRGB(50, 220, 50),
-            ["Color Toggle Off"] = Color3.fromRGB(25, 45, 25),
-            ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
-            ["Color Toggle Knob Off"] = Color3.fromRGB(200, 200, 200),
-            ["Color Toggle Border"] = Color3.fromRGB(45, 75, 45),
-            ["Border Thickness"] = 1.5,
+            ["Color Discord Border"] = Color3.fromRGB(50, 220, 50),
+            ["Color Profile Border"] = Color3.fromRGB(50, 220, 50),
             ["UI Border Color"] = Color3.fromRGB(50, 220, 50),
+            ["Border Thickness"] = 1.5,
             ["Corner Radius"] = 12,
-            ["ShowVNFlag"] = false,
+        },
+        Neon = {
+            ["Color Background Main"] = Color3.fromRGB(10, 0, 20),
+            ["Color Hub 1"] = Color3.fromRGB(20, 5, 35),
+            ["Color Hub 2"] = Color3.fromRGB(30, 10, 50),
+            ["Color Hub 3"] = Color3.fromRGB(0, 255, 255),
+            ["Color Stroke"] = Color3.fromRGB(50, 20, 80),
+            ["Color Theme"] = Color3.fromRGB(0, 255, 255),
+            ["Color Text"] = Color3.fromRGB(0, 255, 255),
+            ["Color Dark Text"] = Color3.fromRGB(150, 150, 200),
+            ["Color Discord Border"] = Color3.fromRGB(0, 255, 255),
+            ["Color Profile Border"] = Color3.fromRGB(0, 255, 255),
+            ["UI Border Color"] = Color3.fromRGB(0, 255, 255),
+            ["Border Thickness"] = 2,
+            ["Corner Radius"] = 8,
+        },
+        Red = {
+            ["Color Background Main"] = Color3.fromRGB(30, 5, 5),
+            ["Color Hub 1"] = Color3.fromRGB(45, 10, 10),
+            ["Color Hub 2"] = Color3.fromRGB(60, 15, 15),
+            ["Color Hub 3"] = Color3.fromRGB(255, 100, 100),
+            ["Color Stroke"] = Color3.fromRGB(80, 30, 30),
+            ["Color Theme"] = Color3.fromRGB(255, 50, 50),
+            ["Color Text"] = Color3.fromRGB(255, 220, 220),
+            ["Color Dark Text"] = Color3.fromRGB(200, 160, 160),
+            ["Color Discord Border"] = Color3.fromRGB(255, 50, 50),
+            ["Color Profile Border"] = Color3.fromRGB(255, 50, 50),
+            ["UI Border Color"] = Color3.fromRGB(255, 50, 50),
+            ["Border Thickness"] = 1.5,
+            ["Corner Radius"] = 12,
+        },
+        Gold = {
+            ["Color Background Main"] = Color3.fromRGB(30, 25, 5),
+            ["Color Hub 1"] = Color3.fromRGB(45, 38, 10),
+            ["Color Hub 2"] = Color3.fromRGB(60, 50, 15),
+            ["Color Hub 3"] = Color3.fromRGB(255, 215, 0),
+            ["Color Stroke"] = Color3.fromRGB(80, 65, 25),
+            ["Color Theme"] = Color3.fromRGB(255, 215, 0),
+            ["Color Text"] = Color3.fromRGB(255, 245, 200),
+            ["Color Dark Text"] = Color3.fromRGB(200, 180, 140),
+            ["Color Discord Border"] = Color3.fromRGB(255, 215, 0),
+            ["Color Profile Border"] = Color3.fromRGB(255, 215, 0),
+            ["UI Border Color"] = Color3.fromRGB(255, 215, 0),
+            ["Border Thickness"] = 2,
+            ["Corner Radius"] = 10,
+        },
+        Cyber = {
+            ["Color Background Main"] = Color3.fromRGB(0, 10, 20),
+            ["Color Hub 1"] = Color3.fromRGB(5, 20, 35),
+            ["Color Hub 2"] = Color3.fromRGB(10, 30, 50),
+            ["Color Hub 3"] = Color3.fromRGB(0, 255, 150),
+            ["Color Stroke"] = Color3.fromRGB(20, 60, 80),
+            ["Color Theme"] = Color3.fromRGB(0, 255, 150),
+            ["Color Text"] = Color3.fromRGB(200, 255, 240),
+            ["Color Dark Text"] = Color3.fromRGB(140, 200, 180),
+            ["Color Discord Border"] = Color3.fromRGB(0, 255, 150),
+            ["Color Profile Border"] = Color3.fromRGB(0, 255, 150),
+            ["UI Border Color"] = Color3.fromRGB(0, 255, 150),
+            ["Border Thickness"] = 1.5,
+            ["Corner Radius"] = 10,
         }
     },
+    -- Theme hiện tại
+    Theme = {},
     Info = {
         Name = "Bear Library",
         By = "Quang Huy",
@@ -182,7 +173,7 @@ local bearlib = {
         UISize = {550, 380},
         TabSize = 160,
         BarPosition = {X = 350, Y = -65},
-        Theme = "Darker"
+        Theme = "Darker"  -- Lưu theme đã chọn
     },
     Settings = {},
     Connection = {},
@@ -196,40 +187,18 @@ local bearlib = {
         return {}
     end)(),
     AllElements = {},
-    ThunderActive = false
+    ThunderActive = false,
+    CurrentTheme = "Darker"
 }
+
+-- Load theme mặc định
+bearlib.Theme = bearlib.Themes[bearlib.Save.Theme] or bearlib.Themes.Darker
 
 local ViewportSize = workspace.CurrentCamera.ViewportSize
 local UIScale = ViewportSize.Y / 450
 
 local Settings = bearlib.Settings
 local Flags = bearlib.Flags
-local Theme = bearlib.Themes[bearlib.Save.Theme] or bearlib.Themes.Darker
-
--- Hàm lấy danh sách theme
-local function GetThemeList()
-    local themes = {}
-    for themeName, _ in pairs(bearlib.Themes) do
-        table.insert(themes, themeName)
-    end
-    return themes
-end
-
--- Hàm đổi theme
-function bearlib:SetTheme(NewTheme)
-    if not bearlib.Themes[NewTheme] then return end
-    
-    bearlib.Save.Theme = NewTheme
-    Theme = bearlib.Themes[NewTheme]
-    
-    SaveJson("bearlib.json", bearlib.Save)
-    RefreshAllUIElements()
-end
-
--- Hàm lấy theme hiện tại
-function bearlib:GetCurrentTheme()
-    return bearlib.Save.Theme
-end
 
 local SetProps, SetChildren, InsertTheme, Create do
     InsertTheme = function(Instance, Type)
@@ -289,13 +258,56 @@ local SetProps, SetChildren, InsertTheme, Create do
                 end
                 if rawget(decode, "Theme") and bearlib.Themes[decode["Theme"]] then
                     bearlib.Save["Theme"] = decode["Theme"]
-                    Theme = bearlib.Themes[decode["Theme"]]
+                    bearlib.CurrentTheme = decode["Theme"]
+                    bearlib.Theme = bearlib.Themes[decode["Theme"]]
                 end
             end
         end
     end
 
     pcall(Save, "bearlib.json")
+end
+
+-- Hàm lấy danh sách theme
+local function GetThemeList()
+    local themes = {}
+    for themeName, _ in pairs(bearlib.Themes) do
+        table.insert(themes, themeName)
+    end
+    table.sort(themes)
+    return themes
+end
+
+-- Hàm cập nhật theme
+function bearlib:SetTheme(themeName)
+    if not bearlib.Themes[themeName] then return end
+    
+    bearlib.CurrentTheme = themeName
+    bearlib.Save.Theme = themeName
+    bearlib.Theme = bearlib.Themes[themeName]
+    
+    -- Lưu vào file
+    SaveJson("bearlib.json", bearlib.Save)
+    
+    -- Cập nhật giao diện
+    RefreshAllUIElements()
+    
+    -- Thông báo
+    bearlib:Notify({
+        Title = "Theme Changed",
+        Message = "Đã chuyển sang theme: " .. themeName,
+        Duration = 3
+    })
+end
+
+-- Hàm lấy theme hiện tại
+function bearlib:GetCurrentTheme()
+    return bearlib.CurrentTheme
+end
+
+-- Hàm lấy tất cả theme
+function bearlib:GetThemes()
+    return GetThemeList()
 end
 
 local Funcs = {} do
@@ -387,7 +399,7 @@ local Connections, Connection = {}, bearlib.Connection do
         end
     end
 
-    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded", "ThemeChanged"})
+    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded"})
 end
 
 local GetFlag, SetFlag, CheckFlag do
@@ -441,6 +453,8 @@ local ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
 if ScreenFind and ScreenFind ~= ScreenGui then
     ScreenFind:Destroy()
 end
+
+local Theme = bearlib.Theme
 
 local function GetStr(val)
     if type(val) == "function" then
@@ -598,7 +612,7 @@ end)
 AddEle("Gradient", function(parent, props, ...)
     local args = {...}
     local gradient = Instance.new("UIGradient")
-    gradient.Color = Theme["Color Hub 1"]
+    gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
     gradient.Rotation = args[1] or 45
     gradient.Parent = parent
     return InsertTheme(gradient, "Gradient")
@@ -639,8 +653,7 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
     local Frame = Make("Button", Instance, {
         Size = UDim2.new(1, 0, 0, 25),
         AutomaticSize = "Y",
-        Name = "Option",
-        BackgroundColor3 = Theme["Color Hub 2"]
+        Name = "Option"
     })
     Make("Corner", Frame, UDim.new(0, 6))
 
@@ -803,8 +816,9 @@ local function UpdateSmallBar5Size()
     UpdateBarLayout(SmallBar5, SmallBar5Text, SmallBar5Icon)
 end
 
--- Hàm refresh toàn bộ UI khi đổi theme
+-- HÀM CẬP NHẬT GIAO DIỆN CHÍNH - QUAN TRỌNG
 local function RefreshAllUIElements()
+    -- Cập nhật MainFrame (nền chính)
     if MainFrame then
         MainFrame.BackgroundColor3 = Theme["Color Background Main"] or Theme["Color Hub 1"] or Color3.fromRGB(0, 0, 0)
         ApplyRoundedCorners(MainFrame, UDim.new(0, Theme["Corner Radius"] or 12))
@@ -815,16 +829,16 @@ local function RefreshAllUIElements()
         end
         local gradient = MainFrame:FindFirstChildOfClass("UIGradient")
         if gradient then
-            gradient.Color = Theme["Color Hub 1"]
+            gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
         end
     end
 
-    -- Cập nhật tất cả instance đã được insert
+    -- Cập nhật các instance đã đăng ký
     for _, Val in pairs(bearlib.Instances) do
         if not Val.Instance or not Val.Instance.Parent then continue end
 
         if Val.Type == "Gradient" then
-            Val.Instance.Color = Theme["Color Hub 1"]
+            Val.Instance.Color = ColorSequence.new(Theme["Color Hub 1"])
         elseif Val.Type == "Frame" then
             Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
         elseif Val.Type == "Stroke" then
@@ -907,7 +921,7 @@ local function RefreshAllUIElements()
         end
         local gradient = MinimizedBar:FindFirstChildOfClass("UIGradient")
         if gradient then
-            gradient.Color = Theme["Color Hub 1"]
+            gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
         end
     end
 
@@ -920,7 +934,7 @@ local function RefreshAllUIElements()
                 end
                 local gradient = notif:FindFirstChildOfClass("UIGradient")
                 if gradient then
-                    gradient.Color = Theme["Color Hub 1"]
+                    gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
                 end
                 ApplyRoundedCorners(notif, UDim.new(0, 8))
             end
@@ -1058,7 +1072,7 @@ function bearlib:MakeWindow(Configs)
 
     local UIBorder = Instance.new("UIStroke")
     UIBorder.Name = "UIBorder"
-    UIBorder.Color = Theme["UI Border Color"] or Color3.fromRGB(88, 101, 242)
+    UIBorder.Color = Theme["UI Border Color"] or Color3.fromRGB(255, 215, 0)
     UIBorder.Thickness = Theme["Border Thickness"] or 1.5
     UIBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     UIBorder.LineJoinMode = Enum.LineJoinMode.Round
@@ -1106,6 +1120,7 @@ function bearlib:MakeWindow(Configs)
         Name = "SubTitle"
     }), "DarkText")
 
+    -- Tạo các thanh bar nhỏ (giữ nguyên code cũ)
     local function CreateSmallBar(name, textName)
         local bar = Instance.new("Frame")
         bar.Name = name
@@ -1122,7 +1137,7 @@ function bearlib:MakeWindow(Configs)
         barCorner.Parent = bar
 
         local barStroke = Instance.new("UIStroke")
-        barStroke.Color = Theme["Color Stroke"]
+        barStroke.Color = Color3.fromRGB(0, 255, 0)
         barStroke.Thickness = 1
         barStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         barStroke.Parent = bar
@@ -1144,7 +1159,7 @@ function bearlib:MakeWindow(Configs)
         barText.Position = UDim2.new(0.5, 0, 0.5, 0)
         barText.BackgroundTransparency = 1
         barText.Font = Enum.Font.GothamBold
-        barText.TextColor3 = Theme["Color Text"]
+        barText.TextColor3 = Color3.fromRGB(0, 255, 0)
         barText.TextSize = 10
         barText.TextXAlignment = Enum.TextXAlignment.Center
         barText.TextYAlignment = Enum.TextYAlignment.Center
@@ -1487,7 +1502,7 @@ function bearlib:MakeWindow(Configs)
         BarCorner.Parent = MinimizedBar
 
         local BarGradient = Instance.new("UIGradient")
-        BarGradient.Color = Theme["Color Hub 1"]
+        BarGradient.Color = ColorSequence.new(Theme["Color Hub 1"])
         BarGradient.Rotation = 45
         BarGradient.Parent = MinimizedBar
         InsertTheme(BarGradient, "Gradient")
@@ -1644,6 +1659,7 @@ function bearlib:MakeWindow(Configs)
         end
     end
 
+    -- Các hàm Bar (giữ nguyên code cũ)
     function Window:Bar(Text, ColorBackground, ColorStroke, ColorText, Icon)
         if SmallBarText then
             SmallBarText.Text = Text or ""
@@ -1659,19 +1675,19 @@ function bearlib:MakeWindow(Configs)
                 if ColorStroke and typeof(ColorStroke) == "Color3" then
                     SmallBarStroke.Color = ColorStroke
                 else
-                    SmallBarStroke.Color = Theme["Color Stroke"]
+                    SmallBarStroke.Color = Color3.fromRGB(0, 255, 0)
                 end
 
                 if ColorText and typeof(ColorText) == "Color3" then
                     SmallBarText.TextColor3 = ColorText
                 else
-                    SmallBarText.TextColor3 = Theme["Color Text"]
+                    SmallBarText.TextColor3 = Color3.fromRGB(0, 255, 0)
                 end
 
                 if Icon and SmallBarIcon then
                     SmallBarIcon.Visible = true
                     SmallBarIcon.Image = bearlib:GetIcon(Icon) or Icon
-                    SmallBarIcon.ImageColor3 = ColorText or Theme["Color Text"]
+                    SmallBarIcon.ImageColor3 = ColorText or Color3.fromRGB(0, 255, 0)
                 elseif SmallBarIcon then
                     SmallBarIcon.Visible = false
                 end
@@ -1700,19 +1716,19 @@ function bearlib:MakeWindow(Configs)
                 if ColorStroke and typeof(ColorStroke) == "Color3" then
                     SmallBar2Stroke.Color = ColorStroke
                 else
-                    SmallBar2Stroke.Color = Theme["Color Stroke"]
+                    SmallBar2Stroke.Color = Color3.fromRGB(0, 255, 0)
                 end
 
                 if ColorText and typeof(ColorText) == "Color3" then
                     SmallBar2Text.TextColor3 = ColorText
                 else
-                    SmallBar2Text.TextColor3 = Theme["Color Text"]
+                    SmallBar2Text.TextColor3 = Color3.fromRGB(0, 255, 0)
                 end
 
                 if Icon and SmallBar2Icon then
                     SmallBar2Icon.Visible = true
                     SmallBar2Icon.Image = bearlib:GetIcon(Icon) or Icon
-                    SmallBar2Icon.ImageColor3 = ColorText or Theme["Color Text"]
+                    SmallBar2Icon.ImageColor3 = ColorText or Color3.fromRGB(0, 255, 0)
                 elseif SmallBar2Icon then
                     SmallBar2Icon.Visible = false
                 end
@@ -1741,19 +1757,19 @@ function bearlib:MakeWindow(Configs)
                 if ColorStroke and typeof(ColorStroke) == "Color3" then
                     SmallBar3Stroke.Color = ColorStroke
                 else
-                    SmallBar3Stroke.Color = Theme["Color Stroke"]
+                    SmallBar3Stroke.Color = Color3.fromRGB(0, 255, 0)
                 end
 
                 if ColorText and typeof(ColorText) == "Color3" then
                     SmallBar3Text.TextColor3 = ColorText
                 else
-                    SmallBar3Text.TextColor3 = Theme["Color Text"]
+                    SmallBar3Text.TextColor3 = Color3.fromRGB(0, 255, 0)
                 end
 
                 if Icon and SmallBar3Icon then
                     SmallBar3Icon.Visible = true
                     SmallBar3Icon.Image = bearlib:GetIcon(Icon) or Icon
-                    SmallBar3Icon.ImageColor3 = ColorText or Theme["Color Text"]
+                    SmallBar3Icon.ImageColor3 = ColorText or Color3.fromRGB(0, 255, 0)
                 elseif SmallBar3Icon then
                     SmallBar3Icon.Visible = false
                 end
@@ -1782,19 +1798,19 @@ function bearlib:MakeWindow(Configs)
                 if ColorStroke and typeof(ColorStroke) == "Color3" then
                     SmallBar4Stroke.Color = ColorStroke
                 else
-                    SmallBar4Stroke.Color = Theme["Color Stroke"]
+                    SmallBar4Stroke.Color = Color3.fromRGB(0, 255, 0)
                 end
 
                 if ColorText and typeof(ColorText) == "Color3" then
                     SmallBar4Text.TextColor3 = ColorText
                 else
-                    SmallBar4Text.TextColor3 = Theme["Color Text"]
+                    SmallBar4Text.TextColor3 = Color3.fromRGB(0, 255, 0)
                 end
 
                 if Icon and SmallBar4Icon then
                     SmallBar4Icon.Visible = true
                     SmallBar4Icon.Image = bearlib:GetIcon(Icon) or Icon
-                    SmallBar4Icon.ImageColor3 = ColorText or Theme["Color Text"]
+                    SmallBar4Icon.ImageColor3 = ColorText or Color3.fromRGB(0, 255, 0)
                 elseif SmallBar4Icon then
                     SmallBar4Icon.Visible = false
                 end
@@ -1823,19 +1839,19 @@ function bearlib:MakeWindow(Configs)
                 if ColorStroke and typeof(ColorStroke) == "Color3" then
                     SmallBar5Stroke.Color = ColorStroke
                 else
-                    SmallBar5Stroke.Color = Theme["Color Stroke"]
+                    SmallBar5Stroke.Color = Color3.fromRGB(0, 255, 0)
                 end
 
                 if ColorText and typeof(ColorText) == "Color3" then
                     SmallBar5Text.TextColor3 = ColorText
                 else
-                    SmallBar5Text.TextColor3 = Theme["Color Text"]
+                    SmallBar5Text.TextColor3 = Color3.fromRGB(0, 255, 0)
                 end
 
                 if Icon and SmallBar5Icon then
                     SmallBar5Icon.Visible = true
                     SmallBar5Icon.Image = bearlib:GetIcon(Icon) or Icon
-                    SmallBar5Icon.ImageColor3 = ColorText or Theme["Color Text"]
+                    SmallBar5Icon.ImageColor3 = ColorText or Color3.fromRGB(0, 255, 0)
                 elseif SmallBar5Icon then
                     SmallBar5Icon.Visible = false
                 end
@@ -1996,233 +2012,6 @@ function bearlib:MakeWindow(Configs)
         end
     end
 
-    -- THÊM CHỨC NĂNG THEME SELECTOR
-    function Window:AddThemeSelector(Configs)
-        local TName = Configs[1] or Configs.Name or Configs.Title or "Theme Selector"
-        local TDesc = Configs.Desc or Configs.Description or "Chọn theme cho UI"
-
-        local Button, LabelFunc = ButtonFrame(Containers, TName, TDesc, UDim2.new(1, -180))
-        Button.LayoutOrder = #Containers:GetChildren() + 1
-
-        local SelectedFrame = InsertTheme(Create("Frame", Button, {
-            Size = UDim2.new(0, 150, 0, 18),
-            Position = UDim2.new(1, -10, 0.5),
-            AnchorPoint = Vector2.new(1, 0.5),
-            BackgroundColor3 = Theme["Color Stroke"],
-            ZIndex = 4
-        }), "Stroke")
-        Make("Corner", SelectedFrame, UDim.new(0, 4))
-
-        local ActiveLabel = InsertTheme(Create("TextLabel", SelectedFrame, {
-            Size = UDim2.new(0.85, 0, 0.85, 0),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            BackgroundTransparency = 1,
-            Font = Enum.Font.GothamBold,
-            TextScaled = true,
-            TextColor3 = Theme["Color Text"],
-            Text = bearlib.Save.Theme or "Darker"
-        }), "Text")
-
-        local Arrow = Create("ImageLabel", SelectedFrame, {
-            Size = UDim2.new(0, 15, 0, 15),
-            Position = UDim2.new(0, -5, 0.5),
-            AnchorPoint = Vector2.new(1, 0.5),
-            Image = "rbxassetid://10709791523",
-            BackgroundTransparency = 1,
-            ZIndex = 5
-        })
-
-        local NoClickFrame = Create("TextButton", DropdownHolder, {
-            Name = "AntiClick",
-            Size = UDim2.new(1, 0, 1, 0),
-            BackgroundTransparency = 1,
-            Visible = false,
-            Text = ""
-        })
-
-        local DropFrame = Create("Frame", NoClickFrame, {
-            Size = UDim2.new(SelectedFrame.Size.X, 0, 0),
-            BackgroundTransparency = 0.1,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            AnchorPoint = Vector2.new(0, 1),
-            Name = "DropdownFrame",
-            ClipsDescendants = true,
-            Active = true,
-            ZIndex = 5
-        })
-        Make("Corner", DropFrame)
-        Make("Stroke", DropFrame)
-        Make("Gradient", DropFrame, {Rotation = 60})
-
-        local ScrollFrame = InsertTheme(Create("ScrollingFrame", DropFrame, {
-            ScrollBarImageColor3 = Theme["Color Theme"],
-            Size = UDim2.new(1, 0, 1, 0),
-            ScrollBarThickness = 1.5,
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            CanvasSize = UDim2.new(),
-            ScrollingDirection = "Y",
-            AutomaticCanvasSize = "Y",
-            Active = true,
-            ZIndex = 6
-        }, {
-            Create("UIPadding", {
-                PaddingLeft = UDim.new(0, 8),
-                PaddingRight = UDim.new(0, 8),
-                PaddingTop = UDim.new(0, 5),
-                PaddingBottom = UDim.new(0, 5)
-            }),
-            Create("UIListLayout", {
-                Padding = UDim.new(0, 4)
-            })
-        }), "ScrollBar")
-
-        local ScrollSize, WaitClick = 5
-
-        local function Disable()
-            WaitClick = true
-            CreateTween({Arrow, "Rotation", 0, 0.2})
-            CreateTween({DropFrame, "Size", UDim2.new(0, 152, 0, 0), 0.2, true})
-            CreateTween({Arrow, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
-            Arrow.Image = "rbxassetid://10709791523"
-            NoClickFrame.Visible = false
-            WaitClick = false
-        end
-
-        local function GetFrameSize()
-            return UDim2.fromOffset(152, ScrollSize)
-        end
-
-        local function CalculateSize()
-            local Count = 0
-            for _, Frame in pairs(ScrollFrame:GetChildren()) do
-                if Frame:IsA("Frame") or Frame.Name == "Option" then
-                    Count = Count + 1
-                end
-            end
-            ScrollSize = (math.clamp(Count, 0, 10) * 25) + 10
-            if NoClickFrame.Visible then
-                NoClickFrame.Visible = true
-                CreateTween({DropFrame, "Size", GetFrameSize(), 0.2, true})
-            end
-        end
-
-        local function Minimize()
-            if WaitClick then return end
-            WaitClick = true
-            if NoClickFrame.Visible then
-                Arrow.Image = "rbxassetid://10709791523"
-                CreateTween({Arrow, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
-                CreateTween({DropFrame, "Size", UDim2.new(0, 152, 0, 0), 0.2, true})
-                NoClickFrame.Visible = false
-            else
-                NoClickFrame.Visible = true
-                Arrow.Image = "rbxassetid://10709790948"
-                CreateTween({Arrow, "ImageColor3", Theme["Color Theme"], 0.2})
-                CreateTween({DropFrame, "Size", GetFrameSize(), 0.2, true})
-            end
-            WaitClick = false
-        end
-
-        local function CalculatePos()
-            local FramePos = SelectedFrame.AbsolutePosition
-            local ScreenSize = ScreenGui.AbsoluteSize
-            local ClampX = math.clamp((FramePos.X / UIScale), 0, ScreenSize.X / UIScale - DropFrame.Size.X.Offset)
-            local ClampY = math.clamp((FramePos.Y / UIScale) , 0, ScreenSize.Y / UIScale)
-
-            local NewPos = UDim2.fromOffset(ClampX, ClampY)
-            local AnchorPoint = FramePos.Y > ScreenSize.Y / 1.4 and 1 or ScrollSize > 80 and 0.5 or 0
-            DropFrame.AnchorPoint = Vector2.new(0, AnchorPoint)
-            CreateTween({DropFrame, "Position", NewPos, 0.1})
-        end
-
-        -- Thêm các theme vào dropdown
-        local function AddThemeOption(ThemeName)
-            local ThemeBtn = Make("Button", ScrollFrame, {
-                Name = "Option",
-                Size = UDim2.new(1, 0, 0, 21),
-                Position = UDim2.new(0, 0, 0.5),
-                AnchorPoint = Vector2.new(0, 0.5),
-                ZIndex = 7
-            })
-            Make("Corner", ThemeBtn, UDim.new(0, 4))
-
-            local IsSelected = InsertTheme(Create("Frame", ThemeBtn, {
-                Position = UDim2.new(0, 1, 0.5),
-                Size = UDim2.new(0, 4, 0, 14),
-                BackgroundColor3 = Theme["Color Theme"],
-                BackgroundTransparency = 1,
-                AnchorPoint = Vector2.new(0, 0.5),
-                ZIndex = 8
-            }), "Theme")
-            Make("Corner", IsSelected, UDim.new(0.5, 0))
-
-            local OptionName = InsertTheme(Create("TextLabel", ThemeBtn, {
-                Size = UDim2.new(1, 0, 1),
-                Position = UDim2.new(0, 10),
-                Text = ThemeName,
-                TextColor3 = Theme["Color Text"],
-                Font = Enum.Font.GothamBold,
-                TextXAlignment = "Left",
-                BackgroundTransparency = 1,
-                TextTransparency = 0.4,
-                ZIndex = 8
-            }), "Text")
-
-            if ThemeName == bearlib.Save.Theme then
-                IsSelected.BackgroundTransparency = 0
-                OptionName.TextTransparency = 0
-            end
-
-            ThemeBtn.Activated:Connect(function()
-                bearlib:SetTheme(ThemeName)
-                ActiveLabel.Text = ThemeName
-
-                for _, child in pairs(ScrollFrame:GetChildren()) do
-                    if child:IsA("Frame") and child.Name == "Option" then
-                        local label = child:FindFirstChildOfClass("TextLabel")
-                        local selected = child:FindFirstChildOfClass("Frame")
-                        if label and selected then
-                            if label.Text == ThemeName then
-                                CreateTween({selected, "BackgroundTransparency", 0, 0.35})
-                                CreateTween({label, "TextTransparency", 0, 0.35})
-                            else
-                                CreateTween({selected, "BackgroundTransparency", 1, 0.35})
-                                CreateTween({label, "TextTransparency", 0.4, 0.35})
-                            end
-                        end
-                    end
-                end
-
-                Disable()
-            end)
-        end
-
-        local themeList = GetThemeList()
-        table.sort(themeList)
-        for _, themeName in ipairs(themeList) do
-            AddThemeOption(themeName)
-        end
-
-        Button.Activated:Connect(Minimize)
-        NoClickFrame.MouseButton1Down:Connect(Disable)
-        NoClickFrame.MouseButton1Click:Connect(Disable)
-        MainFrame:GetPropertyChangedSignal("Visible"):Connect(Disable)
-        SelectedFrame:GetPropertyChangedSignal("AbsolutePosition"):Connect(CalculatePos)
-
-        Button.Activated:Connect(CalculateSize)
-        ScrollFrame.ChildAdded:Connect(CalculateSize)
-        ScrollFrame.ChildRemoved:Connect(CalculateSize)
-        CalculatePos()
-        CalculateSize()
-
-        local ThemeSelector = {}
-        function ThemeSelector:Destroy() Button:Destroy() end
-        function ThemeSelector:Visible(...) Funcs:ToggleVisible(Button, ...) end
-        return ThemeSelector
-    end
-
     function Window:MakeTab(Configs)
         if type(Configs) == "table" and Configs[1] == nil then
             Configs = Configs
@@ -2293,21 +2082,26 @@ function bearlib:MakeWindow(Configs)
             ZIndex = 5
         }), "Text")
 
-        local LabelIcon
-        if TIcon then
-            LabelIcon = InsertTheme(Create("ImageLabel", TabSelect, {
-                Position = UDim2.new(0, 8, 0.5),
-                Size = UDim2.new(0, 13, 0, 13),
-                AnchorPoint = Vector2.new(0, 0.5),
-                Image = TIcon or "",
-                BackgroundTransparency = 1,
-                ImageTransparency = (isFirstTab and 0) or 0.3,
-                ImageColor3 = Theme["Color Text"],
-                ZIndex = 5
-            }), "Text")
-        end
+        local LabelIcon = InsertTheme(Create("ImageLabel", TabSelect, {
+            Position = UDim2.new(0, 8, 0.5),
+            Size = UDim2.new(0, 13, 0, 13),
+            AnchorPoint = Vector2.new(0, 0.5),
+            Image = TIcon or "",
+            BackgroundTransparency = 1,
+            ImageTransparency = (isFirstTab and 0) or 0.3,
+            ImageColor3 = Theme["Color Text"],
+            ZIndex = 5
+        }), "Text")
 
-        local BorderFrame = InsertTheme(Create("Frame", TabSelect, {
+        local SelectedContainer = Create("Frame", TabSelect, {
+            Size = UDim2.new(1, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            BackgroundTransparency = 1,
+            ZIndex = 4,
+            Name = "SelectedContainer"
+        })
+
+        local BorderFrame = InsertTheme(Create("Frame", SelectedContainer, {
             Size = UDim2.new(1, -4, 1, 0),
             Position = UDim2.new(0, 0, 0, 0),
             BackgroundTransparency = 1,
@@ -2373,9 +2167,7 @@ function bearlib:MakeWindow(Configs)
 
             CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
             CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
-            if LabelIcon then
-                CreateTween({LabelIcon, "ImageTransparency", 0, 0.35})
-            end
+            CreateTween({LabelIcon, "ImageTransparency", 0, 0.35})
 
             CreateTween({BorderStroke, "Transparency", 0, 0.35})
             BorderGradient.Enabled = true
@@ -2435,9 +2227,7 @@ function bearlib:MakeWindow(Configs)
         function Tab:Disable()
             Container.Parent = nil
             CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
-            if LabelIcon then
-                CreateTween({LabelIcon, "ImageTransparency", 0.3, 0.35})
-            end
+            CreateTween({LabelIcon, "ImageTransparency", 0.3, 0.35})
             CreateTween({BorderStroke, "Transparency", 1, 0.35})
             BorderGradient.Enabled = false
         end
@@ -6390,6 +6180,7 @@ function bearlib:MakeWindow(Configs)
     return Window
 end
 
+-- Hàm Notify (giữ nguyên)
 local NotificationQueue = {}
 local ActiveNotifications = {}
 
@@ -6447,12 +6238,15 @@ local function CreateNotification(Icon, Title, Message, Duration)
     Corner.Parent = Notification
 
     local Stroke = Instance.new("UIStroke")
-    Stroke.Color = Theme["Color Stroke"]
-    Stroke.Thickness = Theme["Border Thickness"] or 1.5
+    Stroke.Color = Color3.fromRGB(255, 255, 255)
+    Stroke.Thickness = 1.5
     Stroke.Parent = Notification
 
     local Gradient = Instance.new("UIGradient")
-    Gradient.Color = Theme["Color Hub 1"]
+    Gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 30)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 15))
+    })
     Gradient.Rotation = 90
     Gradient.Parent = Notification
 
@@ -6469,7 +6263,7 @@ local function CreateNotification(Icon, Title, Message, Duration)
     TimerText.Size = UDim2.new(1, 0, 1, 0)
     TimerText.BackgroundTransparency = 1
     TimerText.Font = Enum.Font.GothamBold
-    TimerText.TextColor3 = Theme["Color Text"]
+    TimerText.TextColor3 = Color3.fromRGB(255, 255, 255)
     TimerText.TextSize = 12
     TimerText.Text = tostring(Duration)
     TimerText.TextStrokeTransparency = 0.3
@@ -6504,7 +6298,7 @@ local function CreateNotification(Icon, Title, Message, Duration)
     IconImage.BackgroundTransparency = 1
     IconImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     IconImage.Image = Icon or "rbxassetid://76571437829227"
-    IconImage.ImageColor3 = Theme["Color Text"]
+    IconImage.ImageColor3 = Color3.fromRGB(255, 255, 255)
     IconImage.ScaleType = Enum.ScaleType.Fit
     IconImage.BorderSizePixel = 0
     IconImage.ZIndex = 1003
@@ -6529,7 +6323,7 @@ local function CreateNotification(Icon, Title, Message, Duration)
     TitleLabel.Size = UDim2.new(1, 0, 0, 16)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.TextColor3 = Theme["Color Text"]
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.TextSize = 13
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.TextYAlignment = Enum.TextYAlignment.Top
@@ -6545,7 +6339,7 @@ local function CreateNotification(Icon, Title, Message, Duration)
     MessageLabel.AutomaticSize = Enum.AutomaticSize.Y
     MessageLabel.BackgroundTransparency = 1
     MessageLabel.Font = Enum.Font.Gotham
-    MessageLabel.TextColor3 = Theme["Color Dark Text"]
+    MessageLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
     MessageLabel.TextSize = 11
     MessageLabel.TextWrapped = true
     MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -6652,6 +6446,7 @@ function bearlib:Notify(Configs)
     return true
 end
 
+-- Các hàm set màu (giữ nguyên)
 function bearlib:SetUIBorderColor(color)
     if typeof(color) == "Color3" then
         self.Theme["UI Border Color"] = color
@@ -6701,6 +6496,16 @@ function bearlib:SetBorderThickness(thickness)
     end
 end
 
+function bearlib:SetBackgroundColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Background Main"] = color
+        if MainFrame then
+            MainFrame.BackgroundColor3 = color
+        end
+        RefreshAllUIElements()
+    end
+end
+
 function bearlib:GetBorderColors()
     return {
         UI = self.Theme["UI Border Color"],
@@ -6739,7 +6544,14 @@ function bearlib:ResetToggleColors()
     RefreshAllUIElements()
 end
 
--- Gửi thông báo khi khởi tạo
+function bearlib:GetCurrentTheme()
+    return bearlib.CurrentTheme
+end
+
+function bearlib:GetThemes()
+    return GetThemeList()
+end
+
 task.spawn(function()
     task.wait(2)
     bearlib:Notify({
