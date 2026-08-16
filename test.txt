@@ -555,7 +555,6 @@ local function GetColor(Instance)
 	return ""
 end
 
--- Lấy danh sách theme
 local function GetThemeList()
 	local themes = {}
 	for themeName, _ in pairs(bearlib.Themes) do
@@ -751,42 +750,8 @@ function bearlib:MakeWindow(Configs)
 		SaveJson("Bear library OS.json", bearlib.Save)
 	end)
 	
-	local ButtonsFolder = Create("Folder", TopBar, {
-		Name = "Buttons"
-	})
-	
-	local CloseButton = Create("ImageButton", {
-		Size = UDim2.new(0, 14, 0, 14),
-		Position = UDim2.new(1, -10, 0.5),
-		AnchorPoint = Vector2.new(1, 0.5),
-		BackgroundTransparency = 1,
-		Image = "rbxassetid://10747384394",
-		AutoButtonColor = false,
-		Name = "Close"
-	})
-	
-	-- Chỉ giữ lại CloseButton, đã xóa MinimizeButton
-	SetChildren(ButtonsFolder, {
-		CloseButton
-	})
-	
 	local Minimized, SaveSize, WaitClick = false, nil, false
 	local Window, FirstTab = {}, false
-	
-	function Window:CloseBtn()
-		local Dialog = Window:Dialog({
-			Title = "",
-			Text = "Mày Tắt Script Của Bố Mày Có Việc Gì Không ?",
-			Options = {
-				{"Tắt Ạ", function()
-					ScreenGui:Destroy()
-				end},
-				{"Không Tắt Ạ"}
-			}
-		})
-	end
-	
-	-- Đã xóa hàm Window:MinimizeBtn
 	
 	function Window:Minimize()
 		MainFrame.Visible = not MainFrame.Visible
@@ -1862,9 +1827,6 @@ function bearlib:MakeWindow(Configs)
 			return DiscordInvite
 		end
 		
-		-- ====================================================
-		-- CHỨC NĂNG ĐỔI MÀU (THEME SELECTOR)
-		-- ====================================================
 		function Tab:AddThemeSelector(Configs)
 			local TName = Configs[1] or Configs.Name or Configs.Title or "Theme Selector"
 			local TDesc = Configs.Desc or Configs.Description or "Chọn theme cho UI"
@@ -2000,7 +1962,6 @@ function bearlib:MakeWindow(Configs)
 				CreateTween({DropFrame, "Position", NewPos, 0.1})
 			end
 			
-			-- Thêm các theme vào dropdown
 			local function AddThemeOption(ThemeName)
 				local Button = Make("Button", ScrollFrame, {
 					Name = "Option",
@@ -2083,9 +2044,6 @@ function bearlib:MakeWindow(Configs)
 		
 		return Tab
 	end
-	
-	CloseButton.Activated:Connect(Window.CloseBtn)
-	-- Đã xóa dòng MinimizeButton.Activated:Connect(Window.MinimizeBtn)
 	
 	return Window
 end
