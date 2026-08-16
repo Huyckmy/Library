@@ -676,6 +676,61 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
+	-- ===== THÊM 3 NÚT TRÊN TOPBAR =====
+	local CloseButton = nil
+	local MaximizeButton = nil
+	local MinimizeButton = nil
+	local ButtonsFolder = nil
+	local IsMaximized = false
+	local OriginalUISize = nil
+	local Minimized = false
+	local SaveSize = nil
+	local WaitClick = false
+	local MinimizedBar = nil
+	
+	ButtonsFolder = Create("Folder", TopBar, {
+		Name = "Buttons"
+	})
+	
+	CloseButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -10, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10747384394",
+		AutoButtonColor = false,
+		Name = "Close"
+	})
+	
+	MaximizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -35, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734886735",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Maximize"
+	})
+	
+	MinimizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -60, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734896206",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Minimize"
+	})
+	
+	SetChildren(ButtonsFolder, {
+		CloseButton,
+		MaximizeButton,
+		MinimizeButton
+	})
+	-- ===== KẾT THÚC THÊM 3 NÚT =====
+	
 	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
 		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
 		ScrollBarImageColor3 = Theme["Color Theme"],
@@ -750,13 +805,180 @@ function bearlib:MakeWindow(Configs)
 		SaveJson("Bear library OS.json", bearlib.Save)
 	end)
 	
-	local Minimized, SaveSize, WaitClick = false, nil, false
-	local Window, FirstTab = {}, false
+	-- ===== CHỨC NĂNG CHO 3 NÚT =====
+	local Window = {}
+	local FirstTab = false
 	
-	function Window:Minimize()
-		MainFrame.Visible = not MainFrame.Visible
+	-- Hàm đóng cửa sổ
+	function Window:CloseBtn()
+		local Dialog = Window:Dialog({
+			Title = "Window",
+			Text = "Đóng window ?",
+			Options = {
+				{"Đóng", function()
+					ScreenGui:Destroy()
+					if MinimizedBar and MinimizedBar.Parent then
+						MinimizedBar:Destroy()
+					end
+				end},
+				{"Không"}
+			}
+		})
 	end
 	
+	-- Hàm phóng to/thu nhỏ
+	local function ToggleMaximize()
+		if not MainFrame then return end
+		
+		if IsMaximized then
+			local defaultX, defaultY = unpack(OriginalUISize or bearlib.Save.UISize)
+			MainFrame.Size = UDim2.fromOffset(defaultX, defaultY)
+			MainFrame.Position = UDim2.new(0.5, -defaultX / 2, 0.5, -defaultY / 2)
+			MaximizeButton.Image = "rbxassetid://10734886735"
+			IsMaximized = false
+			
+			bearlib.Save.UISize = {defaultX, defaultY}
+			SaveJson("bear library OS.json", bearlib.Save)
+		else
+			local currentX = MainFrame.Size.X.Offset
+			local currentY = MainFrame.Size.Y.Offset
+			
+			if not OriginalUISize then
+				OriginalUISize = {currentX, currentY}
+			end
+			
+			local newX = math.min(700, ViewportSize.X - 20)
+			local newY = math.min(410, ViewportSize.Y - 20)
+			
+			MainFrame.Size = UDim2.fromOffset(newX, newY)
+			MainFrame.Position = UDim2.new(0.5, -newX / 2, 0.5, -newY / 2)
+			MaximizeButton.Image = "rbxassetid://10734895698"
+			IsMaximized = true
+		end
+	end
+	
+	-- Hàm khôi phục từ thanh thu nhỏ
+	function Window:RestoreFromBar()
+		if not Minimized then return end
+		
+		MinimizeButton.Image = "rbxassetid://10734896206"
+		if MinimizedBar and MinimizedBar.Parent then
+			MinimizedBar.Visible = false
+		end
+		MainFrame.Visible = true
+		CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
+		CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+		if ControlSize1 and ControlSize2 then
+			ControlSize1.Visible = true
+			ControlSize2.Visible = true
+		end
+		Minimized = false
+	end
+	
+	-- Hàm thu nhỏ
+	function Window:Minimize()
+		if WaitClick then return end
+		WaitClick = true
+		
+		if Minimized then
+			MinimizeButton.Image = "rbxassetid://10734896206"
+			if MinimizedBar and MinimizedBar.Parent then
+				MinimizedBar.Visible = false
+			end
+			MainFrame.Visible = true
+			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
+			CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+			if ControlSize1 and ControlSize2 then
+				ControlSize1.Visible = true
+				ControlSize2.Visible = true
+			end
+			Minimized = false
+		else
+			SaveSize = MainFrame.Size
+			
+			-- Tạo thanh thu nhỏ nếu chưa có
+			if not MinimizedBar or not MinimizedBar.Parent then
+				local BarWidth = 250
+				local BarHeight = 40
+				local barX = 350
+				local barY = -65
+				
+				MinimizedBar = Instance.new("ImageButton")
+				MinimizedBar.Name = "MinimizedBar"
+				MinimizedBar.Size = UDim2.new(0, BarWidth, 0, BarHeight)
+				MinimizedBar.Position = UDim2.fromOffset(barX, barY)
+				MinimizedBar.BackgroundColor3 = Theme["Color Hub 2"]
+				MinimizedBar.BackgroundTransparency = 0
+				MinimizedBar.Parent = ScreenGui
+				MinimizedBar.ZIndex = 1000
+				MinimizedBar.AutoButtonColor = false
+				MinimizedBar.Visible = true
+				
+				local BarCorner = Instance.new("UICorner")
+				BarCorner.CornerRadius = UDim.new(1, 0)
+				BarCorner.Parent = MinimizedBar
+				
+				local BarGradient = Instance.new("UIGradient")
+				BarGradient.Color = Theme["Color Hub 1"]
+				BarGradient.Rotation = 45
+				BarGradient.Parent = MinimizedBar
+				
+				local BarStroke = Instance.new("UIStroke")
+				BarStroke.Color = Theme["Color Stroke"]
+				BarStroke.Thickness = 1
+				BarStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+				BarStroke.Parent = MinimizedBar
+				
+				local BarIcon = Instance.new("ImageLabel")
+				BarIcon.Size = UDim2.new(0, 22, 0, 22)
+				BarIcon.Position = UDim2.new(0, 10, 0.5, 0)
+				BarIcon.AnchorPoint = Vector2.new(0, 0.5)
+				BarIcon.BackgroundTransparency = 1
+				BarIcon.Image = "rbxassetid://76571437829227"
+				BarIcon.ImageColor3 = Theme["Color Text"]
+				BarIcon.Parent = MinimizedBar
+				BarIcon.ZIndex = 1001
+				
+				local BarText = Instance.new("TextLabel")
+				BarText.Size = UDim2.new(1, -20, 1, 0)
+				BarText.Position = UDim2.new(0, 40, 0.5, 0)
+				BarText.AnchorPoint = Vector2.new(0, 0.5)
+				BarText.BackgroundTransparency = 1
+				BarText.Font = Enum.Font.GothamMedium
+				BarText.Text = WTitle
+				BarText.TextColor3 = Theme["Color Text"]
+				BarText.TextSize = 14
+				BarText.TextXAlignment = Enum.TextXAlignment.Left
+				BarText.Parent = MinimizedBar
+				BarText.ZIndex = 1001
+				
+				MakeDrag(MinimizedBar)
+				
+				MinimizedBar.MouseButton1Click:Connect(function()
+					Window:RestoreFromBar()
+				end)
+			else
+				MinimizedBar.Visible = true
+			end
+			
+			MainFrame.Visible = false
+			if ControlSize1 and ControlSize2 then
+				ControlSize1.Visible = false
+				ControlSize2.Visible = false
+			end
+			Minimized = true
+		end
+		
+		WaitClick = false
+	end
+	
+	-- Gán sự kiện cho các nút
+	CloseButton.Activated:Connect(Window.CloseBtn)
+	MaximizeButton.Activated:Connect(ToggleMaximize)
+	MinimizeButton.Activated:Connect(Window.Minimize)
+	-- ===== KẾT THÚC CHỨC NĂNG CHO 3 NÚT =====
+	
+	-- Hàm thêm nút thu nhỏ tùy chỉnh
 	function Window:AddMinimizeButton(Configs)
 		local Button = MakeDrag(Create("ImageButton", ScreenGui, {
 			Size = UDim2.fromOffset(35, 35),
