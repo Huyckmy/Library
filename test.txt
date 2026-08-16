@@ -90,7 +90,7 @@ local bearlib = {
 		UISize = {550, 380},
 		TabSize = 160,
 		Theme = "Darker",
-		GlassEffect = false -- Thêm lưu trạng thái hiệu ứng kính
+		GlassEffect = false
 	},
 	Settings = {},
 	Connection = {},
@@ -659,9 +659,7 @@ function bearlib:MakeWindow(Configs)
 					Name = "GlassEffect"
 				})
 				GlassCorner = Make("Corner", GlassFrame)
-				-- Đảm bảo GlassFrame nằm dưới các thành phần khác
 				GlassFrame.ZIndex = 0
-				-- Đưa các thành phần khác lên trên
 				for _, child in pairs(MainFrame:GetChildren()) do
 					if child ~= GlassFrame and child:IsA("GuiObject") then
 						child.ZIndex = child.ZIndex + 1
@@ -722,7 +720,7 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
-	-- ===== THÊM 4 NÚT TRÊN TOPBAR (Thêm nút Settings) =====
+	-- ===== 4 NÚT TRÊN TOPBAR =====
 	local CloseButton = nil
 	local MaximizeButton = nil
 	local MinimizeButton = nil
@@ -765,7 +763,7 @@ function bearlib:MakeWindow(Configs)
 		Position = UDim2.new(1, -60, 0.5),
 		AnchorPoint = Vector2.new(1, 0.5),
 		BackgroundTransparency = 1,
-		Image = "rbxassetid://6031095938", -- Icon bánh răng settings
+		Image = "rbxassetid://6031095938",
 		ImageColor3 = Theme["Color Text"],
 		AutoButtonColor = false,
 		Name = "Settings"
@@ -788,7 +786,6 @@ function bearlib:MakeWindow(Configs)
 		SettingsButton,
 		MinimizeButton
 	})
-	-- ===== KẾT THÚC THÊM 4 NÚT =====
 	
 	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
 		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
@@ -957,7 +954,6 @@ function bearlib:MakeWindow(Configs)
 		else
 			SaveSize = MainFrame.Size
 			
-			-- Tạo thanh thu nhỏ nếu chưa có
 			if not MinimizedBar or not MinimizedBar.Parent then
 				local BarWidth = 250
 				local BarHeight = 40
@@ -1046,7 +1042,6 @@ function bearlib:MakeWindow(Configs)
 		
 		SettingsOpen = true
 		
-		-- Tạo khung Settings
 		SettingsFrame = Create("Frame", ScreenGui, {
 			Size = UDim2.new(0, 280, 0, 180),
 			Position = UDim2.new(0.5, -140, 0.5, -90),
@@ -1061,7 +1056,6 @@ function bearlib:MakeWindow(Configs)
 		Make("Corner", SettingsFrame, UDim.new(0, 10))
 		Make("Stroke", SettingsFrame)
 		
-		-- Title của Settings
 		local SettingsTitle = InsertTheme(Create("TextLabel", SettingsFrame, {
 			Size = UDim2.new(1, -20, 0, 30),
 			Position = UDim2.new(0, 10, 0, 5),
@@ -1073,7 +1067,6 @@ function bearlib:MakeWindow(Configs)
 			TextXAlignment = "Left"
 		}), "Text")
 		
-		-- Nút đóng Settings
 		local CloseSettings = Create("ImageButton", SettingsFrame, {
 			Size = UDim2.new(0, 18, 0, 18),
 			Position = UDim2.new(1, -12, 0, 8),
@@ -1091,14 +1084,12 @@ function bearlib:MakeWindow(Configs)
 			SettingsOpen = false
 		end)
 		
-		-- Nội dung Settings
 		local SettingsContent = Create("Frame", SettingsFrame, {
 			Size = UDim2.new(1, -20, 1, -45),
 			Position = UDim2.new(0, 10, 0, 40),
 			BackgroundTransparency = 1
 		})
 		
-		-- Toggle Glass Effect
 		local GlassToggleHolder = Create("Frame", SettingsContent, {
 			Size = UDim2.new(1, 0, 0, 30),
 			Position = UDim2.new(0, 0, 0, 10),
@@ -1117,7 +1108,6 @@ function bearlib:MakeWindow(Configs)
 			TextXAlignment = "Left"
 		}), "Text")
 		
-		-- Tạo toggle cho Glass Effect
 		local GlassToggle = Create("Frame", GlassToggleHolder, {
 			Size = UDim2.new(0, 30, 0, 16),
 			Position = UDim2.new(1, 0, 0.5, 0),
@@ -1146,7 +1136,6 @@ function bearlib:MakeWindow(Configs)
 		GlassClick.Activated:Connect(function()
 			GlassEnabled = not GlassEnabled
 			
-			-- Cập nhật UI toggle
 			if GlassEnabled then
 				CreateTween({GlassToggle, "BackgroundColor3", Theme["Color Theme"], 0.2})
 				CreateTween({GlassToggleSlider, "Position", UDim2.new(1, 0, 0.5, 0), 0.2})
@@ -1157,11 +1146,9 @@ function bearlib:MakeWindow(Configs)
 				CreateTween({GlassToggleSlider, "AnchorPoint", Vector2.new(0, 0.5), 0.2})
 			end
 			
-			-- Cập nhật hiệu ứng kính
 			UpdateGlassEffect(GlassEnabled)
 		end)
 		
-		-- Kéo settings
 		MakeDrag(SettingsFrame)
 	end
 	
@@ -1170,7 +1157,6 @@ function bearlib:MakeWindow(Configs)
 	MaximizeButton.Activated:Connect(ToggleMaximize)
 	SettingsButton.Activated:Connect(OpenSettings)
 	MinimizeButton.Activated:Connect(Window.Minimize)
-	-- ===== KẾT THÚC CHỨC NĂNG CHO 4 NÚT =====
 	
 	-- Khởi tạo Glass Effect nếu đã bật
 	if GlassEnabled then
@@ -1180,7 +1166,6 @@ function bearlib:MakeWindow(Configs)
 		end)
 	end
 	
-	-- Hàm thêm nút thu nhỏ tùy chỉnh
 	function Window:AddMinimizeButton(Configs)
 		local Button = MakeDrag(Create("ImageButton", ScreenGui, {
 			Size = UDim2.fromOffset(35, 35),
