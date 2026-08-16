@@ -8,7 +8,7 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local PlayerMouse = Player:GetMouse()
 
-local redzlib = {
+local bearlib = {
 	Themes = {
 		Darker = {
 			["Color Hub 1"] = ColorSequence.new({
@@ -104,12 +104,12 @@ local redzlib = {
 local ViewportSize = workspace.CurrentCamera.ViewportSize
 local UIScale = ViewportSize.Y / 450
 
-local Settings = redzlib.Settings
-local Flags = redzlib.Flags
+local Settings = bearlib.Settings
+local Flags = bearlib.Flags
 
 local SetProps, SetChildren, InsertTheme, Create do
 	InsertTheme = function(Instance, Type)
-		table.insert(redzlib.Instances, {
+		table.insert(bearlib.Instances, {
 			Instance = Instance,
 			Type = Type
 		})
@@ -158,14 +158,14 @@ local SetProps, SetChildren, InsertTheme, Create do
 			local decode = HttpService:JSONDecode(readfile(file))
 			
 			if type(decode) == "table" then
-				if rawget(decode, "UISize") then redzlib.Save["UISize"] = decode["UISize"] end
-				if rawget(decode, "TabSize") then redzlib.Save["TabSize"] = decode["TabSize"] end
-				if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then redzlib.Save["Theme"] = decode["Theme"] end
+				if rawget(decode, "UISize") then bearlib.Save["UISize"] = decode["UISize"] end
+				if rawget(decode, "TabSize") then bearlib.Save["TabSize"] = decode["TabSize"] end
+				if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then bearlib.Save["Theme"] = decode["Theme"] end
 			end
 		end
 	end
 	
-	pcall(Save, "redz library V5.json")
+	pcall(Save, "bear library OS.json")
 end
 
 local Funcs = {} do
@@ -225,7 +225,7 @@ local Funcs = {} do
 	end
 end
 
-local Connections, Connection = {}, redzlib.Connection do
+local Connections, Connection = {}, bearlib.Connection do
 	local function NewConnectionList(List)
 		if type(List) ~= "table" then return end
 		
@@ -305,7 +305,7 @@ local GetFlag, SetFlag, CheckFlag do
 end
 
 local ScreenGui = Create("ScreenGui", CoreGui, {
-	Name = "redz Library V5",
+	Name = "bear Library OS",
 }, {
 	Create("UIScale", {
 		Scale = UIScale,
@@ -388,7 +388,7 @@ local function MakeDrag(Instance)
 end
 
 local function VerifyTheme(Theme)
-	for name,_ in pairs(redzlib.Themes) do
+	for name,_ in pairs(bearlib.Themes) do
 		if name == Theme then
 			return true
 		end
@@ -402,14 +402,14 @@ local function SaveJson(FileName, save)
 	end
 end
 
-local Theme = redzlib.Themes[redzlib.Save.Theme]
+local Theme = bearlib.Themes[bearlib.Save.Theme]
 
 local function AddEle(Name, Func)
-	redzlib.Elements[Name] = Func
+	bearlib.Elements[Name] = Func
 end
 
 local function Make(Ele, Instance, props, ...)
-	local Element = redzlib.Elements[Ele](Instance, props, ...)
+	local Element = bearlib.Elements[Ele](Instance, props, ...)
 	return Element
 end
 
@@ -558,25 +558,25 @@ end
 -- Lấy danh sách theme
 local function GetThemeList()
 	local themes = {}
-	for themeName, _ in pairs(redzlib.Themes) do
+	for themeName, _ in pairs(bearlib.Themes) do
 		table.insert(themes, themeName)
 	end
 	return themes
 end
 
-function redzlib:GetIcon(index)
+function bearlib:GetIcon(index)
 	return index or ""
 end
 
-function redzlib:SetTheme(NewTheme)
+function bearlib:SetTheme(NewTheme)
 	if not VerifyTheme(NewTheme) then return end
 	
-	redzlib.Save.Theme = NewTheme
-	SaveJson("redz library V5.json", redzlib.Save)
-	Theme = redzlib.Themes[NewTheme]
+	bearlib.Save.Theme = NewTheme
+	SaveJson("bear library OS.json", bearlib.Save)
+	Theme = bearlib.Themes[NewTheme]
 	
 	Connection:FireConnection("ThemeChanged", NewTheme)
-	table.foreach(redzlib.Instances, function(_,Val)
+	table.foreach(bearlib.Instances, function(_,Val)
 		if Val.Type == "Gradient" then
 			Val.Instance.Color = Theme["Color Hub 1"]
 		elseif Val.Type == "Frame" then
@@ -595,14 +595,14 @@ function redzlib:SetTheme(NewTheme)
 	end)
 end
 
-function redzlib:SetScale(NewScale)
+function bearlib:SetScale(NewScale)
 	NewScale = ViewportSize.Y / math.clamp(NewScale, 300, 2000)
 	UIScale, ScreenGui.Scale.Scale = NewScale, NewScale
 end
 
-function redzlib:MakeWindow(Configs)
-	local WTitle = Configs[1] or Configs.Name or Configs.Title or "redz Library V5"
-	local WMiniText = Configs[2] or Configs.SubTitle or "by : redz9999"
+function bearlib:MakeWindow(Configs)
+	local WTitle = Configs[1] or Configs.Name or Configs.Title or "bear Library OS"
+	local WMiniText = Configs[2] or Configs.SubTitle or "by : Quang Huy"
 	
 	Settings.ScriptFile = Configs[3] or Configs.SaveFolder or false
 	
@@ -622,7 +622,7 @@ function redzlib:MakeWindow(Configs)
 		end
 	end;LoadFile()
 	
-	local UISizeX, UISizeY = unpack(redzlib.Save.UISize)
+	local UISizeX, UISizeY = unpack(bearlib.Save.UISize)
 	local MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
 		Size = UDim2.fromOffset(UISizeX, UISizeY),
 		Position = UDim2.new(0.5, -UISizeX/2, 0.5, -UISizeY/2),
@@ -678,7 +678,7 @@ function redzlib:MakeWindow(Configs)
 	}), "Text")
 	
 	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
-		Size = UDim2.new(0, redzlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
+		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
 		ScrollBarImageColor3 = Theme["Color Theme"],
 		Position = UDim2.new(0, 0, 1, 0),
 		AnchorPoint = Vector2.new(0, 1),
@@ -741,14 +741,14 @@ function redzlib:MakeWindow(Configs)
 	
 	ConnectSave(ControlSize1, function()
 		if not Minimized then
-			redzlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
-			SaveJson("redz library V5.json", redzlib.Save)
+			bearlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+			SaveJson("bear library OS.json", bearlib.Save)
 		end
 	end)
 	
 	ConnectSave(ControlSize2, function()
-		redzlib.Save.TabSize = MainScroll.Size.X.Offset
-		SaveJson("redz library V5.json", redzlib.Save)
+		bearlib.Save.TabSize = MainScroll.Size.X.Offset
+		SaveJson("Bear library OS.json", bearlib.Save)
 	end)
 	
 	local ButtonsFolder = Create("Folder", TopBar, {
@@ -765,22 +765,17 @@ function redzlib:MakeWindow(Configs)
 		Name = "Close"
 	})
 	
-	local MinimizeButton = SetProps(CloseButton:Clone(), {
-		Position = UDim2.new(1, -35, 0.5),
-		Image = "rbxassetid://10734896206",
-		Name = "Minimize"
-	})
-	
+	-- Chỉ giữ lại CloseButton, đã xóa MinimizeButton
 	SetChildren(ButtonsFolder, {
-		CloseButton,
-		MinimizeButton
+		CloseButton
 	})
 	
-	local Minimized, SaveSize, WaitClick
+	local Minimized, SaveSize, WaitClick = false, nil, false
 	local Window, FirstTab = {}, false
+	
 	function Window:CloseBtn()
 		local Dialog = Window:Dialog({
-			Title = "Tuấn Anh IOS",
+			Title = "",
 			Text = "Mày Tắt Script Của Bố Mày Có Việc Gì Không ?",
 			Options = {
 				{"Tắt Ạ", function()
@@ -790,30 +785,13 @@ function redzlib:MakeWindow(Configs)
 			}
 		})
 	end
-	function Window:MinimizeBtn()
-		if WaitClick then return end
-		WaitClick = true
-		
-		if Minimized then
-			MinimizeButton.Image = "rbxassetid://110657725541747"
-			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
-			ControlSize1.Visible = true
-			ControlSize2.Visible = true
-			Minimized = false
-		else
-			MinimizeButton.Image = "rbxassetid://110657725541747"
-			SaveSize = MainFrame.Size
-			ControlSize1.Visible = false
-			ControlSize2.Visible = false
-			CreateTween({MainFrame, "Size", UDim2.fromOffset(MainFrame.Size.X.Offset, 28), 0.25, true})
-			Minimized = true
-		end
-		
-		WaitClick = false
-	end
+	
+	-- Đã xóa hàm Window:MinimizeBtn
+	
 	function Window:Minimize()
 		MainFrame.Visible = not MainFrame.Visible
 	end
+	
 	function Window:AddMinimizeButton(Configs)
 		local Button = MakeDrag(Create("ImageButton", ScreenGui, {
 			Size = UDim2.fromOffset(35, 35),
@@ -842,6 +820,7 @@ function redzlib:MakeWindow(Configs)
 			Button = Button
 		}
 	end
+	
 	function Window:Set(Val1, Val2)
 		if type(Val1) == "string" and type(Val2) == "string" then
 			Title.Text = Val1
@@ -850,11 +829,9 @@ function redzlib:MakeWindow(Configs)
 			Title.Text = Val1
 		end
 	end
+	
 	function Window:Dialog(Configs)
 		if MainFrame:FindFirstChild("Dialog") then return end
-		if Minimized then
-			Window:MinimizeBtn()
-		end
 		
 		local DTitle = Configs[1] or Configs.Title or "Dialog"
 		local DText = Configs[2] or Configs.Text or "This is a Dialog"
@@ -954,11 +931,12 @@ function redzlib:MakeWindow(Configs)
 		end)
 		return Dialog
 	end
+	
 	function Window:SelectTab(TabSelect)
 		if type(TabSelect) == "number" then
-			redzlib.Tabs[TabSelect].func:Enable()
+			bearlib.Tabs[TabSelect].func:Enable()
 		else
-			for _,Tab in pairs(redzlib.Tabs) do
+			for _,Tab in pairs(bearlib.Tabs) do
 				if Tab.Cont == TabSelect.Cont then
 					Tab.func:Enable()
 				end
@@ -1033,7 +1011,7 @@ function redzlib:MakeWindow(Configs)
 			end
 			Container.Parent = Containers
 			Container.Size = UDim2.new(1, 0, 1, 150)
-			table.foreach(redzlib.Tabs, function(_,Tab)
+			table.foreach(bearlib.Tabs, function(_,Tab)
 				if Tab.Cont ~= Container then
 					Tab.func:Disable()
 				end
@@ -1047,7 +1025,7 @@ function redzlib:MakeWindow(Configs)
 		
 		FirstTab = true
 		local Tab = {}
-		table.insert(redzlib.Tabs, {TabInfo = {Name = TName}, func = Tab, Cont = Container})
+		table.insert(bearlib.Tabs, {TabInfo = {Name = TName}, func = Tab, Cont = Container})
 		Tab.Cont = Container
 		
 		function Tab:Disable()
@@ -1087,7 +1065,7 @@ function redzlib:MakeWindow(Configs)
 			}), "Text")
 			
 			local Section = {}
-			table.insert(redzlib.Options, {type = "Section", Name = SectionName, func = Section})
+			table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = Section})
 			function Section:Visible(Bool)
 				if Bool == nil then SectionFrame.Visible = not SectionFrame.Visible return end
 				SectionFrame.Visible = Bool
@@ -1909,7 +1887,7 @@ function redzlib:MakeWindow(Configs)
 				Font = Enum.Font.GothamBold,
 				TextScaled = true,
 				TextColor3 = Theme["Color Text"],
-				Text = redzlib.Save.Theme or "Darker"
+				Text = bearlib.Save.Theme or "Darker"
 			}), "Text")
 			
 			local Arrow = Create("ImageLabel", SelectedFrame, {
@@ -2050,13 +2028,13 @@ function redzlib:MakeWindow(Configs)
 					TextTransparency = 0.4
 				}), "Text")
 				
-				if ThemeName == redzlib.Save.Theme then
+				if ThemeName == bearlib.Save.Theme then
 					IsSelected.BackgroundTransparency = 0
 					OptionName.TextTransparency = 0
 				end
 				
 				Button.Activated:Connect(function()
-					redzlib:SetTheme(ThemeName)
+					bearlib:SetTheme(ThemeName)
 					ActiveLabel.Text = ThemeName
 					
 					for _, child in pairs(ScrollFrame:GetChildren()) do
@@ -2107,8 +2085,9 @@ function redzlib:MakeWindow(Configs)
 	end
 	
 	CloseButton.Activated:Connect(Window.CloseBtn)
-	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+	-- Đã xóa dòng MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+	
 	return Window
 end
 
-return redzlib
+return bearlib
