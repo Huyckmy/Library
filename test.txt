@@ -2070,7 +2070,7 @@ function bearlib:MakeWindow(Configs)
 		return Tab
 	end
 
-	-- ===== TAB GROUP =====
+	-- ===== TAB GROUP (ĐÃ SỬA) =====
 	function Window:MakeTabGroup(Configs)
 		local TName = Configs[1] or Configs.Title or Configs.Name or "Group"
 		local TIcon = Configs[2] or Configs.Icon or ""
@@ -2275,37 +2275,49 @@ function bearlib:MakeWindow(Configs)
 				ZIndex = 4
 			}), "Text")
 			
+			-- *** SỬA LỖI: Thêm biến isActive để track state thay vì dùng Container.Parent ***
+			local isActive = false
+			
 			table.insert(SubTabs, {
 				Button = SubTabButton,
 				Container = Container,
 				TitleLabel = SubLabelTitle,
-				DotIndicator = DotIndicator
+				DotIndicator = DotIndicator,
+				isActive = isActive
 			})
 			
-			Container.Parent = nil
+			-- *** SỬA LỖI: KHÔNG set Container.Parent = nil ở đây ***
+			-- Container.Parent = nil  -- <-- ĐÃ XÓA DÒNG NÀY
 			
 			local function SelectSubTab()
-				if Container.Parent then return end
+				-- *** SỬA LỖI: Dùng isActive thay vì kiểm tra Container.Parent ***
+				if isActive then return end
 				
+				-- Ẩn tất cả container khác
 				for _, Frame in pairs(ContainerList) do
 					if Frame:IsA("ScrollingFrame") and Frame ~= Container then
 						Frame.Parent = nil
 					end
 				end
 				
+				-- Disable các tab khác
 				table.foreach(bearlib.Tabs, function(_, Tab)
 					if Tab.Cont ~= Container then
 						Tab.func:Disable()
 					end
 				end)
 				
+				-- Reset các SubTab khác trong group
 				for _, subTab in ipairs(SubTabs) do
 					if subTab.Container ~= Container then
 						CreateTween({subTab.TitleLabel, "TextTransparency", 0.5, 0.25})
 						CreateTween({subTab.DotIndicator, "BackgroundTransparency", 1, 0.25})
+						subTab.isActive = false
 					end
 				end
 				
+				-- Active tab hiện tại
+				isActive = true
 				Container.Parent = Containers
 				Container.Size = UDim2.new(1, 0, 1, 150)
 				
@@ -2332,7 +2344,9 @@ function bearlib:MakeWindow(Configs)
 				return ElementCount
 			end
 			
+			-- *** SỬA LỖI: Cập nhật Disable/Enable với isActive ***
 			function SubTab:Disable()
+				isActive = false
 				Container.Parent = nil
 				CreateTween({SubLabelTitle, "TextTransparency", 0.5, 0.35})
 				CreateTween({DotIndicator, "BackgroundTransparency", 1, 0.35})
@@ -2348,11 +2362,13 @@ function bearlib:MakeWindow(Configs)
 			function SubTab:Visible(Bool)
 				Funcs:ToggleVisible(SubTabButton, Bool)
 				if not Bool then
+					isActive = false
 					Container.Parent = nil
 				end
 			end
 			
 			function SubTab:Destroy()
+				isActive = false
 				SubTabButton:Destroy()
 				Container:Destroy()
 				for i, st in ipairs(SubTabs) do
@@ -2364,7 +2380,7 @@ function bearlib:MakeWindow(Configs)
 				UpdateGroupContainerSize()
 			end
 			
-			-- Các method của SubTab (giống Tab thông thường)
+			-- Các method của SubTab (giữ nguyên)
 			function SubTab:AddSection(Configs)
 				local SectionName = type(Configs) == "string" and Configs or Configs[1] or Configs.Name or Configs.Title or Configs.Section
 				CurrentSectionName = SectionName
