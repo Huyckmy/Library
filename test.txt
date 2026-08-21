@@ -676,7 +676,6 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
-	-- 3 nút trên topbar
 	local CloseButton = nil
 	local MaximizeButton = nil
 	local MinimizeButton = nil
@@ -804,7 +803,6 @@ function bearlib:MakeWindow(Configs)
 		SaveJson("Bear library OS.json", bearlib.Save)
 	end)
 	
-	-- Chức năng cho 3 nút
 	local Window = {}
 	local FirstTab = false
 	
