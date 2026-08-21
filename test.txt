@@ -750,7 +750,8 @@ function bearlib:MakeWindow(Configs)
 			PaddingTop = UDim.new(0, 10),
 			PaddingBottom = UDim.new(0, 10)
 		}), Create("UIListLayout", {
-			Padding = UDim.new(0, 5)
+			Padding = UDim.new(0, 5),
+			SortOrder = "LayoutOrder"
 		})
 	}), "ScrollBar")
 	
@@ -806,6 +807,7 @@ function bearlib:MakeWindow(Configs)
 	
 	local Window = {}
 	local FirstTab = false
+	local TabLayoutOrder = 0
 	
 	function Window:CloseBtn()
 		local Dialog = Window:Dialog({
@@ -1123,7 +1125,7 @@ function bearlib:MakeWindow(Configs)
 	
 	local ContainerList = {}
 	
-	-- ===== TAB GROUP FUNCTIONALITY =====
+	-- ===== TAB GROUP FUNCTION =====
 	function Window:MakeTabGroup(Configs)
 		local TName = Configs[1] or Configs.Title or Configs.Name or "Group"
 		local TIcon = Configs[2] or Configs.Icon or ""
@@ -1169,7 +1171,7 @@ function bearlib:MakeWindow(Configs)
 			TextTransparency = 0.3,
 			ZIndex = 5,
 			Name = "Arrow"
-		}), "TabGroupArrow")
+		}), "Text")
 		
 		local GroupTitle = InsertTheme(Create("TextLabel", GroupButton, {
 			Size = UDim2.new(1, TIcon and -40 or -30, 1),
@@ -1213,16 +1215,12 @@ function bearlib:MakeWindow(Configs)
 		}
 		table.insert(bearlib.TabGroups, GroupData)
 		
-		local function ForceUpdateScrollLayout()
-			local layout = MainScroll:FindFirstChildOfClass("UIListLayout")
-			if layout then
-				layout.SortOrder = "Name"
-				task.wait()
-				layout.SortOrder = "LayoutOrder"
-			end
+		local layout = MainScroll:FindFirstChildOfClass("UIListLayout")
+		if layout then
+			layout.SortOrder = "Name"
+			task.wait()
+			layout.SortOrder = "LayoutOrder"
 		end
-		
-		ForceUpdateScrollLayout()
 		
 		local function UpdateGroupContainerSize()
 			if isExpanded then
@@ -1259,8 +1257,11 @@ function bearlib:MakeWindow(Configs)
 			end
 			
 			UpdateGroupContainerSize()
+			
 			task.wait(0.35)
-			MainScroll.CanvasSize = UDim2.new(0, 0, 0, MainScroll:FindFirstChildOfClass("UIListLayout") and MainScroll:FindFirstChildOfClass("UIListLayout").AbsoluteContentSize.Y or 0)
+			if MainScroll:FindFirstChildOfClass("UIListLayout") then
+				MainScroll.CanvasSize = UDim2.new(0, 0, 0, MainScroll:FindFirstChildOfClass("UIListLayout").AbsoluteContentSize.Y or 0)
+			end
 		end
 		
 		local isDragging = false
@@ -1327,7 +1328,7 @@ function bearlib:MakeWindow(Configs)
 			}, {
 				Create("UIPadding", {
 					PaddingLeft = UDim.new(0, 10),
-					PaddingRight = UDim.new(0, 10),
+					PaddingRight = UDim.new(0, 15),
 					PaddingTop = UDim.new(0, 10),
 					PaddingBottom = UDim.new(0, 10)
 				}), Create("UIListLayout", {
@@ -1495,52 +1496,43 @@ function bearlib:MakeWindow(Configs)
 				UpdateGroupContainerSize()
 			end
 			
+			-- Các hàm AddSection, AddButton, AddToggle, AddSlider, AddTextBox, AddDropdown, AddDiscordInvite cho SubTab
 			function SubTab:AddSection(Configs)
 				local SectionName = type(Configs) == "string" and Configs or Configs[1] or Configs.Name or Configs.Title or Configs.Section
-				CurrentSectionName = SectionName
 				
 				local SectionFrame = Create("Frame", Container, {
-					Size = UDim2.new(1, 0, 0, 30),
+					Size = UDim2.new(1, 0, 0, 20),
 					BackgroundTransparency = 1,
 					Name = "Option",
-					LayoutOrder = GetOrder(),
-					ZIndex = 2
+					LayoutOrder = GetOrder()
 				})
 				
 				local SectionLabel = InsertTheme(Create("TextLabel", SectionFrame, {
 					Font = Enum.Font.GothamBold,
 					Text = SectionName,
 					TextColor3 = Theme["Color Text"],
-					Size = UDim2.new(1, -25, 0, 18),
-					Position = UDim2.new(0, 5, 0, 0),
+					Size = UDim2.new(1, -25, 1, 0),
+					Position = UDim2.new(0, 5),
 					BackgroundTransparency = 1,
 					TextTruncate = "AtEnd",
 					TextSize = 14,
-					TextXAlignment = "Left",
-					ZIndex = 3
+					TextXAlignment = "Left"
 				}), "Text")
 				
 				local Section = {}
 				table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = Section})
-				
 				function Section:Visible(Bool)
-					if Bool == nil then
-						SectionFrame.Visible = not SectionFrame.Visible
-						return
-					end
+					if Bool == nil then SectionFrame.Visible = not SectionFrame.Visible return end
 					SectionFrame.Visible = Bool
 				end
-				
 				function Section:Destroy()
 					SectionFrame:Destroy()
 				end
-				
 				function Section:Set(New)
 					if New then
 						SectionLabel.Text = GetStr(New)
 					end
 				end
-				
 				return Section
 			end
 			
@@ -1552,7 +1544,6 @@ function bearlib:MakeWindow(Configs)
 				Frame.LayoutOrder = GetOrder()
 				
 				local Paragraph = {}
-				
 				function Paragraph:Visible(...) Funcs:ToggleVisible(Frame, ...) end
 				function Paragraph:Destroy() Frame:Destroy() end
 				function Paragraph:SetTitle(Val)
@@ -1585,8 +1576,7 @@ function bearlib:MakeWindow(Configs)
 					Position = UDim2.new(1, -10, 0.5),
 					AnchorPoint = Vector2.new(1, 0.5),
 					BackgroundTransparency = 1,
-					Image = "rbxassetid://10709791437",
-					ZIndex = 5
+					Image = "rbxassetid://10709791437"
 				})
 				
 				FButton.Activated:Connect(function()
@@ -1596,7 +1586,7 @@ function bearlib:MakeWindow(Configs)
 				local Button = {}
 				function Button:Visible(...) Funcs:ToggleVisible(FButton, ...) end
 				function Button:Destroy() FButton:Destroy() end
-				function Button:Callback(...) Funcs:InsertCallback(Callback, ...)() end
+				function Button:Callback(...) Funcs:InsertCallback(Callback, ...) end
 				function Button:Set(Val1, Val2)
 					if type(Val1) == "string" and type(Val2) == "string" then
 						LabelFunc:SetTitle(Val1)
@@ -1685,6 +1675,210 @@ function bearlib:MakeWindow(Configs)
 					end
 				end
 				return Toggle
+			end
+			
+			function SubTab:AddSlider(Configs)
+				local SName = Configs[1] or Configs.Name or Configs.Title or "Slider!"
+				local SDesc = Configs.Desc or Configs.Description or ""
+				local Min = Configs[2] or Configs.MinValue or Configs.Min or 10
+				local Max = Configs[3] or Configs.MaxValue or Configs.Max or 100
+				local Increase = Configs[4] or Configs.Increase or 1
+				local Callback = Funcs:GetCallback(Configs, 6)
+				local Flag = Configs[7] or Configs.Flag or false
+				local Default = Configs[5] or Configs.Default or 25
+				if CheckFlag(Flag) then Default = GetFlag(Flag) end
+				Min, Max = Min / Increase, Max / Increase
+				
+				local Button, LabelFunc = ButtonFrame(Container, SName, SDesc, UDim2.new(1, -180))
+				Button.LayoutOrder = GetOrder()
+				
+				local SliderHolder = Create("TextButton", Button, {
+					Size = UDim2.new(0.45, 0, 1),
+					Position = UDim2.new(1),
+					AnchorPoint = Vector2.new(1, 0),
+					AutoButtonColor = false,
+					Text = "",
+					BackgroundTransparency = 1
+				})
+				
+				local SliderBar = InsertTheme(Create("Frame", SliderHolder, {
+					BackgroundColor3 = Theme["Color Stroke"],
+					Size = UDim2.new(1, -20, 0, 6),
+					Position = UDim2.new(0.5, 0, 0.5),
+					AnchorPoint = Vector2.new(0.5, 0.5)
+				}), "Stroke")Make("Corner", SliderBar)
+				
+				local Indicator = InsertTheme(Create("Frame", SliderBar, {
+					BackgroundColor3 = Theme["Color Theme"],
+					Size = UDim2.fromScale(0.3, 1),
+					BorderSizePixel = 0
+				}), "Theme")Make("Corner", Indicator)
+				
+				local SliderIcon = Create("Frame", SliderBar, {
+					Size = UDim2.new(0, 6, 0, 12),
+					BackgroundColor3 = Color3.fromRGB(220, 220, 220),
+					Position = UDim2.fromScale(0.3, 0.5),
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					BackgroundTransparency = 0.2
+				})Make("Corner", SliderIcon)
+				
+				local LabelVal = InsertTheme(Create("TextLabel", SliderHolder, {
+					Size = UDim2.new(0, 14, 0, 14),
+					AnchorPoint = Vector2.new(1, 0.5),
+					Position = UDim2.new(0, 0, 0.5),
+					BackgroundTransparency = 1,
+					TextColor3 = Theme["Color Text"],
+					Font = Enum.Font.FredokaOne,
+					TextSize = 12
+				}), "Text")
+				
+				local UIScale = Create("UIScale", LabelVal)
+				
+				local BaseMousePos = Create("Frame", SliderBar, {
+					Position = UDim2.new(0, 0, 0.5, 0),
+					Visible = false
+				})
+				
+				local function UpdateLabel(NewValue)
+					local Number = tonumber(NewValue * Increase)
+					Number = math.floor(Number * 100) / 100
+					
+					Default, LabelVal.Text = Number, tostring(Number)
+					Funcs:FireCallback(Callback, Default)
+				end
+				
+				local function ControlPos()
+					local MousePos = Player:GetMouse()
+					local APos = MousePos.X - BaseMousePos.AbsolutePosition.X
+					local ConfigureDpiPos = APos / SliderBar.AbsoluteSize.X
+					
+					SliderIcon.Position = UDim2.new(math.clamp(ConfigureDpiPos, 0, 1), 0, 0.5, 0)
+				end
+				
+				local function UpdateValues()
+					Indicator.Size = UDim2.new(SliderIcon.Position.X.Scale, 0, 1, 0)
+					local SliderPos = SliderIcon.Position.X.Scale
+					local NewValue = math.floor(((SliderPos * Max) / Max) * (Max - Min) + Min)
+					UpdateLabel(NewValue)
+				end
+				
+				SliderHolder.MouseButton1Down:Connect(function()
+					CreateTween({SliderIcon, "Transparency", 0, 0.3})
+					Container.ScrollingEnabled = false
+					while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do task.wait()
+						ControlPos()
+					end
+					CreateTween({SliderIcon, "Transparency", 0.2, 0.3})
+					Container.ScrollingEnabled = true
+					SetFlag(Flag, Default)
+				end)
+				
+				LabelVal:GetPropertyChangedSignal("Text"):Connect(function()
+					UIScale.Scale = 0.3
+					CreateTween({UIScale, "Scale", 1.2, 0.1})
+					CreateTween({LabelVal, "Rotation", math.random(-1, 1) * 5, 0.15, true})
+					CreateTween({UIScale, "Scale", 1, 0.2})
+					CreateTween({LabelVal, "Rotation", 0, 0.1})
+				end)
+				
+				function SetSlider(NewValue)
+					if type(NewValue) ~= "number" then return end
+					
+					local Min, Max = Min * Increase, Max * Increase
+					
+					local SliderPos = (NewValue - Min) / (Max - Min)
+					
+					SetFlag(Flag, NewValue)
+					CreateTween({ SliderIcon, "Position", UDim2.fromScale(math.clamp(SliderPos, 0, 1), 0.5), 0.3, true })
+				end;SetSlider(Default)
+				
+				SliderIcon:GetPropertyChangedSignal("Position"):Connect(UpdateValues)UpdateValues()
+				
+				local Slider = {}
+				function Slider:Set(NewVal1, NewVal2)
+					if NewVal1 and NewVal2 then
+						LabelFunc:SetTitle(NewVal1)
+						LabelFunc:SetDesc(NewVal2)
+					elseif type(NewVal1) == "string" then
+						LabelFunc:SetTitle(NewVal1)
+					elseif type(NewVal1) == "function" then
+						Callback = NewVal1
+					elseif type(NewVal1) == "number" then
+						SetSlider(NewVal1)
+					end
+				end
+				function Slider:Callback(...) Funcs:InsertCallback(Callback, ...)(tonumber(Default)) end
+				function Slider:Visible(...) Funcs:ToggleVisible(Button, ...) end
+				function Slider:Destroy() Button:Destroy() end
+				return Slider
+			end
+			
+			function SubTab:AddTextBox(Configs)
+				local TName = Configs[1] or Configs.Name or Configs.Title or "Text Box"
+				local TDesc = Configs.Desc or Configs.Description or ""
+				local TDefault = Configs[2] or Configs.Default or ""
+				local TPlaceholderText = Configs[5] or Configs.PlaceholderText or "Input"
+				local TClearText = Configs[3] or Configs.ClearText or false
+				local Callback = Funcs:GetCallback(Configs, 4)
+				
+				if type(TDefault) ~= "string" or TDefault:gsub(" ", ""):len() < 1 then
+					TDefault = false
+				end
+				
+				local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
+				Button.LayoutOrder = GetOrder()
+				
+				local SelectedFrame = InsertTheme(Create("Frame", Button, {
+					Size = UDim2.new(0, 150, 0, 18),
+					Position = UDim2.new(1, -10, 0.5),
+					AnchorPoint = Vector2.new(1, 0.5),
+					BackgroundColor3 = Theme["Color Stroke"]
+				}), "Stroke")Make("Corner", SelectedFrame, UDim.new(0, 4))
+				
+				local TextBoxInput = InsertTheme(Create("TextBox", SelectedFrame, {
+					Size = UDim2.new(0.85, 0, 0.85, 0),
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					Position = UDim2.new(0.5, 0, 0.5, 0),
+					BackgroundTransparency = 1,
+					Font = Enum.Font.GothamBold,
+					TextScaled = true,
+					TextColor3 = Theme["Color Text"],
+					ClearTextOnFocus = TClearText,
+					PlaceholderText = TPlaceholderText,
+					Text = ""
+				}), "Text")
+				
+				local Pencil = Create("ImageLabel", SelectedFrame, {
+					Size = UDim2.new(0, 12, 0, 12),
+					Position = UDim2.new(0, -5, 0.5),
+					AnchorPoint = Vector2.new(1, 0.5),
+					Image = "rbxassetid://15637081879",
+					BackgroundTransparency = 1
+				})
+				
+				local TextBox = {}
+				local function Input()
+					local Text = TextBoxInput.Text
+					if Text:gsub(" ", ""):len() > 0 then
+						if TextBox.OnChanging then Text = TextBox.OnChanging(Text) or Text end
+						Funcs:FireCallback(Callback, Text)
+						TextBoxInput.Text = Text
+					end
+				end
+				
+				TextBoxInput.FocusLost:Connect(Input)Input()
+				
+				TextBoxInput.FocusLost:Connect(function()
+					CreateTween({Pencil, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
+				end)
+				TextBoxInput.Focused:Connect(function()
+					CreateTween({Pencil, "ImageColor3", Theme["Color Theme"], 0.2})
+				end)
+				
+				TextBox.OnChanging = false
+				function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
+				function TextBox:Destroy() Button:Destroy() end
+				return TextBox
 			end
 			
 			function SubTab:AddDropdown(Configs)
@@ -1939,7 +2133,7 @@ function bearlib:MakeWindow(Configs)
 						
 						Button.Activated:Connect(function()
 							Select(Options[Name])
-						})
+						end)
 						
 						Options[Name].nodes = {Button, IsSelected, OptioneName}
 					end
@@ -2033,212 +2227,107 @@ function bearlib:MakeWindow(Configs)
 				return Dropdown
 			end
 			
-			function SubTab:AddSlider(Configs)
-				local SName = Configs[1] or Configs.Name or Configs.Title or "Slider!"
-				local SDesc = Configs.Desc or Configs.Description or ""
-				local Min = Configs[2] or Configs.MinValue or Configs.Min or 10
-				local Max = Configs[3] or Configs.MaxValue or Configs.Max or 100
-				local Increase = Configs[4] or Configs.Increase or 1
-				local Callback = Funcs:GetCallback(Configs, 6)
-				local Flag = Configs[7] or Configs.Flag or false
-				local Default = Configs[5] or Configs.Default or 25
-				if CheckFlag(Flag) then Default = GetFlag(Flag) end
-				Min, Max = Min / Increase, Max / Increase
+			function SubTab:AddDiscordInvite(Configs)
+				local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
+				local Desc = Configs.Desc or Configs.Description or ""
+				local Logo = Configs[2] or Configs.Logo or ""
+				local Invite = Configs[3] or Configs.Invite or ""
 				
-				local Button, LabelFunc = ButtonFrame(Container, SName, SDesc, UDim2.new(1, -180))
-				Button.LayoutOrder = GetOrder()
-				
-				local SliderHolder = Create("TextButton", Button, {
-					Size = UDim2.new(0.45, 0, 1),
-					Position = UDim2.new(1),
-					AnchorPoint = Vector2.new(1, 0),
-					AutoButtonColor = false,
-					Text = "",
-					BackgroundTransparency = 1
+				local InviteHolder = Create("Frame", Container, {
+					Size = UDim2.new(1, 0, 0, 80),
+					Name = "Option",
+					BackgroundTransparency = 1,
+					LayoutOrder = GetOrder()
 				})
 				
-				local SliderBar = InsertTheme(Create("Frame", SliderHolder, {
-					BackgroundColor3 = Theme["Color Stroke"],
-					Size = UDim2.new(1, -20, 0, 6),
-					Position = UDim2.new(0.5, 0, 0.5),
-					AnchorPoint = Vector2.new(0.5, 0.5)
-				}), "Stroke")Make("Corner", SliderBar)
-				
-				local Indicator = InsertTheme(Create("Frame", SliderBar, {
-					BackgroundColor3 = Theme["Color Theme"],
-					Size = UDim2.fromScale(0.3, 1),
-					BorderSizePixel = 0
-				}), "Theme")Make("Corner", Indicator)
-				
-				local SliderIcon = Create("Frame", SliderBar, {
-					Size = UDim2.new(0, 6, 0, 12),
-					BackgroundColor3 = Color3.fromRGB(220, 220, 220),
-					Position = UDim2.fromScale(0.3, 0.5),
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					BackgroundTransparency = 0.2
-				})Make("Corner", SliderIcon)
-				
-				local LabelVal = InsertTheme(Create("TextLabel", SliderHolder, {
-					Size = UDim2.new(0, 14, 0, 14),
-					AnchorPoint = Vector2.new(1, 0.5),
-					Position = UDim2.new(0, 0, 0.5),
-					BackgroundTransparency = 1,
-					TextColor3 = Theme["Color Text"],
-					Font = Enum.Font.FredokaOne,
-					TextSize = 12
-				}), "Text")
-				
-				local UIScale = Create("UIScale", LabelVal)
-				
-				local BaseMousePos = Create("Frame", SliderBar, {
-					Position = UDim2.new(0, 0, 0.5, 0),
-					Visible = false
-				})
-				
-				local function UpdateLabel(NewValue)
-					local Number = tonumber(NewValue * Increase)
-					Number = math.floor(Number * 100) / 100
-					
-					Default, LabelVal.Text = Number, tostring(Number)
-					Funcs:FireCallback(Callback, Default)
-				end
-				
-				local function ControlPos()
-					local MousePos = Player:GetMouse()
-					local APos = MousePos.X - BaseMousePos.AbsolutePosition.X
-					local ConfigureDpiPos = APos / SliderBar.AbsoluteSize.X
-					
-					SliderIcon.Position = UDim2.new(math.clamp(ConfigureDpiPos, 0, 1), 0, 0.5, 0)
-				end
-				
-				local function UpdateValues()
-					Indicator.Size = UDim2.new(SliderIcon.Position.X.Scale, 0, 1, 0)
-					local SliderPos = SliderIcon.Position.X.Scale
-					local NewValue = math.floor(((SliderPos * Max) / Max) * (Max - Min) + Min)
-					UpdateLabel(NewValue)
-				end
-				
-				SliderHolder.MouseButton1Down:Connect(function()
-					CreateTween({SliderIcon, "Transparency", 0, 0.3})
-					Container.ScrollingEnabled = false
-					while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do task.wait()
-						ControlPos()
-					end
-					CreateTween({SliderIcon, "Transparency", 0.2, 0.3})
-					Container.ScrollingEnabled = true
-					SetFlag(Flag, Default)
-				end)
-				
-				LabelVal:GetPropertyChangedSignal("Text"):Connect(function()
-					UIScale.Scale = 0.3
-					CreateTween({UIScale, "Scale", 1.2, 0.1})
-					CreateTween({LabelVal, "Rotation", math.random(-1, 1) * 5, 0.15, true})
-					CreateTween({UIScale, "Scale", 1, 0.2})
-					CreateTween({LabelVal, "Rotation", 0, 0.1})
-				end)
-				
-				function SetSlider(NewValue)
-					if type(NewValue) ~= "number" then return end
-					
-					local Min, Max = Min * Increase, Max * Increase
-					
-					local SliderPos = (NewValue - Min) / (Max - Min)
-					
-					SetFlag(Flag, NewValue)
-					CreateTween({ SliderIcon, "Position", UDim2.fromScale(math.clamp(SliderPos, 0, 1), 0.5), 0.3, true })
-				end;SetSlider(Default)
-				
-				SliderIcon:GetPropertyChangedSignal("Position"):Connect(UpdateValues)UpdateValues()
-				
-				local Slider = {}
-				function Slider:Set(NewVal1, NewVal2)
-					if NewVal1 and NewVal2 then
-						LabelFunc:SetTitle(NewVal1)
-						LabelFunc:SetDesc(NewVal2)
-					elseif type(NewVal1) == "string" then
-						LabelFunc:SetTitle(NewVal1)
-					elseif type(NewVal1) == "function" then
-						Callback = NewVal1
-					elseif type(NewVal1) == "number" then
-						SetSlider(NewVal1)
-					end
-				end
-				function Slider:Callback(...) Funcs:InsertCallback(Callback, ...)(tonumber(Default)) end
-				function Slider:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				function Slider:Destroy() Button:Destroy() end
-				return Slider
-			end
-			
-			function SubTab:AddTextBox(Configs)
-				local TName = Configs[1] or Configs.Name or Configs.Title or "Text Box"
-				local TDesc = Configs.Desc or Configs.Description or ""
-				local TDefault = Configs[2] or Configs.Default or ""
-				local TPlaceholderText = Configs[5] or Configs.PlaceholderText or "Input"
-				local TClearText = Configs[3] or Configs.ClearText or false
-				local Callback = Funcs:GetCallback(Configs, 4)
-				
-				if type(TDefault) ~= "string" or TDefault:gsub(" ", ""):len() < 1 then
-					TDefault = false
-				end
-				
-				local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
-				Button.LayoutOrder = GetOrder()
-				
-				local SelectedFrame = InsertTheme(Create("Frame", Button, {
-					Size = UDim2.new(0, 150, 0, 18),
-					Position = UDim2.new(1, -10, 0.5),
-					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Theme["Color Stroke"]
-				}), "Stroke")Make("Corner", SelectedFrame, UDim.new(0, 4))
-				
-				local TextBoxInput = InsertTheme(Create("TextBox", SelectedFrame, {
-					Size = UDim2.new(0.85, 0, 0.85, 0),
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.new(0.5, 0, 0.5, 0),
-					BackgroundTransparency = 1,
+				local InviteLabel = Create("TextLabel", InviteHolder, {
+					Size = UDim2.new(1, 0, 0, 15),
+					Position = UDim2.new(0, 5),
+					TextColor3 = Color3.fromRGB(40, 150, 255),
 					Font = Enum.Font.GothamBold,
-					TextScaled = true,
-					TextColor3 = Theme["Color Text"],
-					ClearTextOnFocus = TClearText,
-					PlaceholderText = TPlaceholderText,
-					Text = ""
-				}), "Text")
-				
-				local Pencil = Create("ImageLabel", SelectedFrame, {
-					Size = UDim2.new(0, 12, 0, 12),
-					Position = UDim2.new(0, -5, 0.5),
-					AnchorPoint = Vector2.new(1, 0.5),
-					Image = "rbxassetid://15637081879",
-					BackgroundTransparency = 1
+					TextXAlignment = "Left",
+					BackgroundTransparency = 1,
+					TextSize = 10,
+					Text = Invite
 				})
 				
-				local TextBox = {}
-				local function Input()
-					local Text = TextBoxInput.Text
-					if Text:gsub(" ", ""):len() > 0 then
-						if TextBox.OnChanging then Text = TextBox.OnChanging(Text) or Text end
-						Funcs:FireCallback(Callback, Text)
-						TextBoxInput.Text = Text
-					end
-				end
+				local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
+					Size = UDim2.new(1, 0, 0, 65),
+					AnchorPoint = Vector2.new(0, 1),
+					Position = UDim2.new(0, 0, 1),
+					BackgroundColor3 = Theme["Color Hub 2"]
+				}), "Frame")Make("Corner", FrameHolder)
 				
-				TextBoxInput.FocusLost:Connect(Input)Input()
+				local ImageLabel = Create("ImageLabel", FrameHolder, {
+					Size = UDim2.new(0, 30, 0, 30),
+					Position = UDim2.new(0, 7, 0, 7),
+					Image = Logo,
+					BackgroundTransparency = 1
+				})Make("Corner", ImageLabel, UDim.new(0, 4))Make("Stroke", ImageLabel)
 				
-				TextBoxInput.FocusLost:Connect(function()
-					CreateTween({Pencil, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
+				local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
+					Size = UDim2.new(1, -52, 0, 15),
+					Position = UDim2.new(0, 44, 0, 7),
+					Font = Enum.Font.GothamBold,
+					TextColor3 = Theme["Color Text"],
+					TextXAlignment = "Left",
+					BackgroundTransparency = 1,
+					TextSize = 10,
+					Text = Title
+				}), "Text")
+				
+				local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
+					Size = UDim2.new(1, -52, 0, 0),
+					Position = UDim2.new(0, 44, 0, 22),
+					TextWrapped = "Y",
+					AutomaticSize = "Y",
+					Font = Enum.Font.Gotham,
+					TextColor3 = Theme["Color Dark Text"],
+					TextXAlignment = "Left",
+					BackgroundTransparency = 1,
+					TextSize = 8,
+					Text = Desc
+				}), "DarkText")
+				
+				local JoinButton = Create("TextButton", FrameHolder, {
+					Size = UDim2.new(1, -14, 0, 16),
+					AnchorPoint = Vector2.new(0.5, 1),
+					Position = UDim2.new(0.5, 0, 1, -7),
+					Text = "Copy Link",
+					Font = Enum.Font.GothamBold,
+					TextSize = 12,
+					TextColor3 = Color3.fromRGB(220, 220, 220),
+					BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+				})Make("Corner", JoinButton, UDim.new(0, 5))
+				
+				local ClickDelay
+				JoinButton.Activated:Connect(function()
+					setclipboard(Invite)
+					if ClickDelay then return end
+					
+					ClickDelay = true
+					SetProps(JoinButton, {
+						Text = "Copied to Clipboard",
+						BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+						TextColor3 = Color3.fromRGB(150, 150, 150)
+					})task.wait(5)
+					SetProps(JoinButton, {
+						Text = "Copy Link",
+						BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+						TextColor3 = Color3.fromRGB(220, 220, 220)
+					})ClickDelay = false
 				end)
-				TextBoxInput.Focused:Connect(function()
-					CreateTween({Pencil, "ImageColor3", Theme["Color Theme"], 0.2})
-				end)
 				
-				TextBox.OnChanging = false
-				function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				function TextBox:Destroy() Button:Destroy() end
-				return TextBox
+				local DiscordInvite = {}
+				function DiscordInvite:Destroy() InviteHolder:Destroy() end
+				function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
+				return DiscordInvite
 			end
 			
 			UpdateGroupContainerSize()
-			MainScroll.CanvasSize = UDim2.new(0, 0, 0, MainScroll:FindFirstChildOfClass("UIListLayout") and MainScroll:FindFirstChildOfClass("UIListLayout").AbsoluteContentSize.Y or 0)
+			if MainScroll:FindFirstChildOfClass("UIListLayout") then
+				MainScroll.CanvasSize = UDim2.new(0, 0, 0, MainScroll:FindFirstChildOfClass("UIListLayout").AbsoluteContentSize.Y or 0)
+			end
 			
 			return SubTab
 		end
@@ -2275,14 +2364,18 @@ function bearlib:MakeWindow(Configs)
 		
 		return TabGroup
 	end
-	-- ===== END TAB GROUP FUNCTIONALITY =====
+	-- ===== END TAB GROUP =====
 	
+	-- Hàm Window:MakeTab cũ
 	function Window:MakeTab(paste, Configs)
 		if type(paste) == "table" then Configs = paste end
 		local TName = Configs[1] or Configs.Title or "Tab!"
 		
+		TabLayoutOrder = TabLayoutOrder + 1
+		
 		local TabSelect = Make("Button", MainScroll, {
-			Size = UDim2.new(1, 0, 0, 24)
+			Size = UDim2.new(1, 0, 0, 24),
+			LayoutOrder = TabLayoutOrder
 		})Make("Corner", TabSelect)
 		
 		local LabelTitle = InsertTheme(Create("TextLabel", TabSelect, {
@@ -2326,13 +2419,14 @@ function bearlib:MakeWindow(Configs)
 				PaddingTop = UDim.new(0, 10),
 				PaddingBottom = UDim.new(0, 10)
 			}), Create("UIListLayout", {
-				Padding = UDim.new(0, 5)
+				Padding = UDim.new(0, 5),
+				SortOrder = "LayoutOrder"
 			})
 		}), "ScrollBar")
 		
 		table.insert(ContainerList, Container)
 		
-		if not FirstTab then Container.Parent = Containers end
+		if not FirstTab then Container.Parent = nil end
 		
 		local function Tabs()
 			if Container.Parent then return end
@@ -2375,13 +2469,15 @@ function bearlib:MakeWindow(Configs)
 		end
 		function Tab:Destroy() TabSelect:Destroy() Container:Destroy() end
 		
+		-- Các hàm AddSection, AddButton, AddToggle, AddSlider, AddTextBox, AddDropdown, AddDiscordInvite cho Tab
 		function Tab:AddSection(Configs)
 			local SectionName = type(Configs) == "string" and Configs or Configs[1] or Configs.Name or Configs.Title or Configs.Section
 			
 			local SectionFrame = Create("Frame", Container, {
 				Size = UDim2.new(1, 0, 0, 20),
 				BackgroundTransparency = 1,
-				Name = "Option"
+				Name = "Option",
+				LayoutOrder = #Container:GetChildren() + 1
 			})
 			
 			local SectionLabel = InsertTheme(Create("TextLabel", SectionFrame, {
@@ -3118,7 +3214,7 @@ function bearlib:MakeWindow(Configs)
 				TextXAlignment = "Left",
 				BackgroundTransparency = 1,
 				TextSize = 10,
-				Text = Invite
+					Text = Invite
 			})
 			
 			local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
