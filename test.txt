@@ -128,9 +128,9 @@ local bearlib = {
 	Options = {},
 	Flags = {},
 	Tabs = {},
-	TabGroups = {}, -- Thêm TabGroups
+	TabGroups = {},
 	Icons = {},
-	AllElements = {} -- Thêm AllElements
+	AllElements = {}
 }
 
 local ViewportSize = workspace.CurrentCamera.ViewportSize
