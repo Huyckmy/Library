@@ -541,7 +541,7 @@ function bearlib:MakeWindow(Configs)
 		Rotation = 45
 	})
 	
-	-- THANH KÉO GIỐNG IPHONE - Nằm ở đỉnh giữa UI, cách UI 2px (nằm ngoài UI)
+	-- THANH KÉO GIỐNG IPHONE - Chỉ hoạt động khi chạm vào thanh
 	local function SetupDragBar()
 		-- Tạo thanh kéo mỏng như iPhone
 		local DragBar = InsertTheme(Create("Frame", MainFrame, {
@@ -566,54 +566,51 @@ function bearlib:MakeWindow(Configs)
 		BlurEffect.Size = 2
 		BlurEffect.Parent = DragBar
 		
-		-- Mở rộng vùng chạm để dễ kéo hơn (thêm một vùng trong suốt phía sau)
-		local TouchArea = InsertTheme(Create("Frame", MainFrame, {
-			Size = UDim2.new(0, 200, 0, 40),  -- Vùng chạm rộng hơn
-			Position = UDim2.new(0.5, 0, 0, -15), -- Nằm giữa, bao phủ thanh kéo
-			AnchorPoint = Vector2.new(0.5, 0),
-			BackgroundTransparency = 1,  -- Hoàn toàn trong suốt
-			Name = "TouchArea",
-			ZIndex = 19,
-			BorderSizePixel = 0,
-			Active = true
-		}), "Frame")
-		
 		-- Chức năng kéo thả cho toàn bộ UI
 		local DragStart, StartPos
 		local isDragging = false
-		local CurrentInput = nil
 		local DragConnection = nil
+		local CurrentMousePos = nil
 		
 		-- Hàm xử lý bắt đầu kéo
 		local function StartDrag(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				if isDragging then return end -- Ngăn kéo nhiều lần
+				
 				StartPos = MainFrame.Position
 				DragStart = Input.Position
 				isDragging = true
-				CurrentInput = Input
+				CurrentMousePos = Input.Position
 				
 				-- Hiệu ứng khi bắt đầu kéo - thanh sáng lên
-				DragBar.BackgroundTransparency = 0.4
+				DragBar.BackgroundTransparency = 0.3
 				DragBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				DragBar.Size = UDim2.new(0, 80, 0, 5)  -- Phóng to thanh một chút khi kéo
 				
-				-- Hủy kết nối cũ nếu có
+				-- Xóa kết nối cũ nếu có
 				if DragConnection then
 					DragConnection:Disconnect()
 					DragConnection = nil
 				end
 				
-				-- Tạo kết nối mới để cập nhật vị trí liên tục
-				DragConnection = RunService.Heartbeat:Connect(function()
-					if isDragging and CurrentInput then
-						local delta = CurrentInput.Position - DragStart
-						local Position = UDim2.new(
-							StartPos.X.Scale, 
-							StartPos.X.Offset + delta.X / UIScale,
-							StartPos.Y.Scale, 
-							StartPos.Y.Offset + delta.Y / UIScale
-						)
-						MainFrame.Position = Position
+				-- Tạo kết nối mới để theo dõi di chuyển chuột TOÀN BỘ MÀN HÌNH
+				DragConnection = UserInputService.InputChanged:Connect(function(InputChanged)
+					if isDragging then
+						-- Cập nhật vị trí chuột hiện tại
+						if InputChanged.UserInputType == Enum.UserInputType.MouseMovement or 
+						   InputChanged.UserInputType == Enum.UserInputType.Touch then
+							CurrentMousePos = InputChanged.Position
+							
+							-- Tính toán vị trí mới cho UI
+							local delta = CurrentMousePos - DragStart
+							local Position = UDim2.new(
+								StartPos.X.Scale, 
+								StartPos.X.Offset + delta.X / UIScale,
+								StartPos.Y.Scale, 
+								StartPos.Y.Offset + delta.Y / UIScale
+							)
+							MainFrame.Position = Position
+						end
 					end
 				end)
 			end
@@ -622,37 +619,36 @@ function bearlib:MakeWindow(Configs)
 		-- Hàm xử lý kết thúc kéo
 		local function EndDrag(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-				isDragging = false
-				CurrentInput = nil
-				
-				-- Hủy kết nối
-				if DragConnection then
-					DragConnection:Disconnect()
-					DragConnection = nil
+				if isDragging then
+					isDragging = false
+					
+					-- Ngắt kết nối
+					if DragConnection then
+						DragConnection:Disconnect()
+						DragConnection = nil
+					end
+					
+					-- Trả lại trạng thái ban đầu
+					DragBar.BackgroundTransparency = 0.7
+					DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+					DragBar.Size = UDim2.new(0, 60, 0, 4)  -- Trả về kích thước ban đầu
+					CurrentMousePos = nil
 				end
-				
-				-- Trả lại trạng thái ban đầu
-				DragBar.BackgroundTransparency = 0.7
-				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-				DragBar.Size = UDim2.new(0, 60, 0, 4)  -- Trả về kích thước ban đầu
 			end
 		end
 		
-		-- Xử lý sự kiện trên thanh kéo
+		-- CHỈ XỬ LÝ SỰ KIỆN TRÊN THANH KÉO
 		DragBar.InputBegan:Connect(StartDrag)
 		DragBar.InputEnded:Connect(EndDrag)
 		
-		-- Xử lý sự kiện trên vùng chạm mở rộng
-		TouchArea.InputBegan:Connect(StartDrag)
-		TouchArea.InputEnded:Connect(EndDrag)
-		
-		-- Xử lý khi chuột rời khỏi thanh kéo (vẫn giữ kéo nếu đang kéo)
+		-- Xử lý khi chuột rời khỏi thanh kéo (chỉ thay đổi hiệu ứng, KHÔNG ngắt kéo)
 		DragBar.MouseLeave:Connect(function()
 			if not isDragging then
 				DragBar.BackgroundTransparency = 0.7
 				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 				DragBar.Size = UDim2.new(0, 60, 0, 4)
 			end
+			-- Nếu đang kéo, GIỮ NGUYÊN trạng thái kéo
 		end)
 		
 		-- Hover effect trên thanh kéo
@@ -664,32 +660,40 @@ function bearlib:MakeWindow(Configs)
 			end
 		end)
 		
-		-- Xử lý cho touch (di động)
-		TouchArea.MouseEnter:Connect(function()
-			if not isDragging then
-				DragBar.BackgroundTransparency = 0.5
-				DragBar.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-			end
-		end)
-		
-		TouchArea.MouseLeave:Connect(function()
-			if not isDragging then
-				DragBar.BackgroundTransparency = 0.7
-				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-			end
-		end)
-		
-		-- Xử lý khi kéo ra khỏi thanh (vẫn giữ kéo)
-		UserInputService.InputChanged:Connect(function(Input)
-			if isDragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
-				CurrentInput = Input
-			end
-		end)
-		
-		-- Xử lý khi thả chuột ở bất kỳ đâu
+		-- Xử lý khi thả chuột ở BẤT KỲ ĐÂU (quan trọng)
 		UserInputService.InputEnded:Connect(function(Input)
 			if isDragging and (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
-				EndDrag(Input)
+				-- Kết thúc kéo khi thả chuột ở bất kỳ đâu
+				isDragging = false
+				
+				-- Ngắt kết nối
+				if DragConnection then
+					DragConnection:Disconnect()
+					DragConnection = nil
+				end
+				
+				-- Trả lại trạng thái ban đầu
+				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+				DragBar.Size = UDim2.new(0, 60, 0, 4)
+				CurrentMousePos = nil
+			end
+		end)
+		
+		-- Xử lý khi người dùng nhấn ESC để hủy kéo
+		UserInputService.InputBegan:Connect(function(Input)
+			if isDragging and Input.KeyCode == Enum.KeyCode.Escape then
+				isDragging = false
+				
+				if DragConnection then
+					DragConnection:Disconnect()
+					DragConnection = nil
+				end
+				
+				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+				DragBar.Size = UDim2.new(0, 60, 0, 4)
+				CurrentMousePos = nil
 			end
 		end)
 		
