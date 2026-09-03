@@ -573,6 +573,7 @@ function bearlib:MakeWindow(Configs)
 		local isDragging = false
 		local DragConnection = nil
 		local CurrentMousePos = nil
+		local OriginalMouseBehavior = Enum.MouseBehavior.Default
 		
 		-- Tạo một Frame trong suốt bao phủ toàn màn hình để khóa tương tác
 		local LockFrame = Instance.new("Frame")
@@ -586,14 +587,33 @@ function bearlib:MakeWindow(Configs)
 		LockFrame.Selectable = true
 		LockFrame.Visible = false -- Mặc định ẩn
 		
-		-- Hàm khóa tương tác ngoài UI
+		-- Hàm khóa tương tác ngoài UI và khóa camera
 		local function LockInteraction()
 			LockFrame.Visible = true
+			-- Khóa mouse behavior để ngăn camera quay
+			OriginalMouseBehavior = UserInputService.MouseBehavior
+			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 		end
 		
-		-- Hàm mở khóa tương tác
+		-- Hàm mở khóa tương tác và camera
 		local function UnlockInteraction()
 			LockFrame.Visible = false
+			-- Trả lại mouse behavior ban đầu
+			UserInputService.MouseBehavior = OriginalMouseBehavior
+		end
+		
+		-- Hàm cập nhật vị trí UI
+		local function UpdateUIPosition()
+			if isDragging and CurrentMousePos then
+				local delta = CurrentMousePos - DragStart
+				local Position = UDim2.new(
+					StartPos.X.Scale, 
+					StartPos.X.Offset + delta.X / UIScale,
+					StartPos.Y.Scale, 
+					StartPos.Y.Offset + delta.Y / UIScale
+				)
+				MainFrame.Position = Position
+			end
 		end
 		
 		-- Hàm xử lý bắt đầu kéo
@@ -607,7 +627,7 @@ function bearlib:MakeWindow(Configs)
 				isDragging = true
 				CurrentMousePos = Input.Position
 				
-				-- KHÓA TƯƠNG TÁC NGOÀI UI
+				-- KHÓA TƯƠNG TÁC NGOÀI UI VÀ CAMERA
 				LockInteraction()
 				
 				-- Hiệu ứng khi bắt đầu kéo - thanh sáng lên
@@ -621,38 +641,26 @@ function bearlib:MakeWindow(Configs)
 					DragConnection = nil
 				end
 				
-				-- Tạo kết nối mới để theo dõi di chuyển chuột TOÀN BỘ MÀN HÌNH
+				-- Tạo kết nối để theo dõi di chuyển chuột TOÀN BỘ MÀN HÌNH
 				DragConnection = UserInputService.InputChanged:Connect(function(InputChanged)
 					if isDragging then
 						-- Cập nhật vị trí chuột hiện tại
 						if InputChanged.UserInputType == Enum.UserInputType.MouseMovement or 
 						   InputChanged.UserInputType == Enum.UserInputType.Touch then
 							CurrentMousePos = InputChanged.Position
-							
-							-- Tính toán vị trí mới cho UI
-							local delta = CurrentMousePos - DragStart
-							local Position = UDim2.new(
-								StartPos.X.Scale, 
-								StartPos.X.Offset + delta.X / UIScale,
-								StartPos.Y.Scale, 
-								StartPos.Y.Offset + delta.Y / UIScale
-							)
-							MainFrame.Position = Position
+							UpdateUIPosition()
 						end
 					end
 				end)
 				
-				-- Thêm kết nối để cập nhật vị trí liên tục
-				RunService.Heartbeat:Connect(function()
-					if isDragging and CurrentMousePos then
-						local delta = CurrentMousePos - DragStart
-						local Position = UDim2.new(
-							StartPos.X.Scale, 
-							StartPos.X.Offset + delta.X / UIScale,
-							StartPos.Y.Scale, 
-							StartPos.Y.Offset + delta.Y / UIScale
-						)
-						MainFrame.Position = Position
+				-- Thêm kết nối để cập nhật vị trí liên tục bằng Heartbeat
+				local HeartbeatConnection
+				HeartbeatConnection = RunService.Heartbeat:Connect(function()
+					if isDragging then
+						UpdateUIPosition()
+					else
+						-- Tự động ngắt kết nối khi không còn kéo
+						HeartbeatConnection:Disconnect()
 					end
 				end)
 			end
@@ -664,7 +672,7 @@ function bearlib:MakeWindow(Configs)
 				if isDragging then
 					isDragging = false
 					
-					-- MỞ KHÓA TƯƠNG TÁC
+					-- MỞ KHÓA TƯƠNG TÁC VÀ CAMERA
 					UnlockInteraction()
 					
 					-- Ngắt kết nối
@@ -711,7 +719,7 @@ function bearlib:MakeWindow(Configs)
 				-- Kết thúc kéo khi thả chuột ở bất kỳ đâu
 				isDragging = false
 				
-				-- MỞ KHÓA TƯƠNG TÁC
+				-- MỞ KHÓA TƯƠNG TÁC VÀ CAMERA
 				UnlockInteraction()
 				
 				-- Ngắt kết nối
@@ -733,7 +741,7 @@ function bearlib:MakeWindow(Configs)
 			if isDragging and Input.KeyCode == Enum.KeyCode.Escape then
 				isDragging = false
 				
-				-- MỞ KHÓA TƯƠNG TÁC
+				-- MỞ KHÓA TƯƠNG TÁC VÀ CAMERA
 				UnlockInteraction()
 				
 				if DragConnection then
@@ -741,6 +749,22 @@ function bearlib:MakeWindow(Configs)
 					DragConnection = nil
 				end
 				
+				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+				DragBar.Size = UDim2.new(0, 60, 0, 4)
+				CurrentMousePos = nil
+			end
+		end)
+		
+		-- Xử lý khi game bị mất focus (người dùng click ra ngoài)
+		UserInputService.WindowFocused:Connect(function()
+			if isDragging then
+				isDragging = false
+				UnlockInteraction()
+				if DragConnection then
+					DragConnection:Disconnect()
+					DragConnection = nil
+				end
 				DragBar.BackgroundTransparency = 0.7
 				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 				DragBar.Size = UDim2.new(0, 60, 0, 4)
