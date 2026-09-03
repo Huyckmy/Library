@@ -541,13 +541,13 @@ function bearlib:MakeWindow(Configs)
 		Rotation = 45
 	})
 	
-	-- THANH KÉO GIỐNG IPHONE - Nằm ở đỉnh giữa UI
+	-- THANH KÉO GIỐNG IPHONE - Nằm ở đỉnh giữa UI, cách UI 2px (nằm ngoài UI)
 	local function SetupDragBar()
 		-- Tạo thanh kéo mỏng như iPhone
 		local DragBar = InsertTheme(Create("Frame", MainFrame, {
-			Size = UDim2.new(0, 120, 0, 5),  -- Chiều rộng 120, cao 5px
-			Position = UDim2.new(0.5, 0, 0, 1), -- Nằm giữa, cách mép trên 1px
-			AnchorPoint = Vector2.new(0.5, 0),
+			Size = UDim2.new(0, 120, 0, 7),  -- Chiều rộng 120, cao 7px
+			Position = UDim2.new(0.5, 0, 0, -2), -- Nằm giữa, cách mép trên UI -2px (ra ngoài)
+			AnchorPoint = Vector2.new(0.5, 1), -- Anchor ở dưới cùng của thanh
 			BackgroundColor3 = Color3.fromRGB(200, 200, 200),
 			BackgroundTransparency = 0.7,  -- Trong suốt hơi trắng đục
 			Name = "DragBar",
