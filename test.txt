@@ -541,7 +541,7 @@ function bearlib:MakeWindow(Configs)
 		Rotation = 45
 	})
 	
-	-- THANH KÉO GIỐNG IPHONE - Chỉ hoạt động khi chạm vào thanh
+	-- THANH KÉO GIỐNG IPHONE - Chỉ hoạt động khi chạm vào thanh, khóa tương tác ngoài UI
 	local function SetupDragBar()
 		-- Tạo thanh kéo mỏng như iPhone
 		local DragBar = InsertTheme(Create("Frame", MainFrame, {
@@ -553,7 +553,9 @@ function bearlib:MakeWindow(Configs)
 			Name = "DragBar",
 			ZIndex = 20,
 			BorderSizePixel = 0,
-			ClipsDescendants = true
+			ClipsDescendants = true,
+			Active = true,
+			Selectable = true
 		}), "Frame")
 		
 		-- Bo góc cho thanh kéo (tròn như iPhone)
@@ -566,21 +568,47 @@ function bearlib:MakeWindow(Configs)
 		BlurEffect.Size = 2
 		BlurEffect.Parent = DragBar
 		
-		-- Chức năng kéo thả cho toàn bộ UI
+		-- Biến lưu trạng thái kéo
 		local DragStart, StartPos
 		local isDragging = false
 		local DragConnection = nil
 		local CurrentMousePos = nil
+		
+		-- Tạo một Frame trong suốt bao phủ toàn màn hình để khóa tương tác
+		local LockFrame = Instance.new("Frame")
+		LockFrame.Name = "LockFrame"
+		LockFrame.Size = UDim2.new(1, 0, 1, 0)
+		LockFrame.Position = UDim2.new(0, 0, 0, 0)
+		LockFrame.BackgroundTransparency = 1
+		LockFrame.ZIndex = 999
+		LockFrame.Parent = ScreenGui
+		LockFrame.Active = true
+		LockFrame.Selectable = true
+		LockFrame.Visible = false -- Mặc định ẩn
+		
+		-- Hàm khóa tương tác ngoài UI
+		local function LockInteraction()
+			LockFrame.Visible = true
+		end
+		
+		-- Hàm mở khóa tương tác
+		local function UnlockInteraction()
+			LockFrame.Visible = false
+		end
 		
 		-- Hàm xử lý bắt đầu kéo
 		local function StartDrag(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				if isDragging then return end -- Ngăn kéo nhiều lần
 				
+				-- Lưu vị trí bắt đầu
 				StartPos = MainFrame.Position
 				DragStart = Input.Position
 				isDragging = true
 				CurrentMousePos = Input.Position
+				
+				-- KHÓA TƯƠNG TÁC NGOÀI UI
+				LockInteraction()
 				
 				-- Hiệu ứng khi bắt đầu kéo - thanh sáng lên
 				DragBar.BackgroundTransparency = 0.3
@@ -613,6 +641,20 @@ function bearlib:MakeWindow(Configs)
 						end
 					end
 				end)
+				
+				-- Thêm kết nối để cập nhật vị trí liên tục
+				RunService.Heartbeat:Connect(function()
+					if isDragging and CurrentMousePos then
+						local delta = CurrentMousePos - DragStart
+						local Position = UDim2.new(
+							StartPos.X.Scale, 
+							StartPos.X.Offset + delta.X / UIScale,
+							StartPos.Y.Scale, 
+							StartPos.Y.Offset + delta.Y / UIScale
+						)
+						MainFrame.Position = Position
+					end
+				end)
 			end
 		end
 		
@@ -621,6 +663,9 @@ function bearlib:MakeWindow(Configs)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				if isDragging then
 					isDragging = false
+					
+					-- MỞ KHÓA TƯƠNG TÁC
+					UnlockInteraction()
 					
 					-- Ngắt kết nối
 					if DragConnection then
@@ -637,7 +682,7 @@ function bearlib:MakeWindow(Configs)
 			end
 		end
 		
-		-- CHỈ XỬ LÝ SỰ KIỆN TRÊN THANH KÉO
+		-- Xử lý sự kiện trên thanh kéo
 		DragBar.InputBegan:Connect(StartDrag)
 		DragBar.InputEnded:Connect(EndDrag)
 		
@@ -666,6 +711,9 @@ function bearlib:MakeWindow(Configs)
 				-- Kết thúc kéo khi thả chuột ở bất kỳ đâu
 				isDragging = false
 				
+				-- MỞ KHÓA TƯƠNG TÁC
+				UnlockInteraction()
+				
 				-- Ngắt kết nối
 				if DragConnection then
 					DragConnection:Disconnect()
@@ -684,6 +732,9 @@ function bearlib:MakeWindow(Configs)
 		UserInputService.InputBegan:Connect(function(Input)
 			if isDragging and Input.KeyCode == Enum.KeyCode.Escape then
 				isDragging = false
+				
+				-- MỞ KHÓA TƯƠNG TÁC
+				UnlockInteraction()
 				
 				if DragConnection then
 					DragConnection:Disconnect()
