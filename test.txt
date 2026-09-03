@@ -541,74 +541,47 @@ function bearlib:MakeWindow(Configs)
 		Rotation = 45
 	})
 	
-	-- THANH KÉO MỚI - Thay thế cho MakeDrag(MainFrame)
+	-- THANH KÉO GIỐNG IPHONE - Nằm ở đỉnh giữa UI
 	local function SetupDragBar()
-		-- Tạo thanh kéo
+		-- Tạo thanh kéo mỏng như iPhone
 		local DragBar = InsertTheme(Create("Frame", MainFrame, {
-			Size = UDim2.new(1, 0, 0, 32),
-			Position = UDim2.new(0, 0, 0, 0),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 0.7,
+			Size = UDim2.new(0, 120, 0, 5),  -- Chiều rộng 120, cao 5px
+			Position = UDim2.new(0.5, 0, 0, 1), -- Nằm giữa, cách mép trên 1px
+			AnchorPoint = Vector2.new(0.5, 0),
+			BackgroundColor3 = Color3.fromRGB(200, 200, 200),
+			BackgroundTransparency = 0.7,  -- Trong suốt hơi trắng đục
 			Name = "DragBar",
-			ZIndex = 10,
+			ZIndex = 20,
 			BorderSizePixel = 0,
 			ClipsDescendants = true
 		}), "Frame")
 		
-		-- Bo góc cho thanh kéo (chỉ bo góc trên)
+		-- Bo góc cho thanh kéo (tròn như iPhone)
 		local DragCorner = Instance.new("UICorner")
-		DragCorner.CornerRadius = UDim.new(0, 7)
+		DragCorner.CornerRadius = UDim.new(1, 0)  -- Bo tròn hoàn toàn
 		DragCorner.Parent = DragBar
 		
-		-- Gradient mờ cho thanh kéo (hiệu ứng trong suốt)
-		local DragGradient = Instance.new("UIGradient")
-		DragGradient.Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-			ColorSequenceKeypoint.new(0.7, Color3.fromRGB(255, 255, 255)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-		})
-		DragGradient.Transparency = NumberSequence.new({
-			NumberSequenceKeypoint.new(0, 0.3),
-			NumberSequenceKeypoint.new(0.7, 0.3),
-			NumberSequenceKeypoint.new(1, 1)
-		})
-		DragGradient.Rotation = 90
-		DragGradient.Parent = DragBar
+		-- Tạo hiệu ứng mờ đẹp
+		local BlurEffect = Instance.new("BlurEffect")
+		BlurEffect.Size = 2
+		BlurEffect.Parent = DragBar
 		
-		-- Viền mờ cho thanh kéo
-		local DragStroke = InsertTheme(Create("UIStroke", DragBar, {
-			Color = Color3.fromRGB(255, 255, 255),
-			Thickness = 0.5,
-			Transparency = 0.6,
-			ApplyStrokeMode = "Border"
-		}), "Stroke")
-		
-		-- Text nhỏ hướng dẫn kéo
-		local DragHint = InsertTheme(Create("TextLabel", DragBar, {
-			Size = UDim2.new(1, 0, 1, 0),
-			BackgroundTransparency = 1,
-			Text = "⋮⋮⋮  Kéo để di chuyển  ⋮⋮⋮",
-			TextColor3 = Theme["Color Dark Text"],
-			TextSize = 10,
-			Font = Enum.Font.Gotham,
-			TextTransparency = 0.3,
-			TextXAlignment = "Center",
-			TextYAlignment = "Center",
-			ZIndex = 11
-		}), "DarkText")
-		
-		-- Chức năng kéo thả
+		-- Chức năng kéo thả cho toàn bộ UI
 		local DragStart, StartPos
+		local isDragging = false
 		
 		DragBar.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				StartPos = MainFrame.Position
 				DragStart = Input.Position
+				isDragging = true
 				
-				-- Tăng transparency khi kéo để thấy rõ hơn
-				DragBar.BackgroundTransparency = 0.5
+				-- Hiệu ứng khi bắt đầu kéo - thanh sáng lên
+				DragBar.BackgroundTransparency = 0.4
+				DragBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				
-				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+				-- Kéo liên tục
+				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) and isDragging do
 					RunService.Heartbeat:Wait()
 					local delta = Input.Position - DragStart
 					local Position = UDim2.new(
@@ -620,15 +593,41 @@ function bearlib:MakeWindow(Configs)
 					MainFrame.Position = Position
 				end
 				
-				-- Trả lại transparency ban đầu
+				-- Trả lại trạng thái ban đầu
 				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+				isDragging = false
+			end
+		end)
+		
+		-- Ngăn sự kiện click lan xuống dưới
+		DragBar.InputEnded:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				isDragging = false
+				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+			end
+		end)
+		
+		-- Hover effect
+		DragBar.MouseEnter:Connect(function()
+			if not isDragging then
+				DragBar.BackgroundTransparency = 0.5
+				DragBar.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+			end
+		end)
+		
+		DragBar.MouseLeave:Connect(function()
+			if not isDragging then
+				DragBar.BackgroundTransparency = 0.7
+				DragBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 			end
 		end)
 		
 		return DragBar
 	end
 	
-	-- Gọi hàm tạo thanh kéo
+	-- Tạo thanh kéo
 	local DragBar = SetupDragBar()
 	
 	local MainCorner = Make("Corner", MainFrame)
