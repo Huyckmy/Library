@@ -545,7 +545,7 @@ function bearlib:MakeWindow(Configs)
 	local function SetupDragBar()
 		-- Tạo thanh kéo mỏng như iPhone
 		local DragBar = InsertTheme(Create("Frame", MainFrame, {
-			Size = UDim2.new(0, 120, 0, 7),  -- Chiều rộng 120, cao 7px
+			Size = UDim2.new(0, 120, 0, 4),  -- Chiều rộng 120, cao 4px
 			Position = UDim2.new(0.5, 0, 0, -2), -- Nằm giữa, cách mép trên UI -2px (ra ngoài)
 			AnchorPoint = Vector2.new(0.5, 1), -- Anchor ở dưới cùng của thanh
 			BackgroundColor3 = Color3.fromRGB(200, 200, 200),
