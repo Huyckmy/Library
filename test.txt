@@ -88,7 +88,6 @@ local bearlib = {
 	},
 	Save = {
 		UISize = {550, 380},
-		TabSize = 160,
 		Theme = "Darker"
 	},
 	Settings = {},
@@ -97,10 +96,9 @@ local bearlib = {
 	Elements = {},
 	Options = {},
 	Flags = {},
-	Icons = {},
 	Tabs = {},
 	TabGroups = {},
-	AllElements = {}
+	Icons = {}
 }
 
 local ViewportSize = workspace.CurrentCamera.ViewportSize
@@ -161,8 +159,9 @@ local SetProps, SetChildren, InsertTheme, Create do
 			
 			if type(decode) == "table" then
 				if rawget(decode, "UISize") then bearlib.Save["UISize"] = decode["UISize"] end
-				if rawget(decode, "TabSize") then bearlib.Save["TabSize"] = decode["TabSize"] end
 				if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then bearlib.Save["Theme"] = decode["Theme"] end
+				if rawget(decode, "TabSize") then bearlib.Save["TabSize"] = decode["TabSize"] end
+				if rawget(decode, "BarPosition") then bearlib.Save["BarPosition"] = decode["BarPosition"] end
 			end
 		end
 	end
@@ -395,9 +394,9 @@ local function MakeDragSmooth(Instance, onDrag)
 			Active = true,
 			AutoButtonColor = false
 		})
-
+		
 		local DragStart, StartPos, InputOn
-
+		
 		Instance.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				InputOn = true
@@ -405,7 +404,7 @@ local function MakeDragSmooth(Instance, onDrag)
 				DragStart = Input.Position
 			end
 		end)
-
+		
 		Instance.InputEnded:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				InputOn = false
@@ -414,7 +413,7 @@ local function MakeDragSmooth(Instance, onDrag)
 				end
 			end
 		end)
-
+		
 		UserInputService.InputChanged:Connect(function(Input)
 			if InputOn and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
 				local delta = Input.Position - DragStart
@@ -499,6 +498,21 @@ AddEle("Gradient", function(parent, props, ...)
 	return New
 end)
 
+local function GetColor(Instance)
+	if Instance:IsA("Frame") then
+		return "BackgroundColor3"
+	elseif Instance:IsA("ImageLabel") then
+		return "ImageColor3"
+	elseif Instance:IsA("TextLabel") then
+		return "TextColor3"
+	elseif Instance:IsA("ScrollingFrame") then
+		return "ScrollBarImageColor3"
+	elseif Instance:IsA("UIStroke") then
+		return "Color"
+	end
+	return ""
+end
+
 local function ButtonFrame(Instance, Title, Description, HolderSize)
 	local TitleL = InsertTheme(Create("TextLabel", {
 		Font = Enum.Font.GothamMedium,
@@ -512,7 +526,8 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
 		TextSize = 10,
 		TextXAlignment = "Left",
 		Text = "",
-		RichText = true
+		RichText = true,
+		ZIndex = 5
 	}), "Text")
 	
 	local DescL = InsertTheme(Create("TextLabel", {
@@ -526,21 +541,26 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
 		TextSize = 8,
 		TextXAlignment = "Left",
 		Text = "",
-		RichText = true
+		RichText = true,
+		ZIndex = 5
 	}), "DarkText")
-
+	
 	local Frame = Make("Button", Instance, {
 		Size = UDim2.new(1, 0, 0, 25),
 		AutomaticSize = "Y",
 		Name = "Option"
-	})Make("Corner", Frame, UDim.new(0, 6))
+	})
+	Make("Corner", Frame, UDim.new(0, 6))
 	
-	LabelHolder = Create("Frame", Frame, {
+	Make("Stroke", Frame, nil, Theme["Color Stroke"], 1)
+	
+	local LabelHolder = Create("Frame", Frame, {
 		AutomaticSize = "Y",
 		BackgroundTransparency = 1,
 		Size = HolderSize,
 		Position = UDim2.new(0, 10, 0),
-		AnchorPoint = Vector2.new(0, 0)
+		AnchorPoint = Vector2.new(0, 0),
+		ZIndex = 4
 	}, {
 		Create("UIListLayout", {
 			SortOrder = "LayoutOrder",
@@ -580,31 +600,27 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
 	return Frame, Label
 end
 
-local function GetColor(Instance)
-	if Instance:IsA("Frame") then
-		return "BackgroundColor3"
-	elseif Instance:IsA("ImageLabel") then
-		return "ImageColor3"
-	elseif Instance:IsA("TextLabel") then
-		return "TextColor3"
-	elseif Instance:IsA("ScrollingFrame") then
-		return "ScrollBarImageColor3"
-	elseif Instance:IsA("UIStroke") then
-		return "Color"
-	end
-	return ""
-end
-
-local function GetThemeList()
-	local themes = {}
-	for themeName, _ in pairs(bearlib.Themes) do
-		table.insert(themes, themeName)
-	end
-	return themes
-end
-
 function bearlib:GetIcon(index)
-	return index or ""
+	if type(index) ~= "string" or index:find("rbxassetid://") or #index == 0 then
+		return index
+	end
+	
+	local firstMatch = nil
+	index = string.lower(index):gsub("lucide", ""):gsub("-", "")
+	
+	if self.Icons[index] then
+		return self.Icons[index]
+	end
+	
+	for Name, Icon in self.Icons do
+		if Name == index then
+			return Icon
+		elseif not firstMatch and Name:find(index, 1, true) then
+			firstMatch = Icon
+		end
+	end
+	
+	return firstMatch or index
 end
 
 function bearlib:SetTheme(NewTheme)
@@ -639,6 +655,15 @@ function bearlib:SetScale(NewScale)
 	UIScale, ScreenGui.Scale.Scale = NewScale, NewScale
 end
 
+local MainFrame = nil
+local MinimizeButton = nil
+local MainScroll = nil
+local Containers = nil
+local DividerLine = nil
+local ControlSize1 = nil
+local ControlSize2 = nil
+local DropdownHolder = nil
+
 function bearlib:MakeWindow(Configs)
 	local WTitle = Configs[1] or Configs.Name or Configs.Title or "bear Library OS"
 	local WMiniText = Configs[2] or Configs.SubTitle or "by : Quang Huy"
@@ -662,7 +687,9 @@ function bearlib:MakeWindow(Configs)
 	end;LoadFile()
 	
 	local UISizeX, UISizeY = unpack(bearlib.Save.UISize)
-	local MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
+	local TabSize = bearlib.Save.TabSize or 160
+	
+	MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
 		Size = UDim2.fromOffset(UISizeX, UISizeY),
 		Position = UDim2.new(0.5, -UISizeX/2, 0.5, -UISizeY/2),
 		BackgroundTransparency = 0.03,
@@ -678,7 +705,7 @@ function bearlib:MakeWindow(Configs)
 		Name = "Components"
 	})
 	
-	local DropdownHolder = Create("Folder", ScreenGui, {
+	DropdownHolder = Create("Folder", ScreenGui, {
 		Name = "Dropdown"
 	})
 	
@@ -716,128 +743,9 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
-	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
-		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
-		ScrollBarImageColor3 = Theme["Color Theme"],
-		Position = UDim2.new(0, 0, 1, 0),
-		AnchorPoint = Vector2.new(0, 1),
-		ScrollBarThickness = 1.5,
-		BackgroundTransparency = 1,
-		ScrollBarImageTransparency = 0.2,
-		CanvasSize = UDim2.new(),
-		AutomaticCanvasSize = "Y",
-		ScrollingDirection = "Y",
-		BorderSizePixel = 0,
-		Name = "Tab Scroll"
-	}, {
-		Create("UIPadding", {
-			PaddingLeft = UDim.new(0, 10),
-			PaddingRight = UDim.new(0, 10),
-			PaddingTop = UDim.new(0, 10),
-			PaddingBottom = UDim.new(0, 10)
-		}), Create("UIListLayout", {
-			Padding = UDim.new(0, 5),
-			SortOrder = "LayoutOrder"
-		})
-	}), "ScrollBar")
-	
-	local Containers = Create("Frame", Components, {
-		Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset),
-		AnchorPoint = Vector2.new(1, 1),
-		Position = UDim2.new(1, 0, 1, 0),
-		BackgroundTransparency = 1,
-		ClipsDescendants = true,
-		Name = "Containers"
-	})
-	
-	local DividerLine = Create("Frame", MainFrame, {
-		Size = UDim2.new(0, 2, 1, -TopBar.Size.Y.Offset),
-		Position = UDim2.new(0, MainScroll.Size.X.Offset - 1, 1, 0),
-		AnchorPoint = Vector2.new(0, 1),
-		BackgroundColor3 = Theme["Color Theme"],
-		BackgroundTransparency = 0.8,
-		BorderSizePixel = 0,
-		Name = "DividerLine",
-		ZIndex = 10
-	})
-	
-	local dividerGradient = Instance.new("UIGradient")
-	dividerGradient.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-		ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-	})
-	dividerGradient.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(0.3, 0.7),
-		NumberSequenceKeypoint.new(0.5, 0.5),
-		NumberSequenceKeypoint.new(0.7, 0.7),
-		NumberSequenceKeypoint.new(1, 1)
-	})
-	dividerGradient.Rotation = 90
-	dividerGradient.Name = "UIGradient"
-	dividerGradient.Parent = DividerLine
-	
-	local dividerCorner = Instance.new("UICorner")
-	dividerCorner.CornerRadius = UDim.new(0, 1)
-	dividerCorner.Parent = DividerLine
-	
-	InsertTheme(DividerLine, "Divider")
-	
-	local ControlSize1 = MakeDrag(Create("ImageButton", MainFrame, {
-		Size = UDim2.new(0, 35, 0, 35),
-		Position = MainFrame.Size,
-		Active = true,
-		AnchorPoint = Vector2.new(0.8, 0.8),
-		BackgroundTransparency = 1,
-		Name = "Control Hub Size"
-	}))
-	
-	local function ControlSize()
-		local Pos1 = ControlSize1.Position
-		ControlSize1.Position = UDim2.fromOffset(math.clamp(Pos1.X.Offset, 430, 1000), math.clamp(Pos1.Y.Offset, 200, 500))
-		
-		Containers.Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset)
-		MainFrame.Size = ControlSize1.Position
-	end
-	
-	ControlSize1:GetPropertyChangedSignal("Position"):Connect(ControlSize)
-	
-	ConnectSave(ControlSize1, function()
-		if not Minimized then
-			bearlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
-			SaveJson("bear library OS.json", bearlib.Save)
-		end
-	end)
-	
-	local ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
-		Size = UDim2.new(0, 20, 1, -30),
-		Position = UDim2.new(0, MainScroll.Size.X.Offset, 1, 0),
-		AnchorPoint = Vector2.new(0.5, 1),
-		Active = true,
-		BackgroundTransparency = 1,
-		Name = "Control Tab Size",
-		ZIndex = 100
-	}), function(finished, delta, startPos)
-		if not finished then
-			local newTabX = math.clamp(startPos.X.Offset + (delta and delta.X or 0) / UIScale, 135, 250)
-			ControlSize2.Position = UDim2.new(0, newTabX, 1, 0)
-
-			MainScroll.Size = UDim2.new(0, newTabX, 1, -TopBar.Size.Y.Offset)
-			Containers.Size = UDim2.new(1, -newTabX, 1, -TopBar.Size.Y.Offset)
-
-			if DividerLine then
-				DividerLine.Position = UDim2.new(0, newTabX - 1, 1, 0)
-			end
-		else
-			bearlib.Save.TabSize = MainScroll.Size.X.Offset
-			SaveJson("bear library OS.json", bearlib.Save)
-		end
-	end)
-	
 	local CloseButton = nil
 	local MaximizeButton = nil
-	local MinimizeButton = nil
+	MinimizeButton = nil
 	local ButtonsFolder = nil
 	local IsMaximized = false
 	local OriginalUISize = nil
@@ -845,6 +753,7 @@ function bearlib:MakeWindow(Configs)
 	local SaveSize = nil
 	local WaitClick = false
 	local MinimizedBar = nil
+	local BarPosition = {X = 350, Y = -65}
 	
 	ButtonsFolder = Create("Folder", TopBar, {
 		Name = "Buttons"
@@ -887,6 +796,120 @@ function bearlib:MakeWindow(Configs)
 		MaximizeButton,
 		MinimizeButton
 	})
+	
+	MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
+		Size = UDim2.new(0, TabSize, 1, -TopBar.Size.Y.Offset),
+		ScrollBarImageColor3 = Theme["Color Theme"],
+		Position = UDim2.new(0, 0, 1, 0),
+		AnchorPoint = Vector2.new(0, 1),
+		ScrollBarThickness = 1.5,
+		BackgroundTransparency = 1,
+		ScrollBarImageTransparency = 0.2,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = "Y",
+		ScrollingDirection = "Y",
+		BorderSizePixel = 0,
+		Name = "Tab Scroll"
+	}, {
+		Create("UIPadding", {
+			PaddingLeft = UDim.new(0, 10),
+			PaddingRight = UDim.new(0, 10),
+			PaddingTop = UDim.new(0, 10),
+			PaddingBottom = UDim.new(0, 10)
+		}), Create("UIListLayout", {
+			Padding = UDim.new(0, 5),
+			SortOrder = "LayoutOrder"
+		})
+	}), "ScrollBar")
+	
+	Containers = Create("Frame", Components, {
+		Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset),
+		AnchorPoint = Vector2.new(1, 1),
+		Position = UDim2.new(1, 0, 1, 0),
+		BackgroundTransparency = 1,
+		ClipsDescendants = true,
+		Name = "Containers"
+	})
+	
+	DividerLine = Create("Frame", MainFrame, {
+		Size = UDim2.new(0, 2, 1, -TopBar.Size.Y.Offset),
+		Position = UDim2.new(0, MainScroll.Size.X.Offset - 1, 1, 0),
+		AnchorPoint = Vector2.new(0, 1),
+		BackgroundColor3 = Theme["Color Theme"],
+		BackgroundTransparency = 0.8,
+		BorderSizePixel = 0,
+		Name = "DividerLine",
+		ZIndex = 10
+	})
+	
+	local dividerGradient = Instance.new("UIGradient")
+	dividerGradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+		ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+	})
+	dividerGradient.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.3, 0.7),
+		NumberSequenceKeypoint.new(0.5, 0.5),
+		NumberSequenceKeypoint.new(0.7, 0.7),
+		NumberSequenceKeypoint.new(1, 1)
+	})
+	dividerGradient.Rotation = 90
+	dividerGradient.Name = "UIGradient"
+	dividerGradient.Parent = DividerLine
+	
+	local dividerCorner = Instance.new("UICorner")
+	dividerCorner.CornerRadius = UDim.new(0, 1)
+	dividerCorner.Parent = DividerLine
+	
+	ControlSize1 = MakeDragSmooth(Create("ImageButton", MainFrame, {
+		Size = UDim2.new(0, 35, 0, 35),
+		Position = MainFrame.Size,
+		Active = true,
+		AnchorPoint = Vector2.new(0.8, 0.8),
+		BackgroundTransparency = 1,
+		Name = "Control Hub Size",
+		ZIndex = 100
+	}), function(finished, delta, startPos)
+		if finished then
+			if MainFrame.Visible then
+				bearlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+				SaveJson("bear library OS.json", bearlib.Save)
+			end
+		else
+			local Pos = startPos
+			local newX = math.clamp(Pos.X.Offset + (delta and delta.X or 0) / UIScale, 430, 1000)
+			local newY = math.clamp(Pos.Y.Offset + (delta and delta.Y or 0) / UIScale, 200, 500)
+			ControlSize1.Position = UDim2.fromOffset(newX, newY)
+			MainFrame.Size = ControlSize1.Position
+		end
+	end)
+	
+	ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
+		Size = UDim2.new(0, 20, 1, -30),
+		Position = UDim2.new(0, MainScroll.Size.X.Offset, 1, 0),
+		AnchorPoint = Vector2.new(0.5, 1),
+		Active = true,
+		BackgroundTransparency = 1,
+		Name = "Control Tab Size",
+		ZIndex = 100
+	}), function(finished, delta, startPos)
+		if not finished then
+			local newTabX = math.clamp(startPos.X.Offset + (delta and delta.X or 0) / UIScale, 135, 250)
+			ControlSize2.Position = UDim2.new(0, newTabX, 1, 0)
+			
+			MainScroll.Size = UDim2.new(0, newTabX, 1, -TopBar.Size.Y.Offset)
+			Containers.Size = UDim2.new(1, -newTabX, 1, -TopBar.Size.Y.Offset)
+			
+			if DividerLine then
+				DividerLine.Position = UDim2.new(0, newTabX - 1, 1, 0)
+			end
+		else
+			bearlib.Save.TabSize = MainScroll.Size.X.Offset
+			SaveJson("bear library OS.json", bearlib.Save)
+		end
+	end)
 	
 	local Window = {}
 	local ContainerList = {}
@@ -959,8 +982,9 @@ function bearlib:MakeWindow(Configs)
 		MainFrame.Visible = true
 		CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
 		CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
-		if ControlSize1 then
+		if ControlSize1 and ControlSize2 then
 			ControlSize1.Visible = true
+			ControlSize2.Visible = true
 		end
 		Minimized = false
 	end
@@ -977,8 +1001,9 @@ function bearlib:MakeWindow(Configs)
 			MainFrame.Visible = true
 			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
 			CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
-			if ControlSize1 then
+			if ControlSize1 and ControlSize2 then
 				ControlSize1.Visible = true
+				ControlSize2.Visible = true
 			end
 			Minimized = false
 		else
@@ -987,8 +1012,8 @@ function bearlib:MakeWindow(Configs)
 			if not MinimizedBar or not MinimizedBar.Parent then
 				local BarWidth = 250
 				local BarHeight = 40
-				local barX = 350
-				local barY = -65
+				local barX = BarPosition.X or 350
+				local barY = BarPosition.Y or -65
 				
 				MinimizedBar = Instance.new("ImageButton")
 				MinimizedBar.Name = "MinimizedBar"
@@ -1041,6 +1066,17 @@ function bearlib:MakeWindow(Configs)
 				
 				MakeDrag(MinimizedBar)
 				
+				MinimizedBar:GetPropertyChangedSignal("Position"):Connect(function()
+					if MinimizedBar and MinimizedBar.Parent then
+						BarPosition = {
+							X = MinimizedBar.Position.X.Offset,
+							Y = MinimizedBar.Position.Y.Offset
+						}
+						bearlib.Save.BarPosition = BarPosition
+						SaveJson("bear library OS.json", bearlib.Save)
+					end
+				end)
+				
 				MinimizedBar.MouseButton1Click:Connect(function()
 					Window:RestoreFromBar()
 				end)
@@ -1049,8 +1085,9 @@ function bearlib:MakeWindow(Configs)
 			end
 			
 			MainFrame.Visible = false
-			if ControlSize1 then
+			if ControlSize1 and ControlSize2 then
 				ControlSize1.Visible = false
+				ControlSize2.Visible = false
 			end
 			Minimized = true
 		end
@@ -1126,6 +1163,9 @@ function bearlib:MakeWindow(Configs)
 		local TIcon = Configs[2] or Configs.Icon or ""
 		
 		TIcon = bearlib:GetIcon(TIcon)
+		if not TIcon:find("rbxassetid://") or TIcon:gsub("rbxassetid://", ""):len() < 6 then
+			TIcon = false
+		end
 		
 		local Container = InsertTheme(Create("ScrollingFrame", {
 			Size = UDim2.new(1, 0, 1, 0),
@@ -1185,19 +1225,16 @@ function bearlib:MakeWindow(Configs)
 			ZIndex = 5
 		}), "Text")
 		
-		local LabelIcon
-		if TIcon then
-			LabelIcon = InsertTheme(Create("ImageLabel", TabSelect, {
-				Position = UDim2.new(0, 8, 0.5),
-				Size = UDim2.new(0, 13, 0, 13),
-				AnchorPoint = Vector2.new(0, 0.5),
-				Image = TIcon or "",
-				BackgroundTransparency = 1,
-				ImageTransparency = (isFirstTab and 0) or 0.3,
-				ImageColor3 = Theme["Color Text"],
-				ZIndex = 5
-			}), "Text")
-		end
+		local LabelIcon = InsertTheme(Create("ImageLabel", TabSelect, {
+			Position = UDim2.new(0, 8, 0.5),
+			Size = UDim2.new(0, 13, 0, 13),
+			AnchorPoint = Vector2.new(0, 0.5),
+			Image = TIcon or "",
+			BackgroundTransparency = 1,
+			ImageTransparency = (isFirstTab and 0) or 0.3,
+			ImageColor3 = Theme["Color Text"],
+			ZIndex = 5
+		}), "Text")
 		
 		local SelectedContainer = Create("Frame", TabSelect, {
 			Size = UDim2.new(1, 0, 1, 0),
@@ -1228,7 +1265,7 @@ function bearlib:MakeWindow(Configs)
 		BorderStroke.Name = "BorderStroke"
 		BorderStroke.Transparency = isFirstTab and 0 or 1
 		
-		InsertTheme(BorderStroke, "TabBorderFrame")
+		InsertTheme(BorderStroke, "Stroke")
 		
 		local BorderGradient = Instance.new("UIGradient")
 		BorderGradient.Name = "BorderGradient"
@@ -1273,9 +1310,8 @@ function bearlib:MakeWindow(Configs)
 			
 			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
 			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
-			if LabelIcon then
-				CreateTween({LabelIcon, "ImageTransparency", 0, 0.35})
-			end
+			CreateTween({LabelIcon, "ImageTransparency", 0, 0.35})
+			
 			CreateTween({BorderStroke, "Transparency", 0, 0.35})
 			BorderGradient.Enabled = true
 		end
@@ -1334,9 +1370,7 @@ function bearlib:MakeWindow(Configs)
 		function Tab:Disable()
 			Container.Parent = nil
 			CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
-			if LabelIcon then
-				CreateTween({LabelIcon, "ImageTransparency", 0.3, 0.35})
-			end
+			CreateTween({LabelIcon, "ImageTransparency", 0.3, 0.35})
 			CreateTween({BorderStroke, "Transparency", 1, 0.35})
 			BorderGradient.Enabled = false
 		end
@@ -1379,14 +1413,7 @@ function bearlib:MakeWindow(Configs)
 				ZIndex = 3
 			}), "Text")
 			
-			table.insert(bearlib.AllElements, {
-				Name = SectionName,
-				Instance = SectionFrame,
-				OriginalParent = Container,
-				SectionName = SectionName,
-				Underline = nil,
-				UnderlineGradient = nil
-			})
+			table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = {}})
 			
 			local Section = {}
 			table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = Section})
@@ -1419,27 +1446,12 @@ function bearlib:MakeWindow(Configs)
 			local Frame, LabelFunc = ButtonFrame(Container, PName, PDesc, UDim2.new(1, -20))
 			Frame.LayoutOrder = GetOrder()
 			
-			table.insert(bearlib.AllElements, {
-				Name = PName,
-				Instance = Frame,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
 			local Paragraph = {}
 			
 			function Paragraph:Visible(...) Funcs:ToggleVisible(Frame, ...) end
-			
 			function Paragraph:Destroy() Frame:Destroy() end
-			
-			function Paragraph:SetTitle(Val)
-				LabelFunc:SetTitle(GetStr(Val))
-			end
-			
-			function Paragraph:SetDesc(Val)
-				LabelFunc:SetDesc(GetStr(Val))
-			end
-			
+			function Paragraph:SetTitle(Val) LabelFunc:SetTitle(GetStr(Val)) end
+			function Paragraph:SetDesc(Val) LabelFunc:SetDesc(GetStr(Val)) end
 			function Paragraph:Set(Val1, Val2)
 				if Val1 and Val2 then
 					LabelFunc:SetTitle(GetStr(Val1))
@@ -1472,21 +1484,11 @@ function bearlib:MakeWindow(Configs)
 				Funcs:FireCallback(Callback)
 			end)
 			
-			table.insert(bearlib.AllElements, {
-				Name = BName,
-				Instance = FButton,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
 			local Button = {}
 			
 			function Button:Visible(...) Funcs:ToggleVisible(FButton, ...) end
-			
 			function Button:Destroy() FButton:Destroy() end
-			
 			function Button:Callback(...) Funcs:InsertCallback(Callback, ...)() end
-			
 			function Button:Set(Val1, Val2)
 				if type(Val1) == "string" and type(Val2) == "string" then
 					LabelFunc:SetTitle(Val1)
@@ -1511,14 +1513,15 @@ function bearlib:MakeWindow(Configs)
 			local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
 			Button.LayoutOrder = GetOrder()
 			
-			local ToggleHolder = InsertTheme(Create("Frame", Button, {
+			local ToggleHolder = Create("Frame", Button, {
 				Size = UDim2.new(0, 35, 0, 18),
 				Position = UDim2.new(1, -10, 0.5),
 				AnchorPoint = Vector2.new(1, 0.5),
-				BackgroundColor3 = Theme["Color Stroke"],
+				BackgroundColor3 = Theme["Color Hub 2"],
 				ZIndex = 4
-			}), "Stroke")
+			})
 			Make("Corner", ToggleHolder, UDim.new(0.5, 0))
+			Make("Stroke", ToggleHolder, Theme["Color Stroke"], 1)
 			
 			local Slider = Create("Frame", ToggleHolder, {
 				BackgroundTransparency = 1,
@@ -1528,13 +1531,13 @@ function bearlib:MakeWindow(Configs)
 				ZIndex = 4
 			})
 			
-			local Toggle = InsertTheme(Create("Frame", Slider, {
+			local Toggle = Create("Frame", Slider, {
 				Size = UDim2.new(0, 12, 0, 12),
 				Position = UDim2.new(0, 0, 0.5),
 				AnchorPoint = Vector2.new(0, 0.5),
 				BackgroundColor3 = Theme["Color Theme"],
 				ZIndex = 5
-			}), "Theme")
+			})
 			Make("Corner", Toggle, UDim.new(0.5, 0))
 			
 			local WaitClick
@@ -1546,14 +1549,10 @@ function bearlib:MakeWindow(Configs)
 				Funcs:FireCallback(Callback, Default)
 				if Default then
 					CreateTween({Toggle, "Position", UDim2.new(1, 0, 0.5), 0.25})
-					CreateTween({Toggle, "BackgroundColor3", Theme["Color Theme"], 0.25})
 					CreateTween({Toggle, "AnchorPoint", Vector2.new(1, 0.5), 0.25})
-					CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Theme"], 0.25})
 				else
 					CreateTween({Toggle, "Position", UDim2.new(0, 0, 0.5), 0.25})
-					CreateTween({Toggle, "BackgroundColor3", Theme["Color Hub 2"], 0.25})
 					CreateTween({Toggle, "AnchorPoint", Vector2.new(0, 0.5), 0.25})
-					CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Stroke"], 0.25})
 				end
 				WaitClick = false
 			end
@@ -1563,21 +1562,11 @@ function bearlib:MakeWindow(Configs)
 				SetToggle(not Default)
 			end)
 			
-			table.insert(bearlib.AllElements, {
-				Name = TName,
-				Instance = Button,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
 			local ToggleObj = {}
 			
 			function ToggleObj:Visible(...) Funcs:ToggleVisible(Button, ...) end
-			
 			function ToggleObj:Destroy() Button:Destroy() end
-			
 			function ToggleObj:Callback(...) Funcs:InsertCallback(Callback, ...)() end
-			
 			function ToggleObj:Set(Val1, Val2)
 				if type(Val1) == "string" and type(Val2) == "string" then
 					LabelFunc:SetTitle(Val1)
@@ -1621,20 +1610,23 @@ function bearlib:MakeWindow(Configs)
 				ZIndex = 4
 			})
 			
-			local SliderBar = InsertTheme(Create("Frame", SliderHolder, {
-				BackgroundColor3 = Theme["Color Stroke"],
+			local SliderBar = Create("Frame", SliderHolder, {
+				BackgroundColor3 = Theme["Color Hub 2"],
 				Size = UDim2.new(1, -20, 0, 6),
 				Position = UDim2.new(0.5, 0, 0.5),
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				ZIndex = 4
-			}), "Stroke") Make("Corner", SliderBar)
+			})
+			Make("Corner", SliderBar)
+			Make("Stroke", SliderBar, Theme["Color Stroke"], 1)
 			
-			local Indicator = InsertTheme(Create("Frame", SliderBar, {
+			local Indicator = Create("Frame", SliderBar, {
 				BackgroundColor3 = Theme["Color Theme"],
 				Size = UDim2.fromScale(0.3, 1),
 				BorderSizePixel = 0,
 				ZIndex = 5
-			}), "Theme") Make("Corner", Indicator)
+			})
+			Make("Corner", Indicator)
 			
 			local SliderIcon = Create("Frame", SliderBar, {
 				Size = UDim2.new(0, 6, 0, 12),
@@ -1643,7 +1635,8 @@ function bearlib:MakeWindow(Configs)
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				BackgroundTransparency = 0.2,
 				ZIndex = 6
-			}) Make("Corner", SliderIcon)
+			})
+			Make("Corner", SliderIcon)
 			
 			local LabelVal = InsertTheme(Create("TextLabel", SliderHolder, {
 				Size = UDim2.new(0, 14, 0, 14),
@@ -1719,13 +1712,6 @@ function bearlib:MakeWindow(Configs)
 			
 			SliderIcon:GetPropertyChangedSignal("Position"):Connect(UpdateValues) UpdateValues()
 			
-			table.insert(bearlib.AllElements, {
-				Name = SName,
-				Instance = Button,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
 			local Slider = {}
 			
 			function Slider:Set(NewVal1, NewVal2)
@@ -1742,9 +1728,7 @@ function bearlib:MakeWindow(Configs)
 			end
 			
 			function Slider:Callback(...) Funcs:InsertCallback(Callback, ...)(tonumber(Default)) end
-			
 			function Slider:Visible(...) Funcs:ToggleVisible(Button, ...) end
-			
 			function Slider:Destroy() Button:Destroy() end
 			return Slider
 		end
@@ -1764,13 +1748,15 @@ function bearlib:MakeWindow(Configs)
 			local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
 			Button.LayoutOrder = GetOrder()
 			
-			local SelectedFrame = InsertTheme(Create("Frame", Button, {
+			local SelectedFrame = Create("Frame", Button, {
 				Size = UDim2.new(0, 150, 0, 18),
 				Position = UDim2.new(1, -10, 0.5),
 				AnchorPoint = Vector2.new(1, 0.5),
-				BackgroundColor3 = Theme["Color Stroke"],
+				BackgroundColor3 = Theme["Color Hub 2"],
 				ZIndex = 4
-			}), "Stroke") Make("Corner", SelectedFrame, UDim.new(0, 4))
+			})
+			Make("Corner", SelectedFrame, UDim.new(0, 4))
+			Make("Stroke", SelectedFrame, Theme["Color Stroke"], 1)
 			
 			local TextBoxInput = InsertTheme(Create("TextBox", SelectedFrame, {
 				Size = UDim2.new(0.85, 0, 0.85, 0),
@@ -1783,9 +1769,7 @@ function bearlib:MakeWindow(Configs)
 				ClearTextOnFocus = TClearText,
 				PlaceholderText = TPlaceholderText,
 				Text = "",
-				ZIndex = 5,
-				TextStrokeTransparency = 0.3,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+				ZIndex = 5
 			}), "Text")
 			
 			local Pencil = Create("ImageLabel", SelectedFrame, {
@@ -1795,13 +1779,6 @@ function bearlib:MakeWindow(Configs)
 				Image = "rbxassetid://15637081879",
 				BackgroundTransparency = 1,
 				ZIndex = 5
-			})
-			
-			table.insert(bearlib.AllElements, {
-				Name = TName,
-				Instance = Button,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
 			})
 			
 			local TextBox = {}
@@ -1827,7 +1804,6 @@ function bearlib:MakeWindow(Configs)
 			TextBox.OnChanging = false
 			
 			function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
-			
 			function TextBox:Destroy() Button:Destroy() end
 			return TextBox
 		end
@@ -1844,13 +1820,15 @@ function bearlib:MakeWindow(Configs)
 			local Button, LabelFunc = ButtonFrame(Container, DName, DDesc, UDim2.new(1, -180))
 			Button.LayoutOrder = GetOrder()
 			
-			local SelectedFrame = InsertTheme(Create("Frame", Button, {
+			local SelectedFrame = Create("Frame", Button, {
 				Size = UDim2.new(0, 150, 0, 18),
 				Position = UDim2.new(1, -10, 0.5),
 				AnchorPoint = Vector2.new(1, 0.5),
-				BackgroundColor3 = Theme["Color Stroke"],
+				BackgroundColor3 = Theme["Color Hub 2"],
 				ZIndex = 4
-			}), "Stroke") Make("Corner", SelectedFrame, UDim.new(0, 4))
+			})
+			Make("Corner", SelectedFrame, UDim.new(0, 4))
+			Make("Stroke", SelectedFrame, Theme["Color Stroke"], 1)
 			
 			local ActiveLabel = InsertTheme(Create("TextLabel", SelectedFrame, {
 				Size = UDim2.new(0.85, 0, 0.85, 0),
@@ -1890,7 +1868,10 @@ function bearlib:MakeWindow(Configs)
 				ClipsDescendants = true,
 				Active = true,
 				ZIndex = 5
-			}) Make("Corner", DropFrame) Make("Stroke", DropFrame) Make("Gradient", DropFrame, {Rotation = 60})
+			})
+			Make("Corner", DropFrame)
+			Make("Stroke", DropFrame, Theme["Color Stroke"], 1)
+			Make("Gradient", DropFrame, {Rotation = 60})
 			
 			local SearchBox = Create("TextBox", DropFrame, {
 				BackgroundColor3 = Theme["Color Hub 2"],
@@ -1902,7 +1883,8 @@ function bearlib:MakeWindow(Configs)
 				TextColor3 = Theme["Color Text"],
 				TextSize = 11,
 				ZIndex = 6
-			}) Make("Corner", SearchBox, UDim.new(0, 8))
+			})
+			Make("Corner", SearchBox, UDim.new(0, 8))
 			
 			local ScrollFrame = InsertTheme(Create("ScrollingFrame", DropFrame, {
 				ScrollBarImageColor3 = Theme["Color Theme"],
@@ -2100,16 +2082,18 @@ function bearlib:MakeWindow(Configs)
 						Position = UDim2.new(0, 0, 0.5),
 						AnchorPoint = Vector2.new(0, 0.5),
 						ZIndex = 7
-					}) Make("Corner", Button, UDim.new(0, 4))
+					})
+					Make("Corner", Button, UDim.new(0, 4))
 					
-					local IsSelected = InsertTheme(Create("Frame", Button, {
+					local IsSelected = Create("Frame", Button, {
 						Position = UDim2.new(0, 1, 0.5),
 						Size = UDim2.new(0, 4, 0, 4),
 						BackgroundColor3 = Theme["Color Theme"],
 						BackgroundTransparency = 1,
 						AnchorPoint = Vector2.new(0, 0.5),
 						ZIndex = 8
-					}), "Theme") Make("Corner", IsSelected, UDim.new(0.5, 0))
+					})
+					Make("Corner", IsSelected, UDim.new(0.5, 0))
 					
 					local OptioneName = InsertTheme(Create("TextLabel", Button, {
 						Size = UDim2.new(1, 0, 1),
@@ -2120,9 +2104,7 @@ function bearlib:MakeWindow(Configs)
 						TextXAlignment = "Left",
 						BackgroundTransparency = 1,
 						TextTransparency = 0.4,
-						ZIndex = 8,
-						TextStrokeTransparency = 0.3,
-						TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+						ZIndex = 8
 					}), "Text")
 					
 					Button.Activated:Connect(function()
@@ -2201,21 +2183,11 @@ function bearlib:MakeWindow(Configs)
 			CalculatePos()
 			CalculateSize()
 			
-			table.insert(bearlib.AllElements, {
-				Name = DName,
-				Instance = Button,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
 			local Dropdown = {}
 			
 			function Dropdown:Visible(...) Funcs:ToggleVisible(Button, ...) end
-			
 			function Dropdown:Destroy() Button:Destroy() end
-			
 			function Dropdown:Callback(...) Funcs:InsertCallback(Callback, ...)(Selected) end
-			
 			function Dropdown:Add(...)
 				local NewOptions = {...}
 				if type(NewOptions[1]) == "table" then
@@ -2228,7 +2200,6 @@ function bearlib:MakeWindow(Configs)
 					end
 				end
 			end
-			
 			function Dropdown:Remove(Option)
 				for index, Value in pairs(GetOptions()) do
 					if type(Option) == "number" and index == Option or Value.Name == Option then
@@ -2236,7 +2207,6 @@ function bearlib:MakeWindow(Configs)
 					end
 				end
 			end
-			
 			function Dropdown:Select(Option)
 				if type(Option) == "string" then
 					for _, Val in pairs(Options) do
@@ -2254,7 +2224,6 @@ function bearlib:MakeWindow(Configs)
 					end
 				end
 			end
-			
 			function Dropdown:Set(Val1, Clear)
 				if type(Val1) == "table" then
 					AddNewOptions(Val1, Clear)
@@ -2265,238 +2234,6 @@ function bearlib:MakeWindow(Configs)
 			return Dropdown
 		end
 		
-		function Tab:AddProfile(Configs)
-			local PName = Configs[1] or Configs.Name or "User Name"
-			local PBio = Configs[2] or Configs.Bio or "No bio yet."
-			local PAvatar = Configs.Avatar or "rbxassetid://0"
-			local PCover = Configs.Cover or "rbxassetid://0"
-			local PVerified = Configs.Verified or false
-			
-			local ProfileHolder = Create("Frame", Container, {
-				Size = UDim2.new(1, 0, 0, 100),
-				BackgroundTransparency = 1,
-				LayoutOrder = GetOrder(),
-				Name = "Profile",
-				ZIndex = 1
-			})
-			
-			local Card = InsertTheme(Create("Frame", ProfileHolder, {
-				Size = UDim2.new(1, 0, 1, 0),
-				BackgroundColor3 = Theme["Color Hub 2"],
-				ZIndex = 1
-			}), "Frame")
-			Make("Corner", Card, UDim.new(0, 8))
-			
-			local ProfileStroke = InsertTheme(Create("UIStroke", Card, {
-				Color = Theme["Color Stroke"],
-				Thickness = 1.5,
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-			}), "Stroke")
-			
-			local CoverImg = Create("ImageLabel", Card, {
-				Size = UDim2.new(1, 0, 0, 50),
-				Image = PCover,
-				ScaleType = Enum.ScaleType.Crop,
-				BackgroundTransparency = 1,
-				ZIndex = 1
-			})
-			Make("Corner", CoverImg, UDim.new(0, 8))
-			
-			local CoverFix = InsertTheme(Create("Frame", CoverImg, {
-				Size = UDim2.new(1, 0, 0, 10),
-				Position = UDim2.new(0, 0, 1, -5),
-				BorderSizePixel = 0,
-				BackgroundColor3 = Theme["Color Hub 2"],
-				ZIndex = 2
-			}), "Frame")
-			
-			local AvatarImg = Create("ImageLabel", Card, {
-				Size = UDim2.fromOffset(45, 45),
-				Position = UDim2.new(0, 12, 0, 30),
-				Image = PAvatar,
-				BackgroundColor3 = Theme["Color Hub 2"],
-				ZIndex = 3
-			})
-			Make("Corner", AvatarImg, UDim.new(1, 0))
-			
-			local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
-				Thickness = 2,
-				Color = Theme["Color Stroke"]
-			}), "Stroke")
-			
-			local NameLabel = InsertTheme(Create("TextLabel", Card, {
-				Position = UDim2.new(0, 65, 0, 50),
-				Size = UDim2.new(1, -75, 0, 18),
-				Text = PName,
-				Font = Enum.Font.GothamBold,
-				TextColor3 = Theme["Color Text"],
-				TextSize = 13,
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextTruncate = "AtEnd",
-				ZIndex = 3,
-				TextStrokeTransparency = 0.3,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			}), "Text")
-			
-			if PVerified then
-				local VerifyIcon = Create("ImageLabel", Card, {
-					Size = UDim2.fromOffset(14, 14),
-					Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52),
-					Image = "rbxassetid://10709752907",
-					ImageColor3 = Color3.fromRGB(60, 140, 255),
-					BackgroundTransparency = 1,
-					ZIndex = 4
-				})
-				NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
-					VerifyIcon.Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52)
-				end)
-			end
-			
-			local BioLabel = InsertTheme(Create("TextLabel", Card, {
-				Position = UDim2.new(0, 12, 0, 78),
-				Size = UDim2.new(1, -24, 0, 16),
-				Text = PBio,
-				Font = Enum.Font.Gotham,
-				TextColor3 = Theme["Color Dark Text"],
-				TextSize = 9,
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextTruncate = Enum.TextTruncate.AtEnd,
-				ZIndex = 3,
-				TextStrokeTransparency = 0.4,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			}), "DarkText")
-			
-			table.insert(bearlib.AllElements, {
-				Name = PName .. " Profile",
-				Instance = ProfileHolder,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
-			local Profile = {}
-			function Profile:Visible(...) Funcs:ToggleVisible(ProfileHolder, ...) end
-			function Profile:Destroy() ProfileHolder:Destroy() end
-			function Profile:SetBio(NewBio) BioLabel.Text = NewBio end
-			function Profile:SetBorderColor(NewColor)
-				if typeof(NewColor) == "Color3" then
-					ProfileStroke.Color = NewColor
-					AvatarStroke.Color = NewColor
-				end
-			end
-			return Profile
-		end
-		
-		function Tab:AddDiscordInvite(Configs)
-			local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
-			local Desc = Configs[2] or Configs.Desc or Configs.Description or ""
-			local Logo = Configs[3] or Configs.Logo or ""
-			local Invite = Configs[4] or Configs.Invite or ""
-			
-			local InviteHolder = Create("Frame", Container, {
-				Size = UDim2.new(1, 0, 0, 65),
-				Name = "Option",
-				BackgroundTransparency = 1,
-				LayoutOrder = GetOrder(),
-				ZIndex = 1
-			})
-			
-			local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
-				Size = UDim2.new(1, 0, 0, 65),
-				AnchorPoint = Vector2.new(0, 0),
-				Position = UDim2.new(0, 0, 0, 0),
-				BackgroundColor3 = Theme["Color Hub 2"],
-				ZIndex = 1
-			}), "Frame")
-			Make("Corner", FrameHolder)
-			
-			local ImageLabel = Create("ImageLabel", FrameHolder, {
-				Size = UDim2.new(0, 30, 0, 30),
-				Position = UDim2.new(0, 7, 0, 7),
-				Image = Logo,
-				BackgroundTransparency = 1,
-				ZIndex = 3
-			})
-			Make("Corner", ImageLabel, UDim.new(0, 4))
-			Make("Stroke", ImageLabel)
-			
-			local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
-				Size = UDim2.new(1, -52, 0, 15),
-				Position = UDim2.new(0, 44, 0, 7),
-				Font = Enum.Font.GothamBold,
-				TextColor3 = Theme["Color Text"],
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextSize = 10,
-				Text = Title,
-				ZIndex = 3,
-				TextStrokeTransparency = 0.3,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			}), "Text")
-			
-			local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
-				Size = UDim2.new(1, -52, 0, 0),
-				Position = UDim2.new(0, 44, 0, 22),
-				TextWrapped = "Y",
-				AutomaticSize = "Y",
-				Font = Enum.Font.Gotham,
-				TextColor3 = Theme["Color Dark Text"],
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextSize = 8,
-				Text = Desc,
-				ZIndex = 3,
-				TextStrokeTransparency = 0.4,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			}), "DarkText")
-			
-			local JoinButton = Create("TextButton", FrameHolder, {
-				Size = UDim2.new(1, -14, 0, 16),
-				AnchorPoint = Vector2.new(0.5, 1),
-				Position = UDim2.new(0.5, 0, 1, -7),
-				Text = "Copy Link",
-				Font = Enum.Font.GothamBold,
-				TextSize = 12,
-				TextColor3 = Color3.fromRGB(220, 220, 220),
-				BackgroundColor3 = Color3.fromRGB(50, 150, 50),
-				ZIndex = 4,
-				TextStrokeTransparency = 0.3,
-				TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			})
-			Make("Corner", JoinButton, UDim.new(0, 5))
-			
-			local ClickDelay
-			JoinButton.Activated:Connect(function()
-				setclipboard(Invite)
-				if ClickDelay then return end
-				
-				ClickDelay = true
-				SetProps(JoinButton, {
-					Text = "Copied to Clipboard",
-					BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-					TextColor3 = Color3.fromRGB(150, 150, 150)
-				}) task.wait(5)
-				SetProps(JoinButton, {
-					Text = "Copy Link",
-					BackgroundColor3 = Color3.fromRGB(50, 150, 50),
-					TextColor3 = Color3.fromRGB(220, 220, 220)
-				}) ClickDelay = false
-			end)
-			
-			table.insert(bearlib.AllElements, {
-				Name = Title,
-				Instance = InviteHolder,
-				OriginalParent = Container,
-				SectionName = CurrentSectionName
-			})
-			
-			local DiscordInvite = {}
-			function DiscordInvite:Destroy() InviteHolder:Destroy() end
-			function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
-			return DiscordInvite
-		end
-		
 		return Tab
 	end
 	
@@ -2505,6 +2242,9 @@ function bearlib:MakeWindow(Configs)
 		local TIcon = Configs[2] or Configs.Icon or ""
 		
 		TIcon = bearlib:GetIcon(TIcon)
+		if not TIcon:find("rbxassetid://") or TIcon:gsub("rbxassetid://", ""):len() < 6 then
+			TIcon = false
+		end
 		
 		TabLayoutOrder = TabLayoutOrder + 1
 		
@@ -2530,7 +2270,7 @@ function bearlib:MakeWindow(Configs)
 		})
 		Make("Corner", GroupButton)
 		
-		local ArrowLabel = InsertTheme(Create("TextLabel", GroupButton, {
+		local ArrowLabel = Create("TextLabel", GroupButton, {
 			Size = UDim2.new(0, 12, 0, 12),
 			Position = UDim2.new(1, -15, 0.5, 0),
 			AnchorPoint = Vector2.new(1, 0.5),
@@ -2542,7 +2282,7 @@ function bearlib:MakeWindow(Configs)
 			TextTransparency = 0.3,
 			ZIndex = 5,
 			Name = "Arrow"
-		}), "Text")
+		})
 		
 		local GroupTitle = InsertTheme(Create("TextLabel", GroupButton, {
 			Size = UDim2.new(1, TIcon and -40 or -30, 1),
@@ -2671,6 +2411,9 @@ function bearlib:MakeWindow(Configs)
 			local TIcon = Configs[2] or Configs.Icon or ""
 			
 			TIcon = bearlib:GetIcon(TIcon)
+			if not TIcon:find("rbxassetid://") or TIcon:gsub("rbxassetid://", ""):len() < 6 then
+				TIcon = false
+			end
 			
 			local Container = InsertTheme(Create("ScrollingFrame", {
 				Size = UDim2.new(1, 0, 1, 0),
@@ -2882,14 +2625,7 @@ function bearlib:MakeWindow(Configs)
 					ZIndex = 3
 				}), "Text")
 				
-				table.insert(bearlib.AllElements, {
-					Name = SectionName,
-					Instance = SectionFrame,
-					OriginalParent = Container,
-					SectionName = SectionName,
-					Underline = nil,
-					UnderlineGradient = nil
-				})
+				table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = {}})
 				
 				local Section = {}
 				table.insert(bearlib.Options, {type = "Section", Name = SectionName, func = Section})
@@ -2922,27 +2658,12 @@ function bearlib:MakeWindow(Configs)
 				local Frame, LabelFunc = ButtonFrame(Container, PName, PDesc, UDim2.new(1, -20))
 				Frame.LayoutOrder = GetOrder()
 				
-				table.insert(bearlib.AllElements, {
-					Name = PName,
-					Instance = Frame,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
 				local Paragraph = {}
 				
 				function Paragraph:Visible(...) Funcs:ToggleVisible(Frame, ...) end
-				
 				function Paragraph:Destroy() Frame:Destroy() end
-				
-				function Paragraph:SetTitle(Val)
-					LabelFunc:SetTitle(GetStr(Val))
-				end
-				
-				function Paragraph:SetDesc(Val)
-					LabelFunc:SetDesc(GetStr(Val))
-				end
-				
+				function Paragraph:SetTitle(Val) LabelFunc:SetTitle(GetStr(Val)) end
+				function Paragraph:SetDesc(Val) LabelFunc:SetDesc(GetStr(Val)) end
 				function Paragraph:Set(Val1, Val2)
 					if Val1 and Val2 then
 						LabelFunc:SetTitle(GetStr(Val1))
@@ -2975,21 +2696,11 @@ function bearlib:MakeWindow(Configs)
 					Funcs:FireCallback(Callback)
 				end)
 				
-				table.insert(bearlib.AllElements, {
-					Name = BName,
-					Instance = FButton,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
 				local Button = {}
 				
 				function Button:Visible(...) Funcs:ToggleVisible(FButton, ...) end
-				
 				function Button:Destroy() FButton:Destroy() end
-				
 				function Button:Callback(...) Funcs:InsertCallback(Callback, ...)() end
-				
 				function Button:Set(Val1, Val2)
 					if type(Val1) == "string" and type(Val2) == "string" then
 						LabelFunc:SetTitle(Val1)
@@ -3014,14 +2725,15 @@ function bearlib:MakeWindow(Configs)
 				local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
 				Button.LayoutOrder = GetOrder()
 				
-				local ToggleHolder = InsertTheme(Create("Frame", Button, {
+				local ToggleHolder = Create("Frame", Button, {
 					Size = UDim2.new(0, 35, 0, 18),
 					Position = UDim2.new(1, -10, 0.5),
 					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Theme["Color Stroke"],
+					BackgroundColor3 = Theme["Color Hub 2"],
 					ZIndex = 4
-				}), "Stroke")
+				})
 				Make("Corner", ToggleHolder, UDim.new(0.5, 0))
+				Make("Stroke", ToggleHolder, Theme["Color Stroke"], 1)
 				
 				local Slider = Create("Frame", ToggleHolder, {
 					BackgroundTransparency = 1,
@@ -3031,13 +2743,13 @@ function bearlib:MakeWindow(Configs)
 					ZIndex = 4
 				})
 				
-				local Toggle = InsertTheme(Create("Frame", Slider, {
+				local Toggle = Create("Frame", Slider, {
 					Size = UDim2.new(0, 12, 0, 12),
 					Position = UDim2.new(0, 0, 0.5),
 					AnchorPoint = Vector2.new(0, 0.5),
 					BackgroundColor3 = Theme["Color Theme"],
 					ZIndex = 5
-				}), "Theme")
+				})
 				Make("Corner", Toggle, UDim.new(0.5, 0))
 				
 				local WaitClick
@@ -3049,14 +2761,10 @@ function bearlib:MakeWindow(Configs)
 					Funcs:FireCallback(Callback, Default)
 					if Default then
 						CreateTween({Toggle, "Position", UDim2.new(1, 0, 0.5), 0.25})
-						CreateTween({Toggle, "BackgroundColor3", Theme["Color Theme"], 0.25})
 						CreateTween({Toggle, "AnchorPoint", Vector2.new(1, 0.5), 0.25})
-						CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Theme"], 0.25})
 					else
 						CreateTween({Toggle, "Position", UDim2.new(0, 0, 0.5), 0.25})
-						CreateTween({Toggle, "BackgroundColor3", Theme["Color Hub 2"], 0.25})
 						CreateTween({Toggle, "AnchorPoint", Vector2.new(0, 0.5), 0.25})
-						CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Stroke"], 0.25})
 					end
 					WaitClick = false
 				end
@@ -3066,21 +2774,11 @@ function bearlib:MakeWindow(Configs)
 					SetToggle(not Default)
 				end)
 				
-				table.insert(bearlib.AllElements, {
-					Name = TName,
-					Instance = Button,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
 				local ToggleObj = {}
 				
 				function ToggleObj:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				
 				function ToggleObj:Destroy() Button:Destroy() end
-				
 				function ToggleObj:Callback(...) Funcs:InsertCallback(Callback, ...)() end
-				
 				function ToggleObj:Set(Val1, Val2)
 					if type(Val1) == "string" and type(Val2) == "string" then
 						LabelFunc:SetTitle(Val1)
@@ -3124,20 +2822,23 @@ function bearlib:MakeWindow(Configs)
 					ZIndex = 4
 				})
 				
-				local SliderBar = InsertTheme(Create("Frame", SliderHolder, {
-					BackgroundColor3 = Theme["Color Stroke"],
+				local SliderBar = Create("Frame", SliderHolder, {
+					BackgroundColor3 = Theme["Color Hub 2"],
 					Size = UDim2.new(1, -20, 0, 6),
 					Position = UDim2.new(0.5, 0, 0.5),
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					ZIndex = 4
-				}), "Stroke") Make("Corner", SliderBar)
+				})
+				Make("Corner", SliderBar)
+				Make("Stroke", SliderBar, Theme["Color Stroke"], 1)
 				
-				local Indicator = InsertTheme(Create("Frame", SliderBar, {
+				local Indicator = Create("Frame", SliderBar, {
 					BackgroundColor3 = Theme["Color Theme"],
 					Size = UDim2.fromScale(0.3, 1),
 					BorderSizePixel = 0,
 					ZIndex = 5
-				}), "Theme") Make("Corner", Indicator)
+				})
+				Make("Corner", Indicator)
 				
 				local SliderIcon = Create("Frame", SliderBar, {
 					Size = UDim2.new(0, 6, 0, 12),
@@ -3146,7 +2847,8 @@ function bearlib:MakeWindow(Configs)
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					BackgroundTransparency = 0.2,
 					ZIndex = 6
-				}) Make("Corner", SliderIcon)
+				})
+				Make("Corner", SliderIcon)
 				
 				local LabelVal = InsertTheme(Create("TextLabel", SliderHolder, {
 					Size = UDim2.new(0, 14, 0, 14),
@@ -3222,13 +2924,6 @@ function bearlib:MakeWindow(Configs)
 				
 				SliderIcon:GetPropertyChangedSignal("Position"):Connect(UpdateValues) UpdateValues()
 				
-				table.insert(bearlib.AllElements, {
-					Name = SName,
-					Instance = Button,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
 				local Slider = {}
 				
 				function Slider:Set(NewVal1, NewVal2)
@@ -3245,9 +2940,7 @@ function bearlib:MakeWindow(Configs)
 				end
 				
 				function Slider:Callback(...) Funcs:InsertCallback(Callback, ...)(tonumber(Default)) end
-				
 				function Slider:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				
 				function Slider:Destroy() Button:Destroy() end
 				return Slider
 			end
@@ -3267,13 +2960,15 @@ function bearlib:MakeWindow(Configs)
 				local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
 				Button.LayoutOrder = GetOrder()
 				
-				local SelectedFrame = InsertTheme(Create("Frame", Button, {
+				local SelectedFrame = Create("Frame", Button, {
 					Size = UDim2.new(0, 150, 0, 18),
 					Position = UDim2.new(1, -10, 0.5),
 					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Theme["Color Stroke"],
+					BackgroundColor3 = Theme["Color Hub 2"],
 					ZIndex = 4
-				}), "Stroke") Make("Corner", SelectedFrame, UDim.new(0, 4))
+				})
+				Make("Corner", SelectedFrame, UDim.new(0, 4))
+				Make("Stroke", SelectedFrame, Theme["Color Stroke"], 1)
 				
 				local TextBoxInput = InsertTheme(Create("TextBox", SelectedFrame, {
 					Size = UDim2.new(0.85, 0, 0.85, 0),
@@ -3286,9 +2981,7 @@ function bearlib:MakeWindow(Configs)
 					ClearTextOnFocus = TClearText,
 					PlaceholderText = TPlaceholderText,
 					Text = "",
-					ZIndex = 5,
-					TextStrokeTransparency = 0.3,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+					ZIndex = 5
 				}), "Text")
 				
 				local Pencil = Create("ImageLabel", SelectedFrame, {
@@ -3298,13 +2991,6 @@ function bearlib:MakeWindow(Configs)
 					Image = "rbxassetid://15637081879",
 					BackgroundTransparency = 1,
 					ZIndex = 5
-				})
-				
-				table.insert(bearlib.AllElements, {
-					Name = TName,
-					Instance = Button,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
 				})
 				
 				local TextBox = {}
@@ -3330,7 +3016,6 @@ function bearlib:MakeWindow(Configs)
 				TextBox.OnChanging = false
 				
 				function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				
 				function TextBox:Destroy() Button:Destroy() end
 				return TextBox
 			end
@@ -3347,13 +3032,15 @@ function bearlib:MakeWindow(Configs)
 				local Button, LabelFunc = ButtonFrame(Container, DName, DDesc, UDim2.new(1, -180))
 				Button.LayoutOrder = GetOrder()
 				
-				local SelectedFrame = InsertTheme(Create("Frame", Button, {
+				local SelectedFrame = Create("Frame", Button, {
 					Size = UDim2.new(0, 150, 0, 18),
 					Position = UDim2.new(1, -10, 0.5),
 					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Theme["Color Stroke"],
+					BackgroundColor3 = Theme["Color Hub 2"],
 					ZIndex = 4
-				}), "Stroke") Make("Corner", SelectedFrame, UDim.new(0, 4))
+				})
+				Make("Corner", SelectedFrame, UDim.new(0, 4))
+				Make("Stroke", SelectedFrame, Theme["Color Stroke"], 1)
 				
 				local ActiveLabel = InsertTheme(Create("TextLabel", SelectedFrame, {
 					Size = UDim2.new(0.85, 0, 0.85, 0),
@@ -3393,7 +3080,10 @@ function bearlib:MakeWindow(Configs)
 					ClipsDescendants = true,
 					Active = true,
 					ZIndex = 5
-				}) Make("Corner", DropFrame) Make("Stroke", DropFrame) Make("Gradient", DropFrame, {Rotation = 60})
+				})
+				Make("Corner", DropFrame)
+				Make("Stroke", DropFrame, Theme["Color Stroke"], 1)
+				Make("Gradient", DropFrame, {Rotation = 60})
 				
 				local SearchBox = Create("TextBox", DropFrame, {
 					BackgroundColor3 = Theme["Color Hub 2"],
@@ -3405,7 +3095,8 @@ function bearlib:MakeWindow(Configs)
 					TextColor3 = Theme["Color Text"],
 					TextSize = 11,
 					ZIndex = 6
-				}) Make("Corner", SearchBox, UDim.new(0, 8))
+				})
+				Make("Corner", SearchBox, UDim.new(0, 8))
 				
 				local ScrollFrame = InsertTheme(Create("ScrollingFrame", DropFrame, {
 					ScrollBarImageColor3 = Theme["Color Theme"],
@@ -3603,16 +3294,18 @@ function bearlib:MakeWindow(Configs)
 							Position = UDim2.new(0, 0, 0.5),
 							AnchorPoint = Vector2.new(0, 0.5),
 							ZIndex = 7
-						}) Make("Corner", Button, UDim.new(0, 4))
+						})
+						Make("Corner", Button, UDim.new(0, 4))
 						
-						local IsSelected = InsertTheme(Create("Frame", Button, {
+						local IsSelected = Create("Frame", Button, {
 							Position = UDim2.new(0, 1, 0.5),
 							Size = UDim2.new(0, 4, 0, 4),
 							BackgroundColor3 = Theme["Color Theme"],
 							BackgroundTransparency = 1,
 							AnchorPoint = Vector2.new(0, 0.5),
 							ZIndex = 8
-						}), "Theme") Make("Corner", IsSelected, UDim.new(0.5, 0))
+						})
+						Make("Corner", IsSelected, UDim.new(0.5, 0))
 						
 						local OptioneName = InsertTheme(Create("TextLabel", Button, {
 							Size = UDim2.new(1, 0, 1),
@@ -3623,9 +3316,7 @@ function bearlib:MakeWindow(Configs)
 							TextXAlignment = "Left",
 							BackgroundTransparency = 1,
 							TextTransparency = 0.4,
-							ZIndex = 8,
-							TextStrokeTransparency = 0.3,
-							TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+							ZIndex = 8
 						}), "Text")
 						
 						Button.Activated:Connect(function()
@@ -3704,21 +3395,11 @@ function bearlib:MakeWindow(Configs)
 				CalculatePos()
 				CalculateSize()
 				
-				table.insert(bearlib.AllElements, {
-					Name = DName,
-					Instance = Button,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
 				local Dropdown = {}
 				
 				function Dropdown:Visible(...) Funcs:ToggleVisible(Button, ...) end
-				
 				function Dropdown:Destroy() Button:Destroy() end
-				
 				function Dropdown:Callback(...) Funcs:InsertCallback(Callback, ...)(Selected) end
-				
 				function Dropdown:Add(...)
 					local NewOptions = {...}
 					if type(NewOptions[1]) == "table" then
@@ -3731,7 +3412,6 @@ function bearlib:MakeWindow(Configs)
 						end
 					end
 				end
-				
 				function Dropdown:Remove(Option)
 					for index, Value in pairs(GetOptions()) do
 						if type(Option) == "number" and index == Option or Value.Name == Option then
@@ -3739,7 +3419,6 @@ function bearlib:MakeWindow(Configs)
 						end
 					end
 				end
-				
 				function Dropdown:Select(Option)
 					if type(Option) == "string" then
 						for _, Val in pairs(Options) do
@@ -3757,7 +3436,6 @@ function bearlib:MakeWindow(Configs)
 						end
 					end
 				end
-				
 				function Dropdown:Set(Val1, Clear)
 					if type(Val1) == "table" then
 						AddNewOptions(Val1, Clear)
@@ -3766,238 +3444,6 @@ function bearlib:MakeWindow(Configs)
 					end
 				end
 				return Dropdown
-			end
-			
-			function SubTab:AddProfile(Configs)
-				local PName = Configs[1] or Configs.Name or "User Name"
-				local PBio = Configs[2] or Configs.Bio or "No bio yet."
-				local PAvatar = Configs.Avatar or "rbxassetid://0"
-				local PCover = Configs.Cover or "rbxassetid://0"
-				local PVerified = Configs.Verified or false
-				
-				local ProfileHolder = Create("Frame", Container, {
-					Size = UDim2.new(1, 0, 0, 100),
-					BackgroundTransparency = 1,
-					LayoutOrder = GetOrder(),
-					Name = "Profile",
-					ZIndex = 1
-				})
-				
-				local Card = InsertTheme(Create("Frame", ProfileHolder, {
-					Size = UDim2.new(1, 0, 1, 0),
-					BackgroundColor3 = Theme["Color Hub 2"],
-					ZIndex = 1
-				}), "Frame")
-				Make("Corner", Card, UDim.new(0, 8))
-				
-				local ProfileStroke = InsertTheme(Create("UIStroke", Card, {
-					Color = Theme["Color Stroke"],
-					Thickness = 1.5,
-					ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-				}), "Stroke")
-				
-				local CoverImg = Create("ImageLabel", Card, {
-					Size = UDim2.new(1, 0, 0, 50),
-					Image = PCover,
-					ScaleType = Enum.ScaleType.Crop,
-					BackgroundTransparency = 1,
-					ZIndex = 1
-				})
-				Make("Corner", CoverImg, UDim.new(0, 8))
-				
-				local CoverFix = InsertTheme(Create("Frame", CoverImg, {
-					Size = UDim2.new(1, 0, 0, 10),
-					Position = UDim2.new(0, 0, 1, -5),
-					BorderSizePixel = 0,
-					BackgroundColor3 = Theme["Color Hub 2"],
-					ZIndex = 2
-				}), "Frame")
-				
-				local AvatarImg = Create("ImageLabel", Card, {
-					Size = UDim2.fromOffset(45, 45),
-					Position = UDim2.new(0, 12, 0, 30),
-					Image = PAvatar,
-					BackgroundColor3 = Theme["Color Hub 2"],
-					ZIndex = 3
-				})
-				Make("Corner", AvatarImg, UDim.new(1, 0))
-				
-				local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
-					Thickness = 2,
-					Color = Theme["Color Stroke"]
-				}), "Stroke")
-				
-				local NameLabel = InsertTheme(Create("TextLabel", Card, {
-					Position = UDim2.new(0, 65, 0, 50),
-					Size = UDim2.new(1, -75, 0, 18),
-					Text = PName,
-					Font = Enum.Font.GothamBold,
-					TextColor3 = Theme["Color Text"],
-					TextSize = 13,
-					TextXAlignment = "Left",
-					BackgroundTransparency = 1,
-					TextTruncate = "AtEnd",
-					ZIndex = 3,
-					TextStrokeTransparency = 0.3,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-				}), "Text")
-				
-				if PVerified then
-					local VerifyIcon = Create("ImageLabel", Card, {
-						Size = UDim2.fromOffset(14, 14),
-						Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52),
-						Image = "rbxassetid://10709752907",
-						ImageColor3 = Color3.fromRGB(60, 140, 255),
-						BackgroundTransparency = 1,
-						ZIndex = 4
-					})
-					NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
-						VerifyIcon.Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52)
-					end)
-				end
-				
-				local BioLabel = InsertTheme(Create("TextLabel", Card, {
-					Position = UDim2.new(0, 12, 0, 78),
-					Size = UDim2.new(1, -24, 0, 16),
-					Text = PBio,
-					Font = Enum.Font.Gotham,
-					TextColor3 = Theme["Color Dark Text"],
-					TextSize = 9,
-					TextXAlignment = "Left",
-					BackgroundTransparency = 1,
-					TextTruncate = Enum.TextTruncate.AtEnd,
-					ZIndex = 3,
-					TextStrokeTransparency = 0.4,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-				}), "DarkText")
-				
-				table.insert(bearlib.AllElements, {
-					Name = PName .. " Profile",
-					Instance = ProfileHolder,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
-				local Profile = {}
-				function Profile:Visible(...) Funcs:ToggleVisible(ProfileHolder, ...) end
-				function Profile:Destroy() ProfileHolder:Destroy() end
-				function Profile:SetBio(NewBio) BioLabel.Text = NewBio end
-				function Profile:SetBorderColor(NewColor)
-					if typeof(NewColor) == "Color3" then
-						ProfileStroke.Color = NewColor
-						AvatarStroke.Color = NewColor
-					end
-				end
-				return Profile
-			end
-			
-			function SubTab:AddDiscordInvite(Configs)
-				local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
-				local Desc = Configs[2] or Configs.Desc or Configs.Description or ""
-				local Logo = Configs[3] or Configs.Logo or ""
-				local Invite = Configs[4] or Configs.Invite or ""
-				
-				local InviteHolder = Create("Frame", Container, {
-					Size = UDim2.new(1, 0, 0, 65),
-					Name = "Option",
-					BackgroundTransparency = 1,
-					LayoutOrder = GetOrder(),
-					ZIndex = 1
-				})
-				
-				local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
-					Size = UDim2.new(1, 0, 0, 65),
-					AnchorPoint = Vector2.new(0, 0),
-					Position = UDim2.new(0, 0, 0, 0),
-					BackgroundColor3 = Theme["Color Hub 2"],
-					ZIndex = 1
-				}), "Frame")
-				Make("Corner", FrameHolder)
-				
-				local ImageLabel = Create("ImageLabel", FrameHolder, {
-					Size = UDim2.new(0, 30, 0, 30),
-					Position = UDim2.new(0, 7, 0, 7),
-					Image = Logo,
-					BackgroundTransparency = 1,
-					ZIndex = 3
-				})
-				Make("Corner", ImageLabel, UDim.new(0, 4))
-				Make("Stroke", ImageLabel)
-				
-				local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
-					Size = UDim2.new(1, -52, 0, 15),
-					Position = UDim2.new(0, 44, 0, 7),
-					Font = Enum.Font.GothamBold,
-					TextColor3 = Theme["Color Text"],
-					TextXAlignment = "Left",
-					BackgroundTransparency = 1,
-					TextSize = 10,
-					Text = Title,
-					ZIndex = 3,
-					TextStrokeTransparency = 0.3,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-				}), "Text")
-				
-				local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
-					Size = UDim2.new(1, -52, 0, 0),
-					Position = UDim2.new(0, 44, 0, 22),
-					TextWrapped = "Y",
-					AutomaticSize = "Y",
-					Font = Enum.Font.Gotham,
-					TextColor3 = Theme["Color Dark Text"],
-					TextXAlignment = "Left",
-					BackgroundTransparency = 1,
-					TextSize = 8,
-					Text = Desc,
-					ZIndex = 3,
-					TextStrokeTransparency = 0.4,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-				}), "DarkText")
-				
-				local JoinButton = Create("TextButton", FrameHolder, {
-					Size = UDim2.new(1, -14, 0, 16),
-					AnchorPoint = Vector2.new(0.5, 1),
-					Position = UDim2.new(0.5, 0, 1, -7),
-					Text = "Copy Link",
-					Font = Enum.Font.GothamBold,
-					TextSize = 12,
-					TextColor3 = Color3.fromRGB(220, 220, 220),
-					BackgroundColor3 = Color3.fromRGB(50, 150, 50),
-					ZIndex = 4,
-					TextStrokeTransparency = 0.3,
-					TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-				})
-				Make("Corner", JoinButton, UDim.new(0, 5))
-				
-				local ClickDelay
-				JoinButton.Activated:Connect(function()
-					setclipboard(Invite)
-					if ClickDelay then return end
-					
-					ClickDelay = true
-					SetProps(JoinButton, {
-						Text = "Copied to Clipboard",
-						BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-						TextColor3 = Color3.fromRGB(150, 150, 150)
-					}) task.wait(5)
-					SetProps(JoinButton, {
-						Text = "Copy Link",
-						BackgroundColor3 = Color3.fromRGB(50, 150, 50),
-						TextColor3 = Color3.fromRGB(220, 220, 220)
-					}) ClickDelay = false
-				end)
-				
-				table.insert(bearlib.AllElements, {
-					Name = Title,
-					Instance = InviteHolder,
-					OriginalParent = Container,
-					SectionName = CurrentSectionName
-				})
-				
-				local DiscordInvite = {}
-				function DiscordInvite:Destroy() InviteHolder:Destroy() end
-				function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
-				return DiscordInvite
 			end
 			
 			UpdateGroupContainerSize()
