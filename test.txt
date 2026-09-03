@@ -568,7 +568,7 @@ function bearlib:MakeWindow(Configs)
 		
 		-- Mở rộng vùng chạm để dễ kéo hơn (thêm một vùng trong suốt phía sau)
 		local TouchArea = InsertTheme(Create("Frame", MainFrame, {
-			Size = UDim2.new(0, 200, 0, 30),  -- Vùng chạm rộng hơn
+			Size = UDim2.new(0, 200, 0, 40),  -- Vùng chạm rộng hơn
 			Position = UDim2.new(0.5, 0, 0, -15), -- Nằm giữa, bao phủ thanh kéo
 			AnchorPoint = Vector2.new(0.5, 0),
 			BackgroundTransparency = 1,  -- Hoàn toàn trong suốt
@@ -582,6 +582,7 @@ function bearlib:MakeWindow(Configs)
 		local DragStart, StartPos
 		local isDragging = false
 		local CurrentInput = nil
+		local DragConnection = nil
 		
 		-- Hàm xử lý bắt đầu kéo
 		local function StartDrag(Input)
@@ -596,20 +597,23 @@ function bearlib:MakeWindow(Configs)
 				DragBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				DragBar.Size = UDim2.new(0, 80, 0, 5)  -- Phóng to thanh một chút khi kéo
 				
-				-- Kéo liên tục với tốc độ cao hơn
-				task.spawn(function()
-					while isDragging and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-						task.wait()
-						if isDragging and CurrentInput then
-							local delta = CurrentInput.Position - DragStart
-							local Position = UDim2.new(
-								StartPos.X.Scale, 
-								StartPos.X.Offset + delta.X / UIScale,
-								StartPos.Y.Scale, 
-								StartPos.Y.Offset + delta.Y / UIScale
-							)
-							MainFrame.Position = Position
-						end
+				-- Hủy kết nối cũ nếu có
+				if DragConnection then
+					DragConnection:Disconnect()
+					DragConnection = nil
+				end
+				
+				-- Tạo kết nối mới để cập nhật vị trí liên tục
+				DragConnection = RunService.Heartbeat:Connect(function()
+					if isDragging and CurrentInput then
+						local delta = CurrentInput.Position - DragStart
+						local Position = UDim2.new(
+							StartPos.X.Scale, 
+							StartPos.X.Offset + delta.X / UIScale,
+							StartPos.Y.Scale, 
+							StartPos.Y.Offset + delta.Y / UIScale
+						)
+						MainFrame.Position = Position
 					end
 				end)
 			end
@@ -620,6 +624,12 @@ function bearlib:MakeWindow(Configs)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				isDragging = false
 				CurrentInput = nil
+				
+				-- Hủy kết nối
+				if DragConnection then
+					DragConnection:Disconnect()
+					DragConnection = nil
+				end
 				
 				-- Trả lại trạng thái ban đầu
 				DragBar.BackgroundTransparency = 0.7
@@ -636,7 +646,7 @@ function bearlib:MakeWindow(Configs)
 		TouchArea.InputBegan:Connect(StartDrag)
 		TouchArea.InputEnded:Connect(EndDrag)
 		
-		-- Xử lý khi chuột rời khỏi thanh kéo
+		-- Xử lý khi chuột rời khỏi thanh kéo (vẫn giữ kéo nếu đang kéo)
 		DragBar.MouseLeave:Connect(function()
 			if not isDragging then
 				DragBar.BackgroundTransparency = 0.7
@@ -669,17 +679,17 @@ function bearlib:MakeWindow(Configs)
 			end
 		end)
 		
-		-- Cập nhật vị trí khi kéo (cải thiện độ mượt)
-		RunService.Heartbeat:Connect(function()
-			if isDragging and CurrentInput then
-				local delta = CurrentInput.Position - DragStart
-				local Position = UDim2.new(
-					StartPos.X.Scale, 
-					StartPos.X.Offset + delta.X / UIScale,
-					StartPos.Y.Scale, 
-					StartPos.Y.Offset + delta.Y / UIScale
-				)
-				MainFrame.Position = Position
+		-- Xử lý khi kéo ra khỏi thanh (vẫn giữ kéo)
+		UserInputService.InputChanged:Connect(function(Input)
+			if isDragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+				CurrentInput = Input
+			end
+		end)
+		
+		-- Xử lý khi thả chuột ở bất kỳ đâu
+		UserInputService.InputEnded:Connect(function(Input)
+			if isDragging and (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
+				EndDrag(Input)
 			end
 		end)
 		
