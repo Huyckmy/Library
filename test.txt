@@ -651,7 +651,7 @@ function bearlib:MakeWindow(Configs)
 							UpdateUIPosition()
 						end
 					end
-				end)
+				)
 				
 				-- Thêm kết nối để cập nhật vị trí liên tục bằng Heartbeat
 				local HeartbeatConnection
@@ -1210,6 +1210,104 @@ function bearlib:MakeWindow(Configs)
 	end
 	
 	return Window
+end
+
+-- ==============================================
+-- NÚT TOGGLE NỔI (THAM KHẢO TỪ bearlib.lua)
+-- ==============================================
+
+local ToggleGui = Instance.new("ScreenGui")
+ToggleGui.Name = "BearHub_Toggle_Circle"
+ToggleGui.Parent = CoreGui
+
+local ToggleButton = Instance.new("ImageButton")
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+ToggleButton.Position = UDim2.new(0.12, 0, 0.12, 0)
+ToggleButton.Image = "rbxassetid://75089236463451"
+ToggleButton.BackgroundColor3 = Theme["Color Hub 2"]
+ToggleButton.BackgroundTransparency = 0.2
+ToggleButton.Active = true
+ToggleButton.Draggable = true
+ToggleButton.Parent = ToggleGui
+
+-- Bo tròn nút
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = ToggleButton
+
+-- Viền nút với hiệu ứng cầu vồng
+local ToggleStroke = Instance.new("UIStroke")
+ToggleStroke.Name = "ToggleStroke"
+ToggleStroke.Thickness = 1
+ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+ToggleStroke.LineJoinMode = Enum.LineJoinMode.Round
+ToggleStroke.Parent = ToggleButton
+
+-- Màu sắc cầu vồng
+local RainbowColors = {
+	Color3.fromRGB(255, 0, 0),
+	Color3.fromRGB(255, 127, 0),
+	Color3.fromRGB(255, 255, 0),
+	Color3.fromRGB(0, 255, 0),
+	Color3.fromRGB(0, 0, 255),
+	Color3.fromRGB(75, 0, 130),
+	Color3.fromRGB(148, 0, 211)
+}
+local colorIndex = 1
+
+-- Hiệu ứng cầu vồng cho viền
+task.spawn(function()
+	while ToggleButton and ToggleButton.Parent do
+		ToggleStroke.Color = RainbowColors[colorIndex]
+		colorIndex = colorIndex % #RainbowColors + 1
+		task.wait(0.3)
+	end
+end)
+
+-- Biến để lưu trạng thái của MainFrame và các thành phần khác
+local UIFullVisible = true
+
+-- Xử lý sự kiện click của nút toggle
+ToggleButton.MouseButton1Click:Connect(function()
+	-- Kiểm tra xem MainFrame có tồn tại không
+	local MainFrame = ScreenGui:FindFirstChild("Hub")
+	
+	if MainFrame then
+		if MainFrame.Visible then
+			MainFrame.Visible = false
+			-- Ẩn các control size
+			for _, child in ipairs(MainFrame:GetChildren()) do
+				if child.Name == "Control Hub Size" or child.Name == "Control Tab Size" then
+					child.Visible = false
+				end
+			end
+			UIFullVisible = false
+		else
+			MainFrame.Visible = true
+			for _, child in ipairs(MainFrame:GetChildren()) do
+				if child.Name == "Control Hub Size" or child.Name == "Control Tab Size" then
+					child.Visible = true
+				end
+			end
+			UIFullVisible = true
+		end
+	end
+end)
+
+-- Thêm cờ VN nếu được bật (tùy chọn)
+local ShowVNFlag = false -- Có thể set thành true nếu muốn hiển thị
+if ShowVNFlag then
+	local Flag = Instance.new("ImageLabel")
+	Flag.Name = "VNFlagIcon"
+	Flag.Parent = ToggleButton
+	Flag.BackgroundTransparency = 1
+	Flag.Image = "rbxassetid://90723031696932"
+	Flag.Size = UDim2.fromOffset(28, 18)
+	Flag.AnchorPoint = Vector2.new(0.5, 0.5)
+	Flag.Position = UDim2.new(1, -2, 0, 2)
+	Flag.ZIndex = 100
+	Flag.Rotation = 15
 end
 
 return bearlib
