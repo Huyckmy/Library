@@ -9,108 +9,42 @@ local Player = Players.LocalPlayer
 local PlayerMouse = Player:GetMouse()
 
 local bearlib = {
-    Themes = {
-        Darker = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(25, 25, 25)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(25, 25, 25))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-            ["Color Hub 3"] = Color3.fromRGB(200, 200, 200),
-            ["Color Background Main"] = Color3.fromRGB(25, 25, 25),
-            ["Color Stroke"] = Color3.fromRGB(40, 40, 40),
-            ["Color Theme"] = Color3.fromRGB(88, 101, 242),
-            ["Color Text"] = Color3.fromRGB(243, 243, 243),
-            ["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
-            ["UI Border Color"] = Color3.fromRGB(88, 101, 242),
-        },
-        Dark = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(47.5, 47.5, 47.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(40, 40, 40))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(45, 45, 45),
-            ["Color Hub 3"] = Color3.fromRGB(220, 220, 220),
-            ["Color Background Main"] = Color3.fromRGB(40, 40, 40),
-            ["Color Stroke"] = Color3.fromRGB(65, 65, 65),
-            ["Color Theme"] = Color3.fromRGB(65, 150, 255),
-            ["Color Text"] = Color3.fromRGB(245, 245, 245),
-            ["Color Dark Text"] = Color3.fromRGB(190, 190, 190),
-            ["UI Border Color"] = Color3.fromRGB(65, 150, 255),
-        },
-        Purple = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(27.5, 25, 30)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(27.5, 25, 30))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-            ["Color Hub 3"] = Color3.fromRGB(200, 200, 200),
-            ["Color Background Main"] = Color3.fromRGB(27.5, 25, 30),
-            ["Color Stroke"] = Color3.fromRGB(40, 40, 40),
-            ["Color Theme"] = Color3.fromRGB(150, 0, 255),
-            ["Color Text"] = Color3.fromRGB(240, 240, 240),
-            ["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
-            ["UI Border Color"] = Color3.fromRGB(150, 0, 255),
-        },
-        Ocean = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 30, 50)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(25, 45, 65)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 30, 50))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(20, 40, 60),
-            ["Color Hub 3"] = Color3.fromRGB(200, 230, 255),
-            ["Color Background Main"] = Color3.fromRGB(15, 30, 50),
-            ["Color Stroke"] = Color3.fromRGB(40, 70, 100),
-            ["Color Theme"] = Color3.fromRGB(0, 180, 255),
-            ["Color Text"] = Color3.fromRGB(220, 240, 255),
-            ["Color Dark Text"] = Color3.fromRGB(150, 200, 230),
-            ["UI Border Color"] = Color3.fromRGB(0, 180, 255),
-        },
-        Sunset = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(50, 20, 30)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 35, 25)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(50, 20, 30))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(55, 25, 30),
-            ["Color Hub 3"] = Color3.fromRGB(255, 220, 200),
-            ["Color Background Main"] = Color3.fromRGB(50, 20, 30),
-            ["Color Stroke"] = Color3.fromRGB(80, 50, 40),
-            ["Color Theme"] = Color3.fromRGB(255, 120, 50),
-            ["Color Text"] = Color3.fromRGB(255, 230, 210),
-            ["Color Dark Text"] = Color3.fromRGB(200, 160, 140),
-            ["UI Border Color"] = Color3.fromRGB(255, 120, 50),
-        },
-        Forest = {
-            ["Color Hub 1"] = ColorSequence.new({
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 40, 20)),
-                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(30, 55, 30)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 40, 20))
-            }),
-            ["Color Hub 2"] = Color3.fromRGB(25, 45, 25),
-            ["Color Hub 3"] = Color3.fromRGB(200, 255, 200),
-            ["Color Background Main"] = Color3.fromRGB(20, 40, 20),
-            ["Color Stroke"] = Color3.fromRGB(45, 75, 45),
-            ["Color Theme"] = Color3.fromRGB(50, 220, 50),
-            ["Color Text"] = Color3.fromRGB(220, 255, 220),
-            ["Color Dark Text"] = Color3.fromRGB(160, 210, 160),
-            ["UI Border Color"] = Color3.fromRGB(50, 220, 50),
-        }
+    Theme = {
+        ["Color Hub 1"] = Color3.fromRGB(11, 11, 15),
+        ["Color Hub 2"] = Color3.fromRGB(20, 20, 27),
+        ["Color Hub 3"] = Color3.fromRGB(255, 255, 255),
+        ["Color Background Main"] = Color3.fromRGB(11, 11, 15),
+        ["Color Stroke"] = Color3.fromRGB(45, 45, 55),
+        ["Color Theme"] = Color3.fromRGB(255, 210, 70),
+        ["Color Text"] = Color3.fromRGB(255, 255, 255),
+        ["Color Dark Text"] = Color3.fromRGB(165, 165, 178),
+        ["Color Discord Text"] = Color3.fromRGB(255, 255, 255),
+        ["Color Discord Stats"] = Color3.fromRGB(255, 255, 255),
+        ["Color Discord Border"] = Color3.fromRGB(70, 70, 82),
+        ["Color Profile Border"] = Color3.fromRGB(70, 70, 82),
+        ["Color Toggle On"] = Color3.fromRGB(255, 210, 70),
+        ["Color Toggle Off"] = Color3.fromRGB(30, 30, 38),
+        ["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255),
+        ["Color Toggle Knob Off"] = Color3.fromRGB(170, 170, 180),
+        ["Color Toggle Border"] = Color3.fromRGB(70, 70, 82),
+        ["Border Thickness"] = 1.25,
+        ["UI Border Color"] = Color3.fromRGB(70, 70, 82),
+        ["Corner Radius"] = 10,
+        ["Animation Speed"] = 0.22,
+        ["Responsive Scale"] = true,
+        ["Min Scale"] = 0.72,
+        ["Max Scale"] = 1.25,
+        ["ShowVNFlag"] = false,
     },
     Info = {
         Name = "Bear Library",
         By = "Quang Huy",
-        Version = "1.2.0"
+        Version = "2.0.0"
     },
     Save = {
         UISize = {550, 380},
         TabSize = 160,
-        BarPosition = {X = 350, Y = -65},
-        Theme = "Darker"
+        BarPosition = {X = 350, Y = -65}
     },
     Settings = {},
     Connection = {},
@@ -124,15 +58,64 @@ local bearlib = {
         return {}
     end)(),
     AllElements = {},
-    ThunderActive = false,
-    CurrentTheme = nil
+    ThunderActive = false
 }
 
-local ViewportSize = workspace.CurrentCamera.ViewportSize
-local UIScale = ViewportSize.Y / 450
+local Camera = workspace.CurrentCamera
+local ViewportSize = Camera and Camera.ViewportSize or Vector2.new(1280, 720)
+local function CalculateScale()
+    local Theme = bearlib.Theme
+    if Theme["Responsive Scale"] == false then
+        return 1
+    end
+    local minScale = tonumber(Theme["Min Scale"]) or 0.72
+    local maxScale = tonumber(Theme["Max Scale"]) or 1.25
+    return math.clamp(ViewportSize.Y / 720, minScale, maxScale)
+end
+local UIScale = CalculateScale()
 
 local Settings = bearlib.Settings
 local Flags = bearlib.Flags
+
+--[=[
+    Bear Library 2.0.0 - lifecycle / cleanup layer
+    Keeps the original public API while making connections and tweens safer.
+]=]
+local Maid = {}
+Maid.__index = Maid
+
+function Maid.new()
+    return setmetatable({Tasks = {}}, Maid)
+end
+
+function Maid:Add(taskObject)
+    if taskObject ~= nil then
+        table.insert(self.Tasks, taskObject)
+    end
+    return taskObject
+end
+
+function Maid:Cleanup()
+    for i = #self.Tasks, 1, -1 do
+        local taskObject = self.Tasks[i]
+        self.Tasks[i] = nil
+        local kind = typeof(taskObject)
+        if kind == "RBXScriptConnection" then
+            pcall(function() taskObject:Disconnect() end)
+        elseif kind == "Instance" then
+            pcall(function() taskObject:Destroy() end)
+        elseif type(taskObject) == "function" then
+            pcall(taskObject)
+        elseif type(taskObject) == "table" and type(taskObject.Destroy) == "function" then
+            pcall(function() taskObject:Destroy() end)
+        elseif type(taskObject) == "table" and type(taskObject.Disconnect) == "function" then
+            pcall(function() taskObject:Disconnect() end)
+        end
+    end
+end
+
+local RootMaid = Maid.new()
+
 
 local SetProps, SetChildren, InsertTheme, Create do
     InsertTheme = function(Instance, Type)
@@ -163,30 +146,19 @@ local SetProps, SetChildren, InsertTheme, Create do
 
     Create = function(...)
         local args = {...}
-        if type(args) ~= "table" then return end
-        local new = Instance.new(args[1])
-        local Children = {}
+        local className = args[1]
+        if type(className) ~= "string" then return end
 
-        if type(args[2]) == "table" then
-            SetProps(new, args[2])
-            SetChildren(new, args[3])
-            Children = args[3] or {}
-        elseif typeof(args[2]) == "Instance" then
+        local new = Instance.new(className)
+        if typeof(args[2]) == "Instance" then
             new.Parent = args[2]
-            SetProps(new, args[3])
+            SetProps(new, type(args[3]) == "table" and args[3] or nil)
             SetChildren(new, args[4])
-            Children = args[4] or {}
+        else
+            SetProps(new, type(args[2]) == "table" and args[2] or nil)
+            SetChildren(new, args[3])
         end
         return new
-    end
-
-    local function VerifyTheme(Theme)
-        for name, _ in pairs(bearlib.Themes) do
-            if name == Theme then
-                return true
-            end
-        end
-        return false
     end
 
     local function Save(file)
@@ -199,18 +171,12 @@ local SetProps, SetChildren, InsertTheme, Create do
                 if rawget(decode, "BarPosition") then
                     bearlib.Save["BarPosition"] = decode["BarPosition"]
                 end
-                if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then 
-                    bearlib.Save["Theme"] = decode["Theme"] 
-                end
             end
         end
     end
 
     pcall(Save, "bearlib.json")
 end
-
-local Theme = bearlib.Themes[bearlib.Save.Theme]
-bearlib.CurrentTheme = bearlib.Save.Theme
 
 local Funcs = {} do
     function Funcs:InsertCallback(tab, func)
@@ -301,7 +267,7 @@ local Connections, Connection = {}, bearlib.Connection do
         end
     end
 
-    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded", "ThemeChanged"})
+    NewConnectionList({"FlagsChanged", "FileSaved", "OptionAdded"})
 end
 
 local GetFlag, SetFlag, CheckFlag do
@@ -342,6 +308,11 @@ local GetFlag, SetFlag, CheckFlag do
     end)
 end
 
+local ExistingScreenGui = CoreGui:FindFirstChild("bearlib")
+if ExistingScreenGui then
+    pcall(function() ExistingScreenGui:Destroy() end)
+end
+
 local ScreenGui = Create("ScreenGui", CoreGui, {
     Name = "bearlib",
 }, {
@@ -351,10 +322,7 @@ local ScreenGui = Create("ScreenGui", CoreGui, {
     })
 })
 
-local ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
-if ScreenFind and ScreenFind ~= ScreenGui then
-    ScreenFind:Destroy()
-end
+local Theme = bearlib.Theme
 
 local function GetStr(val)
     if type(val) == "function" then
@@ -367,7 +335,7 @@ local function CreateTween(Configs)
     local Instance = Configs[1] or Configs.Instance
     local Prop = Configs[2] or Configs.Prop
     local NewVal = Configs[3] or Configs.NewVal
-    local Time = Configs[4] or Configs.Time or 0.5
+    local Time = Configs[4] or Configs.Time or Theme["Animation Speed"] or 0.22
     local TweenWait = Configs[5] or Configs.wait or false
     local TweenInfo = TweenInfo.new(Time, Enum.EasingStyle.Quint)
 
@@ -379,87 +347,97 @@ local function CreateTween(Configs)
     return Tween
 end
 
-local function MakeDrag(Instance)
-    task.spawn(function()
-        SetProps(Instance, {
-            Active = true,
-            AutoButtonColor = false
-        })
+local ActiveDrag = nil
+local DragInputConnection
 
-        local DragStart, StartPos, InputOn
-
-        local function Update(Input)
-            local delta = Input.Position - DragStart
-            local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
-            CreateTween({Instance, "Position", Position, 0.35})
+local function EnsureDragConnection()
+    if DragInputConnection then return end
+    DragInputConnection = UserInputService.InputChanged:Connect(function(Input)
+        if not ActiveDrag then return end
+        if Input.UserInputType ~= Enum.UserInputType.MouseMovement and Input.UserInputType ~= Enum.UserInputType.Touch then
+            return
         end
-
-        Instance.InputBegan:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                InputOn = true
-                StartPos = Instance.Position
-                DragStart = Input.Position
-            end
-        end)
-
-        Instance.InputEnded:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                InputOn = false
-            end
-        end)
-
-        UserInputService.InputChanged:Connect(function(Input)
-            if InputOn and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
-                Update(Input)
-            end
-        end)
+        local data = ActiveDrag
+        if not data.Instance or not data.Instance.Parent then
+            ActiveDrag = nil
+            return
+        end
+        local delta = Input.Position - data.DragStart
+        local Position = UDim2.new(
+            data.StartPos.X.Scale,
+            data.StartPos.X.Offset + delta.X / math.max(UIScale, 0.01),
+            data.StartPos.Y.Scale,
+            data.StartPos.Y.Offset + delta.Y / math.max(UIScale, 0.01)
+        )
+        if data.Callback then
+            data.Callback(false, delta, data.StartPos)
+        else
+            data.Instance.Position = Position
+        end
     end)
+    RootMaid:Add(DragInputConnection)
+end
+
+local function MakeDrag(Instance)
+    if not Instance then return Instance end
+    SetProps(Instance, {Active = true, AutoButtonColor = false})
+    EnsureDragConnection()
+
+    local beginConnection = Instance.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            ActiveDrag = {
+                Instance = Instance,
+                DragStart = Input.Position,
+                StartPos = Instance.Position
+            }
+        end
+    end)
+    local endConnection = Instance.InputEnded:Connect(function(Input)
+        if ActiveDrag and ActiveDrag.Instance == Instance and
+            (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
+            ActiveDrag = nil
+        end
+    end)
+    RootMaid:Add(beginConnection)
+    RootMaid:Add(endConnection)
     return Instance
 end
 
 local function MakeDragSmooth(Instance, onDrag)
-    task.spawn(function()
-        SetProps(Instance, {
-            Active = true,
-            AutoButtonColor = false
-        })
+    if not Instance then return Instance end
+    SetProps(Instance, {Active = true, AutoButtonColor = false})
+    EnsureDragConnection()
 
-        local DragStart, StartPos, InputOn
-
-        Instance.InputBegan:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                InputOn = true
-                StartPos = Instance.Position
-                DragStart = Input.Position
-            end
-        end)
-
-        Instance.InputEnded:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                InputOn = false
-                if onDrag then
-                    onDrag(true)
-                end
-            end
-        end)
-
-        UserInputService.InputChanged:Connect(function(Input)
-            if InputOn and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
-                local delta = Input.Position - DragStart
-                if onDrag then
-                    onDrag(false, delta, StartPos)
-                end
-            end
-        end)
+    local beginConnection = Instance.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            ActiveDrag = {
+                Instance = Instance,
+                DragStart = Input.Position,
+                StartPos = Instance.Position,
+                Callback = onDrag
+            }
+        end
     end)
+    local endConnection = Instance.InputEnded:Connect(function(Input)
+        if ActiveDrag and ActiveDrag.Instance == Instance and
+            (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
+            ActiveDrag = nil
+            if onDrag then onDrag(true) end
+        end
+    end)
+    RootMaid:Add(beginConnection)
+    RootMaid:Add(endConnection)
     return Instance
 end
 
 local function SaveJson(FileName, save)
-    if writefile then
-        local json = HttpService:JSONEncode(save)
-        writefile(FileName, json)
+    if type(FileName) ~= "string" or type(save) ~= "table" or not writefile then
+        return false
     end
+    local ok, json = pcall(HttpService.JSONEncode, HttpService, save)
+    if not ok then return false end
+    local success = pcall(writefile, FileName, json)
+    return success
 end
 
 local function AddEle(Name, Func)
@@ -473,7 +451,7 @@ end
 
 AddEle("Corner", function(parent, CornerRadius)
     local New = SetProps(Create("UICorner", parent, {
-        CornerRadius = CornerRadius or UDim.new(0, 12)
+        CornerRadius = CornerRadius or UDim.new(0, 7)
     }))
     return New
 end)
@@ -482,7 +460,7 @@ AddEle("Stroke", function(parent, props, ...)
     local args = {...}
     local New = InsertTheme(SetProps(Create("UIStroke", parent, {
         Color = args[1] or Theme["Color Stroke"],
-        Thickness = 1.5,
+        Thickness = args[2] or 1,
         ApplyStrokeMode = "Border"
     }), props), "Stroke")
     return New
@@ -512,7 +490,7 @@ end)
 AddEle("Gradient", function(parent, props, ...)
     local args = {...}
     local gradient = Instance.new("UIGradient")
-    gradient.Color = Theme["Color Hub 1"]
+    gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
     gradient.Rotation = args[1] or 45
     gradient.Parent = parent
     return InsertTheme(gradient, "Gradient")
@@ -556,7 +534,8 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
         Name = "Option"
     })
     Make("Corner", Frame, UDim.new(0, 6))
-    Make("Stroke", Frame, nil, Theme["Color Stroke"], 1.5)
+
+    Make("Stroke", Frame, nil, Theme["Color Stroke"], 1)
 
     local LabelHolder = Create("Frame", Frame, {
         AutomaticSize = "Y",
@@ -627,225 +606,6 @@ function bearlib:GetIcon(index)
     return firstMatch or index
 end
 
-local function RefreshAllUIElements()
-    if not MainFrame then return end
-    
-    MainFrame.BackgroundColor3 = Theme["Color Background Main"] or Theme["Color Hub 1"] or Color3.fromRGB(0, 0, 0)
-    local border = MainFrame:FindFirstChild("UIBorder")
-    if border and border:IsA("UIStroke") then
-        border.Color = Theme["UI Border Color"]
-    end
-
-    for _, Val in pairs(bearlib.Instances) do
-        if not Val.Instance or not Val.Instance.Parent then continue end
-
-        if Val.Type == "Gradient" then
-            Val.Instance.Color = Theme["Color Hub 1"]
-        elseif Val.Type == "Frame" then
-            Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
-        elseif Val.Type == "Stroke" then
-            Val.Instance.Color = Theme["Color Stroke"]
-        elseif Val.Type == "Theme" then
-            Val.Instance.BackgroundColor3 = Theme["Color Theme"]
-        elseif Val.Type == "Text" then
-            Val.Instance.TextColor3 = Theme["Color Text"]
-        elseif Val.Type == "DarkText" then
-            Val.Instance.TextColor3 = Theme["Color Dark Text"]
-        elseif Val.Type == "ScrollBar" then
-            Val.Instance.ScrollBarImageColor3 = Theme["Color Theme"]
-        elseif Val.Type == "UIBorder" then
-            Val.Instance.Color = Theme["UI Border Color"]
-        elseif Val.Type == "TabBorderGradient" then
-            local themeColor = Theme["Color Hub 3"]
-            Val.Instance.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, themeColor),
-                ColorSequenceKeypoint.new(0.5, themeColor),
-                ColorSequenceKeypoint.new(1, themeColor),
-            })
-            Val.Instance.Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 1),
-                NumberSequenceKeypoint.new(0.3, 0.5),
-                NumberSequenceKeypoint.new(1, 0),
-            })
-        elseif Val.Type == "TabBorderFrame" then
-            Val.Instance.Color = Theme["Color Hub 3"]
-        elseif Val.Type == "TabGroupArrow" then
-            Val.Instance.TextColor3 = Theme["Color Text"]
-        elseif Val.Type == "Divider" then
-            Val.Instance.BackgroundColor3 = Theme["Color Theme"]
-            Val.Instance.BackgroundTransparency = 0.8
-            if Val.Instance:FindFirstChild("UIGradient") then
-                local gradient = Val.Instance.UIGradient
-                gradient.Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-                    ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-                })
-            end
-        end
-    end
-
-    if MinimizeButton then
-        MinimizeButton.ImageColor3 = Theme["Color Text"]
-    end
-    if MaximizeButton then
-        MaximizeButton.ImageColor3 = Theme["Color Text"]
-    end
-
-    if MinimizedBar then
-        for _, child in ipairs(MinimizedBar:GetChildren()) do
-            if child:IsA("ImageLabel") then
-                child.ImageColor3 = Theme["Color Text"]
-            elseif child:IsA("TextLabel") then
-                child.TextColor3 = Theme["Color Text"]
-            elseif child:IsA("UIStroke") then
-                child.Color = Theme["UI Border Color"]
-            elseif child:IsA("ImageButton") then
-                child.ImageColor3 = Theme["Color Text"]
-            end
-        end
-        local gradient = MinimizedBar:FindFirstChildOfClass("UIGradient")
-        if gradient then
-            gradient.Color = Theme["Color Hub 1"]
-        end
-    end
-
-    if NotificationHolder then
-        for _, notif in ipairs(NotificationHolder:GetChildren()) do
-            if notif:IsA("Frame") and notif.Name == "Notification" then
-                local stroke = notif:FindFirstChildOfClass("UIStroke")
-                if stroke then
-                    stroke.Color = Theme["Color Stroke"]
-                end
-                local gradient = notif:FindFirstChildOfClass("UIGradient")
-                if gradient then
-                    gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
-                end
-            end
-        end
-    end
-
-    for _, TabData in pairs(bearlib.Tabs) do
-        if TabData and TabData.BorderStroke then
-            TabData.BorderStroke.Color = Theme["Color Hub 3"]
-        end
-        if TabData and TabData.BorderGradient then
-            local themeColor = Theme["Color Hub 3"]
-            TabData.BorderGradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, themeColor),
-                ColorSequenceKeypoint.new(0.5, themeColor),
-                ColorSequenceKeypoint.new(1, themeColor),
-            })
-            TabData.BorderGradient.Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 1),
-                NumberSequenceKeypoint.new(0.3, 0.5),
-                NumberSequenceKeypoint.new(1, 0),
-            })
-        end
-    end
-
-    for _, element in pairs(bearlib.AllElements) do
-        if element and element.Instance and element.Instance.Parent then
-            if element.Instance:IsA("TextButton") or element.Instance:IsA("Frame") then
-                element.Instance.BackgroundColor3 = Theme["Color Hub 2"]
-            end
-
-            local stroke = element.Instance:FindFirstChildOfClass("UIStroke")
-            if stroke then
-                stroke.Color = Theme["Color Stroke"]
-            end
-
-            for _, child in ipairs(element.Instance:GetDescendants()) do
-                if child:IsA("TextLabel") then
-                    if child.Name ~= "TimerText" then
-                        child.TextColor3 = Theme["Color Text"]
-                    end
-                elseif child:IsA("TextBox") then
-                    child.TextColor3 = Theme["Color Text"]
-                end
-            end
-        end
-    end
-
-    for _, GroupData in pairs(bearlib.TabGroups) do
-        if GroupData and GroupData.TabSelect then
-            local textLabel = GroupData.TabSelect:FindFirstChildOfClass("TextLabel")
-            if textLabel then
-                textLabel.TextColor3 = Theme["Color Text"]
-            end
-            local imageLabel = GroupData.TabSelect:FindFirstChildOfClass("ImageLabel")
-            if imageLabel then
-                imageLabel.ImageColor3 = Theme["Color Text"]
-            end
-            local arrow = GroupData.TabSelect:FindFirstChild("Arrow")
-            if arrow and arrow:IsA("TextLabel") then
-                arrow.TextColor3 = Theme["Color Text"]
-            end
-        end
-    end
-
-    if MainScroll then
-        MainScroll.ScrollBarImageColor3 = Theme["Color Theme"]
-    end
-end
-
-function bearlib:SetTheme(NewTheme)
-    if not self.Themes[NewTheme] then return end
-
-    self.Save.Theme = NewTheme
-    self.CurrentTheme = NewTheme
-    Theme = self.Themes[NewTheme]
-
-    SaveJson("bearlib.json", self.Save)
-    RefreshAllUIElements()
-    Connection:FireConnection("ThemeChanged", NewTheme)
-end
-
-function bearlib:GetThemes()
-    local themes = {}
-    for name, _ in pairs(self.Themes) do
-        table.insert(themes, name)
-    end
-    return themes
-end
-
-function bearlib:GetCurrentTheme()
-    return self.CurrentTheme or self.Save.Theme
-end
-
-function bearlib:SetScale(NewScale)
-    NewScale = ViewportSize.Y / math.clamp(NewScale, 300, 2000)
-    UIScale, ScreenGui.Scale.Scale = NewScale, NewScale
-end
-
-function bearlib:SetHubColor(color)
-    if typeof(color) == "Color3" then
-        self.Themes[self.CurrentTheme]["Color Hub 2"] = color
-        RefreshAllUIElements()
-    end
-end
-
-function bearlib:SetTextColor(color)
-    if typeof(color) == "Color3" then
-        self.Themes[self.CurrentTheme]["Color Text"] = color
-        RefreshAllUIElements()
-    end
-end
-
-function bearlib:SetStrokeColor(color)
-    if typeof(color) == "Color3" then
-        self.Themes[self.CurrentTheme]["Color Stroke"] = color
-        RefreshAllUIElements()
-    end
-end
-
-function bearlib:SetBorderColor(color)
-    if typeof(color) == "Color3" then
-        self.Themes[self.CurrentTheme]["UI Border Color"] = color
-        RefreshAllUIElements()
-    end
-end
-
 local MainFrame = nil
 local MinimizeButton = nil
 local ToggleButton = nil
@@ -885,7 +645,7 @@ local function ApplyRoundedCorners(frame, radius)
         corner = Instance.new("UICorner")
         corner.Parent = frame
     end
-    corner.CornerRadius = radius or UDim.new(0, 12)
+    corner.CornerRadius = radius or UDim.new(0, Theme["Corner Radius"] or 12)
     return corner
 end
 
@@ -934,13 +694,262 @@ local function UpdateSmallBar5Size()
     UpdateBarLayout(SmallBar5, SmallBar5Text, SmallBar5Icon)
 end
 
+local function RefreshAllUIElements()
+    if MainFrame then
+        MainFrame.BackgroundColor3 = Theme["Color Background Main"] or Theme["Color Hub 1"] or Color3.fromRGB(0, 0, 0)
+        ApplyRoundedCorners(MainFrame, UDim.new(0, Theme["Corner Radius"] or 12))
+        local border = MainFrame:FindFirstChild("UIBorder")
+        if border and border:IsA("UIStroke") then
+            border.Color = Theme["UI Border Color"]
+            border.Thickness = Theme["Border Thickness"]
+        end
+        local gradient = MainFrame:FindFirstChildOfClass("UIGradient")
+        if gradient then
+            gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
+        end
+    end
+
+    for _, Val in pairs(bearlib.Instances) do
+        if not Val.Instance or not Val.Instance.Parent then continue end
+
+        if Val.Type == "Gradient" then
+            Val.Instance.Color = ColorSequence.new(Theme["Color Hub 1"])
+        elseif Val.Type == "Frame" then
+            Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
+        elseif Val.Type == "Stroke" then
+            local parent = Val.Instance.Parent
+            local strokeColor = Theme["Color Stroke"]
+            if parent then
+                if parent:FindFirstAncestor("DiscordInviteContainer") or 
+                   parent.Name:find("DiscordCard") or
+                   parent:FindFirstAncestor("DiscordCard") then
+                    strokeColor = Theme["Color Discord Border"]
+                elseif parent:FindFirstAncestor("Profile") then
+                    strokeColor = Theme["Color Profile Border"]
+                elseif parent.Name == "Hub" then
+                    strokeColor = Theme["UI Border Color"]
+                end
+            end
+            Val.Instance.Color = strokeColor
+            Val.Instance.Thickness = Theme["Border Thickness"]
+        elseif Val.Type == "Theme" then
+            Val.Instance.BackgroundColor3 = Theme["Color Theme"]
+        elseif Val.Type == "Text" then
+            Val.Instance.TextColor3 = Theme["Color Text"]
+        elseif Val.Type == "DarkText" then
+            Val.Instance.TextColor3 = Theme["Color Dark Text"]
+        elseif Val.Type == "ScrollBar" then
+            Val.Instance.ScrollBarImageColor3 = Theme["Color Theme"]
+        elseif Val.Type == "UIBorder" then
+            Val.Instance.Color = Theme["UI Border Color"]
+            Val.Instance.Thickness = Theme["Border Thickness"]
+        elseif Val.Type == "TabBorderGradient" then
+            local themeColor = Theme["Color Hub 3"]
+            Val.Instance.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, themeColor),
+                ColorSequenceKeypoint.new(0.5, themeColor),
+                ColorSequenceKeypoint.new(1, themeColor),
+            })
+            Val.Instance.Transparency = NumberSequence.new({
+                NumberSequenceKeypoint.new(0, 1),
+                NumberSequenceKeypoint.new(0.3, 0.5),
+                NumberSequenceKeypoint.new(1, 0),
+            })
+        elseif Val.Type == "TabBorderFrame" then
+            Val.Instance.Color = Theme["Color Hub 3"]
+        elseif Val.Type == "TabGroupArrow" then
+            Val.Instance.TextColor3 = Theme["Color Text"]
+        elseif Val.Type == "Divider" then
+            Val.Instance.BackgroundColor3 = Theme["Color Theme"]
+            Val.Instance.BackgroundTransparency = 0.8
+            if Val.Instance:FindFirstChild("UIGradient") then
+                local gradient = Val.Instance.UIGradient
+                gradient.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                    ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+                })
+            end
+        end
+    end
+
+    if MinimizeButton then
+        MinimizeButton.ImageColor3 = Theme["Color Text"]
+    end
+    if MaximizeButton then
+        MaximizeButton.ImageColor3 = Theme["Color Text"]
+    end
+
+    if MinimizedBar then
+        ApplyRoundedCorners(MinimizedBar, UDim.new(1, 0))
+        for _, child in ipairs(MinimizedBar:GetChildren()) do
+            if child:IsA("ImageLabel") then
+                child.ImageColor3 = Theme["Color Text"]
+            elseif child:IsA("TextLabel") then
+                child.TextColor3 = Theme["Color Text"]
+            elseif child:IsA("UIStroke") then
+                child.Color = Theme["UI Border Color"]
+                child.Thickness = Theme["Border Thickness"]
+            elseif child:IsA("ImageButton") then
+                child.ImageColor3 = Theme["Color Text"]
+            end
+        end
+        local gradient = MinimizedBar:FindFirstChildOfClass("UIGradient")
+        if gradient then
+            gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
+        end
+    end
+
+    if NotificationHolder then
+        for _, notif in ipairs(NotificationHolder:GetChildren()) do
+            if notif:IsA("Frame") and notif.Name == "Notification" then
+                local stroke = notif:FindFirstChildOfClass("UIStroke")
+                if stroke then
+                    stroke.Color = Theme["Color Stroke"]
+                end
+                local gradient = notif:FindFirstChildOfClass("UIGradient")
+                if gradient then
+                    gradient.Color = ColorSequence.new(Theme["Color Hub 1"])
+                end
+                ApplyRoundedCorners(notif, UDim.new(0, 8))
+            end
+        end
+    end
+
+    for _, TabData in pairs(bearlib.Tabs) do
+        if TabData and TabData.BorderStroke then
+            TabData.BorderStroke.Color = Theme["Color Hub 3"]
+            TabData.BorderStroke.Thickness = Theme["Border Thickness"]
+        end
+        if TabData and TabData.BorderGradient then
+            local themeColor = Theme["Color Hub 3"]
+            TabData.BorderGradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, themeColor),
+                ColorSequenceKeypoint.new(0.5, themeColor),
+                ColorSequenceKeypoint.new(1, themeColor),
+            })
+            TabData.BorderGradient.Transparency = NumberSequence.new({
+                NumberSequenceKeypoint.new(0, 1),
+                NumberSequenceKeypoint.new(0.3, 0.5),
+                NumberSequenceKeypoint.new(1, 0),
+            })
+        end
+    end
+
+    for _, element in pairs(bearlib.AllElements) do
+        if element and element.Instance and element.Instance.Parent then
+            if element.Instance:IsA("TextButton") or element.Instance:IsA("Frame") then
+                element.Instance.BackgroundColor3 = Theme["Color Hub 2"]
+            end
+
+            local stroke = element.Instance:FindFirstChildOfClass("UIStroke")
+            if stroke then
+                stroke.Color = Theme["Color Stroke"]
+                stroke.Thickness = Theme["Border Thickness"]
+            end
+
+            for _, child in ipairs(element.Instance:GetDescendants()) do
+                if child:IsA("TextLabel") then
+                    if child.Name ~= "TimerText" then
+                        child.TextColor3 = Theme["Color Text"]
+                    end
+                elseif child:IsA("TextBox") then
+                    child.TextColor3 = Theme["Color Text"]
+                end
+            end
+        end
+    end
+
+    for _, GroupData in pairs(bearlib.TabGroups) do
+        if GroupData and GroupData.TabSelect then
+            local textLabel = GroupData.TabSelect:FindFirstChildOfClass("TextLabel")
+            if textLabel then
+                textLabel.TextColor3 = Theme["Color Text"]
+            end
+            local imageLabel = GroupData.TabSelect:FindFirstChildOfClass("ImageLabel")
+            if imageLabel then
+                imageLabel.ImageColor3 = Theme["Color Text"]
+            end
+            local arrow = GroupData.TabSelect:FindFirstChild("Arrow")
+            if arrow and arrow:IsA("TextLabel") then
+                arrow.TextColor3 = Theme["Color Text"]
+            end
+        end
+    end
+
+    if MainScroll then
+        MainScroll.ScrollBarImageColor3 = Theme["Color Theme"]
+    end
+end
+
 local MainScroll = nil
+
+function bearlib:SetScale(NewScale)
+    local target = tonumber(NewScale)
+    if not target then return false end
+    local minScale = tonumber(Theme["Min Scale"]) or 0.72
+    local maxScale = tonumber(Theme["Max Scale"]) or 1.25
+    if target > 2 then
+        target = ViewportSize.Y / math.clamp(target, 300, 2000)
+    end
+    target = math.clamp(target, minScale, maxScale)
+    UIScale = target
+    if ScreenGui and ScreenGui:FindFirstChild("Scale") then
+        ScreenGui.Scale.Scale = target
+    end
+    return target
+end
+
+function bearlib:Refresh()
+    RefreshAllUIElements()
+    return self
+end
+
+function bearlib:SetTheme(Key, Value)
+    if type(Key) == "table" then
+        for name, color in pairs(Key) do
+            if self.Theme[name] ~= nil then
+                self.Theme[name] = color
+            end
+        end
+    elseif type(Key) == "string" and self.Theme[Key] ~= nil then
+        self.Theme[Key] = Value
+    else
+        return false
+    end
+    RefreshAllUIElements()
+    return true
+end
+
+function bearlib:GetTheme(Key)
+    if Key == nil then
+        return self.Theme
+    end
+    return self.Theme[Key]
+end
+
+function bearlib:Destroy()
+    ActiveDrag = nil
+    RootMaid:Cleanup()
+    if ScreenGui then pcall(function() ScreenGui:Destroy() end) end
+    if ToggleGui then pcall(function() ToggleGui:Destroy() end) end
+    if MinimizedBar then pcall(function() MinimizedBar:Destroy() end) end
+    MainFrame, ToggleGui, MinimizedBar, NotificationHolder = nil, nil, nil, nil
+    self.Instances = {}
+    self.Elements = {}
+    self.Options = {}
+    self.Tabs = {}
+    self.TabGroups = {}
+    self.AllElements = {}
+    return true
+end
 
 local Minimized = false
 local UIFullVisible = true
 local SaveSize = nil
 local BarPosition = bearlib.Save.BarPosition
 local WaitClick = false
+local bgTransparency = 0.03
 
 local function SaveBarPosition()
     if MinimizedBar and MinimizedBar.Parent then
@@ -956,7 +965,6 @@ end
 function bearlib:MakeWindow(Configs)
     local WTitle = Configs[1] or Configs.Name or Configs.Title or "bearlib"
     local WMiniText = Configs[2] or Configs.SubTitle or "by : Quang Huy"
-    local ShowVNFlag = Configs.ShowVNFlag or false
 
     Settings.ScriptFile = Configs[3] or Configs.SaveFolder or false
 
@@ -983,19 +991,19 @@ function bearlib:MakeWindow(Configs)
     MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
         Size = UDim2.fromOffset(UISizeX, UISizeY),
         Position = UDim2.new(0.5, -UISizeX / 2, 0.5, -UISizeY / 2),
-        BackgroundTransparency = 0.03,
+        BackgroundTransparency = bgTransparency,
         BackgroundColor3 = Theme["Color Background Main"] or Theme["Color Hub 1"] or Color3.fromRGB(0, 0, 0),
         Name = "Hub"
     }), "Main")
     Make("Gradient", MainFrame, 45)
     MakeDrag(MainFrame)
 
-    local MainCorner = ApplyRoundedCorners(MainFrame, UDim.new(0, 12))
+    local MainCorner = ApplyRoundedCorners(MainFrame, UDim.new(0, Theme["Corner Radius"] or 12))
 
     local UIBorder = Instance.new("UIStroke")
     UIBorder.Name = "UIBorder"
     UIBorder.Color = Theme["UI Border Color"] or Color3.fromRGB(255, 215, 0)
-    UIBorder.Thickness = 1.5
+    UIBorder.Thickness = Theme["Border Thickness"] or 1.5
     UIBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     UIBorder.LineJoinMode = Enum.LineJoinMode.Round
     UIBorder.Parent = MainFrame
@@ -1423,14 +1431,14 @@ function bearlib:MakeWindow(Configs)
         BarCorner.Parent = MinimizedBar
 
         local BarGradient = Instance.new("UIGradient")
-        BarGradient.Color = Theme["Color Hub 1"]
+        BarGradient.Color = ColorSequence.new(Theme["Color Hub 1"])
         BarGradient.Rotation = 45
         BarGradient.Parent = MinimizedBar
         InsertTheme(BarGradient, "Gradient")
 
         local BarStroke = Instance.new("UIStroke")
         BarStroke.Color = Theme["UI Border Color"]
-        BarStroke.Thickness = 1.5
+        BarStroke.Thickness = Theme["Border Thickness"] or 1.5
         BarStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         BarStroke.Parent = MinimizedBar
         InsertTheme(BarStroke, "UIBorder")
@@ -1493,7 +1501,7 @@ function bearlib:MakeWindow(Configs)
 
             MainFrame.Visible = true
             CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
-            CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+            CreateTween({MainFrame, "BackgroundTransparency", bgTransparency, 0.25})
             ControlSize.Visible = true
             ControlSize2.Visible = true
 
@@ -1528,7 +1536,7 @@ function bearlib:MakeWindow(Configs)
 
         MainFrame.Visible = true
         CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
-        CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+        CreateTween({MainFrame, "BackgroundTransparency", bgTransparency, 0.25})
         ControlSize.Visible = true
         ControlSize2.Visible = true
 
@@ -1923,8 +1931,7 @@ function bearlib:MakeWindow(Configs)
             if bearlib.Tabs[TabSelect] then
                 bearlib.Tabs[TabSelect].func:Enable()
             end
-        else
-            for _, Tab in pairs(bearlib.Tabs) do
+        else            for _, Tab in pairs(bearlib.Tabs) do
                 if Tab.Cont == TabSelect.Cont then
                     Tab.func:Enable()
                 end
@@ -2035,7 +2042,7 @@ function bearlib:MakeWindow(Configs)
 
         local BorderStroke = Instance.new("UIStroke")
         BorderStroke.Color = Theme["Color Hub 3"]
-        BorderStroke.Thickness = 1.5
+        BorderStroke.Thickness = Theme["Border Thickness"] or 1.5
         BorderStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         BorderStroke.LineJoinMode = Enum.LineJoinMode.Round
         BorderStroke.Parent = BorderFrame
@@ -2326,7 +2333,7 @@ function bearlib:MakeWindow(Configs)
                 Size = UDim2.new(0, 35, 0, 18),
                 Position = UDim2.new(1, -10, 0.5),
                 AnchorPoint = Vector2.new(1, 0.5),
-                BackgroundColor3 = ToggleColors.Off,
+                BackgroundColor3 = Theme["Color Toggle Off"],
                 ZIndex = 4
             }), "Stroke")
             Make("Corner", ToggleHolder, UDim.new(0.5, 0))
@@ -2343,7 +2350,7 @@ function bearlib:MakeWindow(Configs)
                 Size = UDim2.new(0, 12, 0, 12),
                 Position = UDim2.new(0, 0, 0.5),
                 AnchorPoint = Vector2.new(0, 0.5),
-                BackgroundColor3 = ToggleColors.KnobOff,
+                BackgroundColor3 = Theme["Color Toggle Knob Off"],
                 ZIndex = 5
             }), "Theme")
             Make("Corner", Toggle, UDim.new(0.5, 0))
@@ -2357,14 +2364,14 @@ function bearlib:MakeWindow(Configs)
                 Funcs:FireCallback(Callback, Default)
                 if Default then
                     CreateTween({Toggle, "Position", UDim2.new(1, 0, 0.5), 0.25})
-                    CreateTween({Toggle, "BackgroundColor3", ToggleColors.KnobOn, 0.25})
+                    CreateTween({Toggle, "BackgroundColor3", Theme["Color Toggle Knob On"], 0.25})
                     CreateTween({Toggle, "AnchorPoint", Vector2.new(1, 0.5), 0.25})
-                    CreateTween({ToggleHolder, "BackgroundColor3", ToggleColors.On, 0.25})
+                    CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Toggle On"], 0.25})
                 else
                     CreateTween({Toggle, "Position", UDim2.new(0, 0, 0.5), 0.25})
-                    CreateTween({Toggle, "BackgroundColor3", ToggleColors.KnobOff, 0.25})
+                    CreateTween({Toggle, "BackgroundColor3", Theme["Color Toggle Knob Off"], 0.25})
                     CreateTween({Toggle, "AnchorPoint", Vector2.new(0, 0.5), 0.25})
-                    CreateTween({ToggleHolder, "BackgroundColor3", ToggleColors.Off, 0.25})
+                    CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Toggle Off"], 0.25})
                 end
                 WaitClick = false
             end
@@ -2796,8 +2803,7 @@ function bearlib:MakeWindow(Configs)
                     NoClickFrame.Visible = false
                     SearchBox.Text = ""
                 else
-                    NoClickFrame.Visible = true
-                    Arrow.Image = "rbxassetid://10709790948"
+                    NoClickFrame.Visible = true                    Arrow.Image = "rbxassetid://10709790948"
                     CreateTween({Arrow, "ImageColor3", Theme["Color Theme"], 0.2})
                     CreateTween({DropFrame, "Size", GetFrameSize(), 0.2, true})
                 end
@@ -3074,6 +3080,818 @@ function bearlib:MakeWindow(Configs)
                 end
             end
             return Dropdown
+        end
+
+        function Tab:AddProfile(Configs)
+            local PName = Configs[1] or Configs.Name or "User Name"
+            local PBio = Configs[2] or Configs.Bio or "No bio yet."
+            local PAvatar = Configs.Avatar or "rbxassetid://0"
+            local PCover = Configs.Cover or "rbxassetid://0"
+            local PVerified = Configs.Verified or false
+
+            local ProfileHolder = Create("Frame", Container, {
+                Size = UDim2.new(1, 0, 0, 100),
+                BackgroundTransparency = 1,
+                LayoutOrder = GetOrder(),
+                Name = "Profile",
+                ZIndex = 1
+            })
+
+            local Card = InsertTheme(Create("Frame", ProfileHolder, {
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 1
+            }), "Frame")
+            Make("Corner", Card, UDim.new(0, 8))
+
+            local ProfileStroke = InsertTheme(Create("UIStroke", Card, {
+                Color = Theme["Color Profile Border"] or Theme["Color Stroke"],
+                Thickness = Theme["Border Thickness"] or 1.5,
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            }), "Stroke")
+
+            local CoverImg = Create("ImageLabel", Card, {
+                Size = UDim2.new(1, 0, 0, 50),
+                Image = PCover,
+                ScaleType = Enum.ScaleType.Crop,
+                BackgroundTransparency = 1,
+                ZIndex = 1
+            })
+            Make("Corner", CoverImg, UDim.new(0, 8))
+
+            local CoverFix = InsertTheme(Create("Frame", CoverImg, {
+                Size = UDim2.new(1, 0, 0, 10),
+                Position = UDim2.new(0, 0, 1, -5),
+                BorderSizePixel = 0,
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 2
+            }), "Frame")
+
+            local AvatarImg = Create("ImageLabel", Card, {
+                Size = UDim2.fromOffset(45, 45),
+                Position = UDim2.new(0, 12, 0, 30),
+                Image = PAvatar,
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 3
+            })
+            Make("Corner", AvatarImg, UDim.new(1, 0))
+
+            local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
+                Thickness = 2,
+                Color = Theme["Color Profile Border"] or Theme["Color Stroke"]
+            }), "Stroke")
+
+            local NameLabel = InsertTheme(Create("TextLabel", Card, {
+                Position = UDim2.new(0, 65, 0, 50),
+                Size = UDim2.new(1, -75, 0, 18),
+                Text = PName,
+                Font = Enum.Font.GothamBold,
+                TextColor3 = Theme["Color Text"],
+                TextSize = 13,
+                TextXAlignment = "Left",
+                BackgroundTransparency = 1,
+                TextTruncate = "AtEnd",
+                ZIndex = 3,
+                TextStrokeTransparency = 0.3,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "Text")
+
+            if PVerified then
+                local VerifyIcon = Create("ImageLabel", Card, {
+                    Size = UDim2.fromOffset(14, 14),
+                    Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52),
+                    Image = "rbxassetid://10709752907",
+                    ImageColor3 = Color3.fromRGB(60, 140, 255),
+                    BackgroundTransparency = 1,
+                    ZIndex = 4
+                })
+                NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
+                    VerifyIcon.Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52)
+                end)
+            end
+
+            local BioLabel = InsertTheme(Create("TextLabel", Card, {
+                Position = UDim2.new(0, 12, 0, 78),
+                Size = UDim2.new(1, -24, 0, 16),
+                Text = PBio,
+                Font = Enum.Font.Gotham,
+                TextColor3 = Theme["Color Dark Text"],
+                TextSize = 9,
+                TextXAlignment = "Left",
+                BackgroundTransparency = 1,
+                TextTruncate = Enum.TextTruncate.AtEnd,
+                ZIndex = 3,
+                TextStrokeTransparency = 0.4,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "DarkText")
+
+            table.insert(bearlib.AllElements, {
+                Name = PName .. " Profile",
+                Instance = ProfileHolder,
+                OriginalParent = Container,
+                SectionName = CurrentSectionName
+            })
+
+            local Profile = {}
+            function Profile:Visible(...) Funcs:ToggleVisible(ProfileHolder, ...) end
+            function Profile:Destroy() ProfileHolder:Destroy() end
+            function Profile:SetBio(NewBio) BioLabel.Text = NewBio end
+            function Profile:SetBorderColor(NewColor)
+                if typeof(NewColor) == "Color3" then
+                    ProfileStroke.Color = NewColor
+                    AvatarStroke.Color = NewColor
+                end
+            end
+            return Profile
+        end
+
+        function Tab:AddSingleDiscordCard(Configs)
+            local Title = Configs.Title or Configs[1] or "Discord Server"
+            local Description = Configs.Description or Configs.Desc or Configs[2] or ""
+            local Logo = Configs.Logo or Configs.Icon or Configs[3] or "rbxassetid://0"
+            local BannerColor = Configs.BannerColor or Configs.Banner or Configs[4] or Color3.fromRGB(88, 101, 242)
+            local Online = Configs.Online or Configs[5] or 0
+            local TotalMembers = Configs.Members or Configs[6] or 0
+            local InviteLink = Configs.Invite or Configs.Link or Configs[7] or "https://discord.gg/example"
+            local Verified = Configs.Verified or false
+
+            local CardContainer = Create("Frame", Container, {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 150),
+                LayoutOrder = GetOrder(),
+                Name = "SingleDiscordCard",
+                ZIndex = 1
+            })
+
+            local Card = InsertTheme(Create("Frame", CardContainer, {
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 1
+            }), "Frame")
+            Make("Corner", Card, UDim.new(0, 8))
+
+            local CardStroke = InsertTheme(Create("UIStroke", Card, {
+                Color = Theme["Color Discord Border"] or Theme["Color Stroke"],
+                Thickness = Theme["Border Thickness"] or 1.5,
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            }), "Stroke")
+
+            local BannerImg = Create("ImageLabel", Card, {
+                Size = UDim2.new(1, 0, 0, 60),
+                Image = type(BannerColor) == "string" and BannerColor or "",
+                ScaleType = Enum.ScaleType.Crop,
+                BackgroundColor3 = type(BannerColor) == "Color3" and BannerColor or Color3.fromRGB(88, 101, 242),
+                BackgroundTransparency = type(BannerColor) == "Color3" and 0 or 1,
+                ZIndex = 1
+            })
+            Make("Corner", BannerImg, UDim.new(0, 8))
+
+            local BannerFix = InsertTheme(Create("Frame", BannerImg, {
+                Size = UDim2.new(1, 0, 0, 12),
+                Position = UDim2.new(0, 0, 1, -6),
+                BorderSizePixel = 0,
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 2
+            }), "Frame")
+
+            local AvatarImg = Create("ImageLabel", Card, {
+                Size = UDim2.fromOffset(50, 50),
+                Position = UDim2.new(0, 15, 0, 35),
+                Image = Logo,
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 3
+            })
+            Make("Corner", AvatarImg, UDim.new(1, 0))
+
+            local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
+                Thickness = 2.5,
+                Color = Theme["Color Discord Border"] or Theme["Color Stroke"]
+            }), "Stroke")
+
+            local NameLabel = InsertTheme(Create("TextLabel", Card, {
+                Position = UDim2.new(0, 75, 0, 48),
+                Size = UDim2.new(1, -90, 0, 20),
+                Text = Title,
+                Font = Enum.Font.GothamBold,
+                TextColor3 = Theme["Color Text"],
+                TextSize = 14,
+                TextXAlignment = "Left",
+                BackgroundTransparency = 1,
+                TextTruncate = "AtEnd",
+                ZIndex = 3,
+                TextStrokeTransparency = 0.3,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "Text")
+
+            if Verified then
+                local VerifyIcon = Create("ImageLabel", Card, {
+                    Size = UDim2.fromOffset(16, 16),
+                    Position = UDim2.new(0, 75 + NameLabel.TextBounds.X + 5, 0, 50),
+                    Image = "rbxassetid://10709752907",
+                    ImageColor3 = Color3.fromRGB(60, 140, 255),
+                    BackgroundTransparency = 1,
+                    ZIndex = 4
+                })
+                NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
+                    VerifyIcon.Position = UDim2.new(0, 75 + NameLabel.TextBounds.X + 5, 0, 50)
+                end)
+            end
+
+            local StatsContainer = Create("Frame", Card, {
+                Position = UDim2.new(0, 75, 0, 70),
+                Size = UDim2.new(1, -90, 0, 20),
+                BackgroundTransparency = 1,
+                ZIndex = 3
+            })
+
+            local StatsLayout = Create("UIListLayout", StatsContainer, {
+                FillDirection = Enum.FillDirection.Horizontal,
+                HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                VerticalAlignment = Enum.VerticalAlignment.Center,
+                Padding = UDim.new(0, 15)
+            })
+
+            local function AddStat(StatColor, StatText)
+                local Stat = Create("Frame", StatsContainer, {
+                    Size = UDim2.new(0, 0, 1, 0),
+                    AutomaticSize = Enum.AutomaticSize.X,
+                    BackgroundTransparency = 1,
+                    ZIndex = 3
+                })
+
+                local Dot = Create("Frame", Stat, {
+                    Size = UDim2.fromOffset(8, 8),
+                    Position = UDim2.new(0, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    BackgroundColor3 = StatColor,
+                    ZIndex = 4
+                })
+                Make("Corner", Dot, UDim.new(1, 0))
+
+                local StatLabel = InsertTheme(Create("TextLabel", Stat, {
+                    Size = UDim2.new(0, 0, 1, 0),
+                    Position = UDim2.new(0, 12, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    AutomaticSize = Enum.AutomaticSize.X,
+                    BackgroundTransparency = 1,
+                    TextSize = 10,
+                    Text = StatText,
+                    Font = Enum.Font.Gotham,
+                    TextColor3 = Theme["Color Dark Text"],
+                    ZIndex = 4,
+                    TextStrokeTransparency = 0.4,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "DarkText")
+            end
+
+            if Online and Online > 0 then
+                AddStat(Color3.fromRGB(0, 255, 0), tostring(Online) .. " Online")
+            end
+
+            if TotalMembers and TotalMembers > 0 then
+                AddStat(Color3.fromRGB(88, 101, 242), tostring(TotalMembers) .. " Members")
+            end
+
+            local DescLabel = InsertTheme(Create("TextLabel", Card, {
+                Position = UDim2.new(0, 75, 0, 95),
+                Size = UDim2.new(1, -90, 0, 35),
+                Text = Description,
+                Font = Enum.Font.Gotham,
+                TextColor3 = Theme["Color Dark Text"],
+                TextSize = 10,
+                TextXAlignment = "Left",
+                TextYAlignment = "Top",
+                TextWrapped = true,
+                BackgroundTransparency = 1,
+                ZIndex = 3,
+                TextStrokeTransparency = 0.4,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "DarkText")
+
+            local ButtonContainer = Create("Frame", Card, {
+                Size = UDim2.new(1, -30, 0, 30),
+                Position = UDim2.new(0.5, 0, 1, -15),
+                AnchorPoint = Vector2.new(0.5, 1),
+                BackgroundTransparency = 1,
+                ZIndex = 3
+            })
+
+            local JoinButton = InsertTheme(Create("TextButton", ButtonContainer, {
+                Size = UDim2.new(1, 0, 1, 0),
+                Text = "Join Discord",
+                Font = Enum.Font.GothamBold,
+                TextSize = 13,
+                BackgroundColor3 = Color3.fromRGB(88, 101, 242),
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                ZIndex = 4,
+                TextStrokeTransparency = 0.3,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "Text")
+            Make("Corner", JoinButton, UDim.new(0.5, 0))
+
+            local LastClick = 0
+            JoinButton.Activated:Connect(function()
+                if tick() - LastClick < 3 then return end
+                LastClick = tick()
+                local OriginalText = JoinButton.Text
+                JoinButton.Text = "Copied!"
+                setclipboard(InviteLink)
+                task.wait(1.5)
+                JoinButton.Text = OriginalText
+            end)
+
+            local function AdjustDescriptionHeight()
+                local textBounds = DescLabel.TextBounds.Y
+                if textBounds > 35 then
+                    DescLabel.Size = UDim2.new(1, -90, 0, textBounds + 5)
+                    ButtonContainer.Position = UDim2.new(0.5, 0, 1, -(15 + (textBounds - 35)))
+                end
+            end
+
+            DescLabel:GetPropertyChangedSignal("Text"):Connect(AdjustDescriptionHeight)
+            task.spawn(AdjustDescriptionHeight)
+
+            table.insert(bearlib.AllElements, {
+                Name = Title .. " Discord Card",
+                Instance = CardContainer,
+                OriginalParent = Container,
+                SectionName = CurrentSectionName
+            })
+
+            local CardObj = {}
+
+            function CardObj:SetTitle(NewTitle)
+                NameLabel.Text = NewTitle
+            end
+
+            function CardObj:SetDescription(NewDesc)
+                DescLabel.Text = NewDesc
+            end
+
+            function CardObj:SetIcon(NewIcon)
+                AvatarImg.Image = NewIcon
+            end
+
+            function CardObj:SetStats(NewOnline, NewMembers)
+                for _, child in ipairs(StatsContainer:GetChildren()) do
+                    if child:IsA("Frame") and child ~= StatsLayout then
+                        child:Destroy()
+                    end
+                end
+
+                if NewOnline and NewOnline > 0 then
+                    AddStat(Color3.fromRGB(0, 255, 0), tostring(NewOnline) .. " Online")
+                end
+
+                if NewMembers and NewMembers > 0 then
+                    AddStat(Color3.fromRGB(88, 101, 242), tostring(NewMembers) .. " Members")
+                end
+            end
+
+            function CardObj:SetBanner(NewBanner)
+                if type(NewBanner) == "string" then
+                    BannerImg.Image = NewBanner
+                    BannerImg.BackgroundTransparency = 1
+                elseif typeof(NewBanner) == "Color3" then
+                    BannerImg.BackgroundColor3 = NewBanner
+                    BannerImg.BackgroundTransparency = 0
+                    BannerImg.Image = ""
+                end
+            end
+
+            function CardObj:SetInviteLink(NewLink)
+                InviteLink = NewLink
+            end
+
+            function CardObj:SetVerified(IsVerified)
+                Verified = IsVerified
+            end
+
+            function CardObj:Visible(...) 
+                Funcs:ToggleVisible(CardContainer, ...) 
+            end
+
+            function CardObj:Destroy() 
+                CardContainer:Destroy() 
+            end
+
+            return CardObj
+        end
+
+        function Tab:AddDiscordInvite(Configs)
+            local ContainerFrame = Create("Frame", Container, {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 150),
+                LayoutOrder = GetOrder(),
+                Name = "DiscordInviteContainer",
+                ZIndex = 1
+            })
+
+            local ListLayout = Create("UIListLayout", ContainerFrame, {
+                FillDirection = Enum.FillDirection.Horizontal,
+                HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                VerticalAlignment = Enum.VerticalAlignment.Center,
+                Padding = UDim.new(0, 12),
+                SortOrder = "LayoutOrder"
+            })
+
+            local function createDiscordCard(cardConfigs, layoutOrder)
+                local BName = cardConfigs[1] or cardConfigs.Name or cardConfigs.Title or "Discord Server"
+                local BDescription = cardConfigs[2] or cardConfigs.Description or cardConfigs.Desc or ""
+                local Logo = cardConfigs[3] or cardConfigs.Icon or cardConfigs.Logo or cardConfigs.Image or ""
+                local BannerColor = cardConfigs[4] or cardConfigs.Banner or cardConfigs.BannerColor or Color3.fromRGB(88, 101, 242)
+                local Online = cardConfigs[5] or cardConfigs.Online or cardConfigs.MembersOnline
+                local TotalMembers = cardConfigs[6] or cardConfigs.Members or cardConfigs.TotalMembers
+                local InviteLink = cardConfigs[7] or cardConfigs.Invite or cardConfigs.Link or "https://discord.gg/example"
+
+                assert(type(InviteLink) == "string", "\"Tab.AddDiscordInvite.Invite\". 'string' expected, got " .. typeof(InviteLink))
+
+                local CardFrame = Create("Frame", ContainerFrame, {
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(0.5, -6, 1, -15),
+                    LayoutOrder = layoutOrder,
+                    Name = "DiscordCard_" .. layoutOrder,
+                    ZIndex = 1
+                })
+
+                local Card = InsertTheme(Create("Frame", CardFrame, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ClipsDescendants = true,
+                    ZIndex = 1
+                }), "Frame")
+                Make("Corner", Card, UDim.new(0, 10))
+
+                local Gradient = Make("Gradient", Card, 45)
+
+                local StrokeFrame = Create("Frame", CardFrame, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 2
+                })
+
+                local Stroke = InsertTheme(Create("UIStroke", StrokeFrame, {
+                    Color = Theme["Color Discord Border"] or Theme["Color Stroke"],
+                    Thickness = Theme["Border Thickness"] or 1.5,
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                }), "Stroke")
+                Make("Corner", StrokeFrame, UDim.new(0, 10))
+
+                local BannerImage = Create("ImageLabel", Card, {
+                    BackgroundColor3 = Color3.new(1, 1, 1),
+                    Size = UDim2.fromScale(1, 0.3),
+                    BackgroundTransparency = 1,
+                    ZIndex = 1
+                })
+                Make("Corner", BannerImage, UDim.new(0, 10))
+
+                local ServerIcon = Create("ImageLabel", Card, {
+                    Size = UDim2.fromOffset(35, 35),
+                    Position = UDim2.new(0, 12, 0.3, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Image = Logo,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 2
+                })
+                Make("Corner", ServerIcon, UDim.new(0, 8))
+
+                local IconStroke = InsertTheme(Create("UIStroke", ServerIcon, {
+                    Thickness = 2,
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                    Color = Theme["Color Discord Border"] or Theme["Color Stroke"]
+                }), "Stroke")
+
+                local ServerName = InsertTheme(Create("TextLabel", Card, {
+                    Size = UDim2.new(1, -20, 0, 12),
+                    Position = UDim2.new(0, 12, 0.46, 0),
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    BackgroundTransparency = 1,
+                    TextSize = 12,
+                    Text = BName,
+                    Font = Enum.Font.GothamBold,
+                    TextColor3 = Theme["Color Discord Text"],
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+
+                local StatsFrame
+                if Online or TotalMembers then
+                    StatsFrame = Create("Frame", Card, {
+                        Size = UDim2.new(1, -20, 0, 10),
+                        Position = UDim2.new(0, 0, 0.54, 0),
+                        BackgroundTransparency = 1,
+                        ZIndex = 2
+                    })
+
+                    local StatsLayout = Create("UIListLayout", StatsFrame, {
+                        HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                        VerticalAlignment = Enum.VerticalAlignment.Center,
+                        FillDirection = Enum.FillDirection.Horizontal,
+                        Padding = UDim.new(0, 6)
+                    })
+
+                    local function AddStat(StatColor, Text)
+                        local Stat = Create("Frame", StatsFrame, {
+                            Size = UDim2.fromScale(0, 1),
+                            AutomaticSize = Enum.AutomaticSize.X,
+                            BackgroundTransparency = 1,
+                            ZIndex = 2
+                        })
+
+                        local Dot = Create("Frame", Stat, {
+                            Size = UDim2.fromOffset(4, 4),
+                            Position = UDim2.new(0, 5, 0.5, 0),
+                            AnchorPoint = Vector2.new(0, 0.5),
+                            BackgroundColor3 = StatColor,
+                            BackgroundTransparency = 0,
+                            ZIndex = 3
+                        })
+                        Make("Corner", Dot, UDim.new(1, 0))
+
+                        InsertTheme(Create("TextLabel", Stat, {
+                            Size = UDim2.new(0, 0, 1, 0),
+                            Position = UDim2.new(0, 14, 0.5, 0),
+                            AnchorPoint = Vector2.new(0, 0.5),
+                            AutomaticSize = Enum.AutomaticSize.X,
+                            BackgroundTransparency = 1,
+                            TextSize = 8,
+                            Text = Text,
+                            Font = Enum.Font.Gotham,
+                            TextColor3 = Theme["Color Discord Stats"],
+                            ZIndex = 4,
+                            TextStrokeTransparency = 0.4,
+                            TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                        }), "DarkText")
+                    end
+
+                    if Online ~= nil then
+                        AddStat(Color3.fromRGB(0, 255, 0), tostring(Online) .. " Online")
+                    end
+                    if TotalMembers ~= nil then
+                        AddStat(Color3.fromRGB(88, 101, 242), tostring(TotalMembers) .. " Members")
+                    end
+                end
+
+                local Description = InsertTheme(Create("TextLabel", Card, {
+                    Size = UDim2.new(1, -50, 0, 10),
+                    Position = UDim2.new(0, 12, StatsFrame and 0.62 or 0.58, 0),
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    AutomaticSize = Enum.AutomaticSize.Y,
+                    BackgroundTransparency = 1,
+                    TextSize = 9,
+                    Text = BDescription,
+                    TextWrapped = true,
+                    Font = Enum.Font.Gotham,
+                    TextColor3 = Theme["Color Dark Text"],
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.4,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+
+                local ButtonContainer = Create("Frame", Card, {
+                    Size = UDim2.new(1, 0, 0.3, 0),
+                    Position = UDim2.fromScale(0, 1),
+                    AnchorPoint = Vector2.new(0, 1),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 2
+                })
+
+                if #Description.Text > 0 then
+                    ButtonContainer.Size = UDim2.new(1, 0, 0.4, 0)
+                    Create("UIGradient", ButtonContainer, {
+                        Rotation = -90,
+                        Transparency = NumberSequence.new{
+                            NumberSequenceKeypoint.new(0.00, 0.00),
+                            NumberSequenceKeypoint.new(0.60, 0.00),
+                            NumberSequenceKeypoint.new(1.00, 1.00)
+                        }
+                    })
+                end
+
+                local JoinButton = InsertTheme(Create("TextButton", ButtonContainer, {
+                    Position = UDim2.new(0.5, 0, 1, -10),
+                    Size = UDim2.new(1, -20, 0, 20),
+                    AnchorPoint = Vector2.new(0.5, 1),
+                    Text = "Join",
+                    Font = Enum.Font.GothamBold,
+                    TextSize = 12,
+                    BackgroundColor3 = Color3.fromRGB(37, 128, 69),
+                    TextColor3 = Color3.fromRGB(255, 255, 255),
+                    ZIndex = 4,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+                Make("Corner", JoinButton, UDim.new(0.5, 0))
+
+                local LastClick = 0
+                JoinButton.Activated:Connect(function()
+                    if tick() - LastClick < 5 then return end
+                    LastClick = tick()
+                    local OriginalText = JoinButton.Text
+                    JoinButton.Text = "Copied!"
+                    setclipboard(InviteLink)
+                    task.wait(2)
+                    JoinButton.Text = OriginalText
+                end)
+
+                if type(BannerColor) == "string" then
+                    BannerImage.ScaleType = Enum.ScaleType.Crop
+                    BannerImage.Image = BannerColor
+                elseif typeof(BannerColor) == "Color3" then
+                    BannerImage.BackgroundTransparency = 0
+                    BannerImage.BackgroundColor3 = BannerColor
+                end
+
+                return {
+                    Frame = CardFrame,
+                    Card = Card,
+                    Name = ServerName,
+                    Description = Description,
+                    JoinButton = JoinButton,
+                    Configs = cardConfigs,
+                    StrokeFrame = StrokeFrame,
+                    Stroke = Stroke
+                }
+            end
+
+            local card1, card2
+
+            if Configs[1] and type(Configs[1]) == "table" then
+                card1 = createDiscordCard(Configs[1], 1)
+                if Configs[2] and type(Configs[2]) == "table" then
+                    card2 = createDiscordCard(Configs[2], 2)
+                else
+                    card2 = createDiscordCard({
+                        "Empty Server",
+                        "Add your second Discord server here",
+                        "",
+                        Color3.fromRGB(50, 50, 50),
+                        0,
+                        0,
+                        "https://discord.gg/example"
+                    }, 2)
+                end
+            else
+                card1 = createDiscordCard(Configs, 1)
+                card2 = createDiscordCard({
+                    "Empty Server",
+                    "Add your second Discord server here",
+                    "",
+                    Color3.fromRGB(50, 50, 50),
+                    0,
+                    0,
+                    "https://discord.gg/example"
+                }, 2)
+            end
+
+            table.insert(bearlib.AllElements, {
+                Name = "Discord Invite Container",
+                Instance = ContainerFrame,
+                OriginalParent = Container,
+                SectionName = CurrentSectionName
+            })
+
+            local DiscordInviteContainer = {}
+            function DiscordInviteContainer:Visible(Bool)
+                if Bool == nil then
+                    ContainerFrame.Visible = not ContainerFrame.Visible
+                else
+                    ContainerFrame.Visible = Bool
+                end
+            end
+            function DiscordInviteContainer:Destroy()
+                ContainerFrame:Destroy()
+            end
+            function DiscordInviteContainer:UpdateCard1(NewConfigs)
+                if card1 then
+                    card1.Frame:Destroy()
+                    card1 = createDiscordCard(NewConfigs, 1)
+                end
+            end
+            function DiscordInviteContainer:UpdateCard2(NewConfigs)
+                if card2 then
+                    card2.Frame:Destroy()
+                    card2 = createDiscordCard(NewConfigs, 2)
+                end
+            end
+            function DiscordInviteContainer:GetCard1()
+                return card1
+            end
+            function DiscordInviteContainer:GetCard2()
+                return card2
+            end
+            return DiscordInviteContainer
+        end
+
+        function Tab:AddDiscordInviteOld(Configs)
+            local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
+            local Desc = Configs[2] or Configs.Desc or Configs.Description or ""
+            local Logo = Configs[3] or Configs.Logo or ""
+            local Invite = Configs[4] or Configs.Invite or ""
+
+            local InviteHolder = Create("Frame", Container, {
+                Size = UDim2.new(1, 0, 0, 65),
+                Name = "Option",
+                BackgroundTransparency = 1,
+                LayoutOrder = GetOrder(),
+                ZIndex = 1
+            })
+
+            local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
+                Size = UDim2.new(1, 0, 0, 65),
+                AnchorPoint = Vector2.new(0, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                BackgroundColor3 = Theme["Color Hub 2"],
+                ZIndex = 1
+            }), "Frame")
+            Make("Corner", FrameHolder)
+
+            local ImageLabel = Create("ImageLabel", FrameHolder, {
+                Size = UDim2.new(0, 30, 0, 30),
+                Position = UDim2.new(0, 7, 0, 7),
+                Image = Logo,
+                BackgroundTransparency = 1,
+                ZIndex = 3
+            })
+            Make("Corner", ImageLabel, UDim.new(0, 4))
+            Make("Stroke", ImageLabel)
+
+            local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
+                Size = UDim2.new(1, -52, 0, 15),
+                Position = UDim2.new(0, 44, 0, 7),
+                Font = Enum.Font.GothamBold,
+                TextColor3 = Theme["Color Text"],
+                TextXAlignment = "Left",
+                BackgroundTransparency = 1,
+                TextSize = 10,
+                Text = Title,
+                ZIndex = 3,
+                TextStrokeTransparency = 0.3,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "Text")
+
+            local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
+                Size = UDim2.new(1, -52, 0, 0),
+                Position = UDim2.new(0, 44, 0, 22),
+                TextWrapped = "Y",
+                AutomaticSize = "Y",
+                Font = Enum.Font.Gotham,
+                TextColor3 = Theme["Color Dark Text"],
+                TextXAlignment = "Left",
+                BackgroundTransparency = 1,
+                TextSize = 8,
+                Text = Desc,
+                ZIndex = 3,
+                TextStrokeTransparency = 0.4,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            }), "DarkText")
+
+            local JoinButton = Create("TextButton", FrameHolder, {
+                Size = UDim2.new(1, -14, 0, 16),
+                AnchorPoint = Vector2.new(0.5, 1),
+                Position = UDim2.new(0.5, 0, 1, -7),
+                Text = "Copy Link",
+                Font = Enum.Font.GothamBold,
+                TextSize = 12,
+                TextColor3 = Color3.fromRGB(220, 220, 220),
+                BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+                ZIndex = 4,
+                TextStrokeTransparency = 0.3,
+                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+            })
+            Make("Corner", JoinButton, UDim.new(0, 5))
+
+            local ClickDelay
+            JoinButton.Activated:Connect(function()
+                setclipboard(Invite)
+                if ClickDelay then return end
+
+                ClickDelay = true
+                SetProps(JoinButton, {
+                    Text = "Copied to Clipboard",
+                    BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+                    TextColor3 = Color3.fromRGB(150, 150, 150)
+                }) task.wait(5)
+                SetProps(JoinButton, {
+                    Text = "Copy Link",
+                    BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+                    TextColor3 = Color3.fromRGB(220, 220, 220)
+                }) ClickDelay = false
+            end)
+
+            table.insert(bearlib.AllElements, {
+                Name = Title,
+                Instance = InviteHolder,
+                OriginalParent = Container,
+                SectionName = CurrentSectionName
+            })
+
+            local DiscordInvite = {}
+            function DiscordInvite:Destroy() InviteHolder:Destroy() end
+            function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
+            return DiscordInvite
         end
 
         return Tab
@@ -3603,7 +4421,7 @@ function bearlib:MakeWindow(Configs)
                     Size = UDim2.new(0, 35, 0, 18),
                     Position = UDim2.new(1, -10, 0.5),
                     AnchorPoint = Vector2.new(1, 0.5),
-                    BackgroundColor3 = ToggleColors.Off,
+                    BackgroundColor3 = Theme["Color Toggle Off"],
                     ZIndex = 4
                 }), "Stroke")
                 Make("Corner", ToggleHolder, UDim.new(0.5, 0))
@@ -3620,7 +4438,7 @@ function bearlib:MakeWindow(Configs)
                     Size = UDim2.new(0, 12, 0, 12),
                     Position = UDim2.new(0, 0, 0.5),
                     AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundColor3 = ToggleColors.KnobOff,
+                    BackgroundColor3 = Theme["Color Toggle Knob Off"],
                     ZIndex = 5
                 }), "Theme")
                 Make("Corner", Toggle, UDim.new(0.5, 0))
@@ -3634,14 +4452,14 @@ function bearlib:MakeWindow(Configs)
                     Funcs:FireCallback(Callback, Default)
                     if Default then
                         CreateTween({Toggle, "Position", UDim2.new(1, 0, 0.5), 0.25})
-                        CreateTween({Toggle, "BackgroundColor3", ToggleColors.KnobOn, 0.25})
+                        CreateTween({Toggle, "BackgroundColor3", Theme["Color Toggle Knob On"], 0.25})
                         CreateTween({Toggle, "AnchorPoint", Vector2.new(1, 0.5), 0.25})
-                        CreateTween({ToggleHolder, "BackgroundColor3", ToggleColors.On, 0.25})
+                        CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Toggle On"], 0.25})
                     else
                         CreateTween({Toggle, "Position", UDim2.new(0, 0, 0.5), 0.25})
-                        CreateTween({Toggle, "BackgroundColor3", ToggleColors.KnobOff, 0.25})
+                        CreateTween({Toggle, "BackgroundColor3", Theme["Color Toggle Knob Off"], 0.25})
                         CreateTween({Toggle, "AnchorPoint", Vector2.new(0, 0.5), 0.25})
-                        CreateTween({ToggleHolder, "BackgroundColor3", ToggleColors.Off, 0.25})
+                        CreateTween({ToggleHolder, "BackgroundColor3", Theme["Color Toggle Off"], 0.25})
                     end
                     WaitClick = false
                 end
@@ -4353,6 +5171,818 @@ function bearlib:MakeWindow(Configs)
                 return Dropdown
             end
 
+            function SubTab:AddProfile(Configs)
+                local PName = Configs[1] or Configs.Name or "User Name"
+                local PBio = Configs[2] or Configs.Bio or "No bio yet."
+                local PAvatar = Configs.Avatar or "rbxassetid://0"
+                local PCover = Configs.Cover or "rbxassetid://0"
+                local PVerified = Configs.Verified or false
+
+                local ProfileHolder = Create("Frame", Container, {
+                    Size = UDim2.new(1, 0, 0, 100),
+                    BackgroundTransparency = 1,
+                    LayoutOrder = GetOrder(),
+                    Name = "Profile",
+                    ZIndex = 1
+                })
+
+                local Card = InsertTheme(Create("Frame", ProfileHolder, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 1
+                }), "Frame")
+                Make("Corner", Card, UDim.new(0, 8))
+
+                local ProfileStroke = InsertTheme(Create("UIStroke", Card, {
+                    Color = Theme["Color Profile Border"] or Theme["Color Stroke"],
+                    Thickness = Theme["Border Thickness"] or 1.5,
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                }), "Stroke")
+
+                local CoverImg = Create("ImageLabel", Card, {
+                    Size = UDim2.new(1, 0, 0, 50),
+                    Image = PCover,
+                    ScaleType = Enum.ScaleType.Crop,
+                    BackgroundTransparency = 1,
+                    ZIndex = 1
+                })
+                Make("Corner", CoverImg, UDim.new(0, 8))
+
+                local CoverFix = InsertTheme(Create("Frame", CoverImg, {
+                    Size = UDim2.new(1, 0, 0, 10),
+                    Position = UDim2.new(0, 0, 1, -5),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 2
+                }), "Frame")
+
+                local AvatarImg = Create("ImageLabel", Card, {
+                    Size = UDim2.fromOffset(45, 45),
+                    Position = UDim2.new(0, 12, 0, 30),
+                    Image = PAvatar,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 3
+                })
+                Make("Corner", AvatarImg, UDim.new(1, 0))
+
+                local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
+                    Thickness = 2,
+                    Color = Theme["Color Profile Border"] or Theme["Color Stroke"]
+                }), "Stroke")
+
+                local NameLabel = InsertTheme(Create("TextLabel", Card, {
+                    Position = UDim2.new(0, 65, 0, 50),
+                    Size = UDim2.new(1, -75, 0, 18),
+                    Text = PName,
+                    Font = Enum.Font.GothamBold,
+                    TextColor3 = Theme["Color Text"],
+                    TextSize = 13,
+                    TextXAlignment = "Left",
+                    BackgroundTransparency = 1,
+                    TextTruncate = "AtEnd",
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+
+                if PVerified then
+                    local VerifyIcon = Create("ImageLabel", Card, {
+                        Size = UDim2.fromOffset(14, 14),
+                        Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52),
+                        Image = "rbxassetid://10709752907",
+                        ImageColor3 = Color3.fromRGB(60, 140, 255),
+                        BackgroundTransparency = 1,
+                        ZIndex = 4
+                    })
+                    NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
+                        VerifyIcon.Position = UDim2.new(0, 65 + NameLabel.TextBounds.X + 4, 0, 52)
+                    end)
+                end
+
+                local BioLabel = InsertTheme(Create("TextLabel", Card, {
+                    Position = UDim2.new(0, 12, 0, 78),
+                    Size = UDim2.new(1, -24, 0, 16),
+                    Text = PBio,
+                    Font = Enum.Font.Gotham,
+                    TextColor3 = Theme["Color Dark Text"],
+                    TextSize = 9,
+                    TextXAlignment = "Left",
+                    BackgroundTransparency = 1,
+                    TextTruncate = Enum.TextTruncate.AtEnd,
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.4,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "DarkText")
+
+                table.insert(bearlib.AllElements, {
+                    Name = PName .. " Profile",
+                    Instance = ProfileHolder,
+                    OriginalParent = Container,
+                    SectionName = CurrentSectionName
+                })
+
+                local Profile = {}
+                function Profile:Visible(...) Funcs:ToggleVisible(ProfileHolder, ...) end
+                function Profile:Destroy() ProfileHolder:Destroy() end
+                function Profile:SetBio(NewBio) BioLabel.Text = NewBio end
+                function Profile:SetBorderColor(NewColor)
+                    if typeof(NewColor) == "Color3" then
+                        ProfileStroke.Color = NewColor
+                        AvatarStroke.Color = NewColor
+                    end
+                end
+                return Profile
+            end
+
+            function SubTab:AddSingleDiscordCard(Configs)
+                local Title = Configs.Title or Configs[1] or "Discord Server"
+                local Description = Configs.Description or Configs.Desc or Configs[2] or ""
+                local Logo = Configs.Logo or Configs.Icon or Configs[3] or "rbxassetid://0"
+                local BannerColor = Configs.BannerColor or Configs.Banner or Configs[4] or Color3.fromRGB(88, 101, 242)
+                local Online = Configs.Online or Configs[5] or 0
+                local TotalMembers = Configs.Members or Configs[6] or 0
+                local InviteLink = Configs.Invite or Configs.Link or Configs[7] or "https://discord.gg/example"
+                local Verified = Configs.Verified or false
+
+                local CardContainer = Create("Frame", Container, {
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 150),
+                    LayoutOrder = GetOrder(),
+                    Name = "SingleDiscordCard",
+                    ZIndex = 1
+                })
+
+                local Card = InsertTheme(Create("Frame", CardContainer, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 1
+                }), "Frame")
+                Make("Corner", Card, UDim.new(0, 8))
+
+                local CardStroke = InsertTheme(Create("UIStroke", Card, {
+                    Color = Theme["Color Discord Border"] or Theme["Color Stroke"],
+                    Thickness = Theme["Border Thickness"] or 1.5,
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                }), "Stroke")
+
+                local BannerImg = Create("ImageLabel", Card, {
+                    Size = UDim2.new(1, 0, 0, 60),
+                    Image = type(BannerColor) == "string" and BannerColor or "",
+                    ScaleType = Enum.ScaleType.Crop,
+                    BackgroundColor3 = type(BannerColor) == "Color3" and BannerColor or Color3.fromRGB(88, 101, 242),
+                    BackgroundTransparency = type(BannerColor) == "Color3" and 0 or 1,
+                    ZIndex = 1
+                })
+                Make("Corner", BannerImg, UDim.new(0, 8))
+
+                local BannerFix = InsertTheme(Create("Frame", BannerImg, {
+                    Size = UDim2.new(1, 0, 0, 12),
+                    Position = UDim2.new(0, 0, 1, -6),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 2
+                }), "Frame")
+
+                local AvatarImg = Create("ImageLabel", Card, {
+                    Size = UDim2.fromOffset(50, 50),
+                    Position = UDim2.new(0, 15, 0, 35),
+                    Image = Logo,
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 3
+                })
+                Make("Corner", AvatarImg, UDim.new(1, 0))
+
+                local AvatarStroke = InsertTheme(Create("UIStroke", AvatarImg, {
+                    Thickness = 2.5,
+                    Color = Theme["Color Discord Border"] or Theme["Color Stroke"]
+                }), "Stroke")
+
+                local NameLabel = InsertTheme(Create("TextLabel", Card, {
+                    Position = UDim2.new(0, 75, 0, 48),
+                    Size = UDim2.new(1, -90, 0, 20),
+                    Text = Title,
+                    Font = Enum.Font.GothamBold,
+                    TextColor3 = Theme["Color Text"],
+                    TextSize = 14,
+                    TextXAlignment = "Left",
+                    BackgroundTransparency = 1,
+                    TextTruncate = "AtEnd",
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+
+                if Verified then
+                    local VerifyIcon = Create("ImageLabel", Card, {
+                        Size = UDim2.fromOffset(16, 16),
+                        Position = UDim2.new(0, 75 + NameLabel.TextBounds.X + 5, 0, 50),
+                        Image = "rbxassetid://10709752907",
+                        ImageColor3 = Color3.fromRGB(60, 140, 255),
+                        BackgroundTransparency = 1,
+                        ZIndex = 4
+                    })
+                    NameLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
+                        VerifyIcon.Position = UDim2.new(0, 75 + NameLabel.TextBounds.X + 5, 0, 50)
+                    end)
+                end
+
+                local StatsContainer = Create("Frame", Card, {
+                    Position = UDim2.new(0, 75, 0, 70),
+                    Size = UDim2.new(1, -90, 0, 20),
+                    BackgroundTransparency = 1,
+                    ZIndex = 3
+                })
+
+                local StatsLayout = Create("UIListLayout", StatsContainer, {
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                    VerticalAlignment = Enum.VerticalAlignment.Center,
+                    Padding = UDim.new(0, 15)
+                })
+
+                local function AddStat(StatColor, StatText)
+                    local Stat = Create("Frame", StatsContainer, {
+                        Size = UDim2.new(0, 0, 1, 0),
+                        AutomaticSize = Enum.AutomaticSize.X,
+                        BackgroundTransparency = 1,
+                        ZIndex = 3
+                    })
+
+                    local Dot = Create("Frame", Stat, {
+                        Size = UDim2.fromOffset(8, 8),
+                        Position = UDim2.new(0, 0, 0.5, 0),
+                        AnchorPoint = Vector2.new(0, 0.5),
+                        BackgroundColor3 = StatColor,
+                        ZIndex = 4
+                    })
+                    Make("Corner", Dot, UDim.new(1, 0))
+
+                    local StatLabel = InsertTheme(Create("TextLabel", Stat, {
+                        Size = UDim2.new(0, 0, 1, 0),
+                        Position = UDim2.new(0, 12, 0.5, 0),
+                        AnchorPoint = Vector2.new(0, 0.5),
+                        AutomaticSize = Enum.AutomaticSize.X,
+                        BackgroundTransparency = 1,
+                        TextSize = 10,
+                        Text = StatText,
+                        Font = Enum.Font.Gotham,
+                        TextColor3 = Theme["Color Dark Text"],
+                        ZIndex = 4,
+                        TextStrokeTransparency = 0.4,
+                        TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    }), "DarkText")
+                end
+
+                if Online and Online > 0 then
+                    AddStat(Color3.fromRGB(0, 255, 0), tostring(Online) .. " Online")
+                end
+
+                if TotalMembers and TotalMembers > 0 then
+                    AddStat(Color3.fromRGB(88, 101, 242), tostring(TotalMembers) .. " Members")
+                end
+
+                local DescLabel = InsertTheme(Create("TextLabel", Card, {
+                    Position = UDim2.new(0, 75, 0, 95),
+                    Size = UDim2.new(1, -90, 0, 35),
+                    Text = Description,
+                    Font = Enum.Font.Gotham,
+                    TextColor3 = Theme["Color Dark Text"],
+                    TextSize = 10,
+                    TextXAlignment = "Left",
+                    TextYAlignment = "Top",
+                    TextWrapped = true,
+                    BackgroundTransparency = 1,
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.4,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "DarkText")
+
+                local ButtonContainer = Create("Frame", Card, {
+                    Size = UDim2.new(1, -30, 0, 30),
+                    Position = UDim2.new(0.5, 0, 1, -15),
+                    AnchorPoint = Vector2.new(0.5, 1),
+                    BackgroundTransparency = 1,
+                    ZIndex = 3
+                })
+
+                local JoinButton = InsertTheme(Create("TextButton", ButtonContainer, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    Text = "Join Discord",
+                    Font = Enum.Font.GothamBold,
+                    TextSize = 13,
+                    BackgroundColor3 = Color3.fromRGB(88, 101, 242),
+                    TextColor3 = Color3.fromRGB(255, 255, 255),
+                    ZIndex = 4,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+                Make("Corner", JoinButton, UDim.new(0.5, 0))
+
+                local LastClick = 0
+                JoinButton.Activated:Connect(function()
+                    if tick() - LastClick < 3 then return end
+                    LastClick = tick()
+                    local OriginalText = JoinButton.Text
+                    JoinButton.Text = "Copied!"
+                    setclipboard(InviteLink)
+                    task.wait(1.5)
+                    JoinButton.Text = OriginalText
+                end)
+
+                local function AdjustDescriptionHeight()
+                    local textBounds = DescLabel.TextBounds.Y
+                    if textBounds > 35 then
+                        DescLabel.Size = UDim2.new(1, -90, 0, textBounds + 5)
+                        ButtonContainer.Position = UDim2.new(0.5, 0, 1, -(15 + (textBounds - 35)))
+                    end
+                end
+
+                DescLabel:GetPropertyChangedSignal("Text"):Connect(AdjustDescriptionHeight)
+                task.spawn(AdjustDescriptionHeight)
+
+                table.insert(bearlib.AllElements, {
+                    Name = Title .. " Discord Card",
+                    Instance = CardContainer,
+                    OriginalParent = Container,
+                    SectionName = CurrentSectionName
+                })
+
+                local CardObj = {}
+
+                function CardObj:SetTitle(NewTitle)
+                    NameLabel.Text = NewTitle
+                end
+
+                function CardObj:SetDescription(NewDesc)
+                    DescLabel.Text = NewDesc
+                end
+
+                function CardObj:SetIcon(NewIcon)
+                    AvatarImg.Image = NewIcon
+                end
+
+                function CardObj:SetStats(NewOnline, NewMembers)
+                    for _, child in ipairs(StatsContainer:GetChildren()) do
+                        if child:IsA("Frame") and child ~= StatsLayout then
+                            child:Destroy()
+                        end
+                    end
+
+                    if NewOnline and NewOnline > 0 then
+                        AddStat(Color3.fromRGB(0, 255, 0), tostring(NewOnline) .. " Online")
+                    end
+
+                    if NewMembers and NewMembers > 0 then
+                        AddStat(Color3.fromRGB(88, 101, 242), tostring(NewMembers) .. " Members")
+                    end
+                end
+
+                function CardObj:SetBanner(NewBanner)
+                    if type(NewBanner) == "string" then
+                        BannerImg.Image = NewBanner
+                        BannerImg.BackgroundTransparency = 1
+                    elseif typeof(NewBanner) == "Color3" then
+                        BannerImg.BackgroundColor3 = NewBanner
+                        BannerImg.BackgroundTransparency = 0
+                        BannerImg.Image = ""
+                    end
+                end
+
+                function CardObj:SetInviteLink(NewLink)
+                    InviteLink = NewLink
+                end
+
+                function CardObj:SetVerified(IsVerified)
+                    Verified = IsVerified
+                end
+
+                function CardObj:Visible(...) 
+                    Funcs:ToggleVisible(CardContainer, ...) 
+                end
+
+                function CardObj:Destroy() 
+                    CardContainer:Destroy() 
+                end
+
+                return CardObj
+            end
+
+            function SubTab:AddDiscordInvite(Configs)
+                local ContainerFrame = Create("Frame", Container, {
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 150),
+                    LayoutOrder = GetOrder(),
+                    Name = "DiscordInviteContainer",
+                    ZIndex = 1
+                })
+
+                local ListLayout = Create("UIListLayout", ContainerFrame, {
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                    VerticalAlignment = Enum.VerticalAlignment.Center,
+                    Padding = UDim.new(0, 12),
+                    SortOrder = "LayoutOrder"
+                })
+
+                local function createDiscordCard(cardConfigs, layoutOrder)
+                    local BName = cardConfigs[1] or cardConfigs.Name or cardConfigs.Title or "Discord Server"
+                    local BDescription = cardConfigs[2] or cardConfigs.Description or cardConfigs.Desc or ""
+                    local Logo = cardConfigs[3] or cardConfigs.Icon or cardConfigs.Logo or cardConfigs.Image or ""
+                    local BannerColor = cardConfigs[4] or cardConfigs.Banner or cardConfigs.BannerColor or Color3.fromRGB(88, 101, 242)
+                    local Online = cardConfigs[5] or cardConfigs.Online or cardConfigs.MembersOnline
+                    local TotalMembers = cardConfigs[6] or cardConfigs.Members or cardConfigs.TotalMembers
+                    local InviteLink = cardConfigs[7] or cardConfigs.Invite or cardConfigs.Link or "https://discord.gg/example"
+
+                    assert(type(InviteLink) == "string", "\"Tab.AddDiscordInvite.Invite\". 'string' expected, got " .. typeof(InviteLink))
+
+                    local CardFrame = Create("Frame", ContainerFrame, {
+                        BackgroundTransparency = 1,
+                        Size = UDim2.new(0.5, -6, 1, -15),
+                        LayoutOrder = layoutOrder,
+                        Name = "DiscordCard_" .. layoutOrder,
+                        ZIndex = 1
+                    })
+
+                    local Card = InsertTheme(Create("Frame", CardFrame, {
+                        Size = UDim2.new(1, 0, 1, 0),
+                        BackgroundColor3 = Theme["Color Hub 2"],
+                        ClipsDescendants = true,
+                        ZIndex = 1
+                    }), "Frame")
+                    Make("Corner", Card, UDim.new(0, 10))
+
+                    local Gradient = Make("Gradient", Card, 45)
+
+                    local StrokeFrame = Create("Frame", CardFrame, {
+                        Size = UDim2.new(1, 0, 1, 0),
+                        BackgroundTransparency = 1,
+                        ZIndex = 2
+                    })
+
+                    local Stroke = InsertTheme(Create("UIStroke", StrokeFrame, {
+                        Color = Theme["Color Discord Border"] or Theme["Color Stroke"],
+                        Thickness = Theme["Border Thickness"] or 1.5,
+                        ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                    }), "Stroke")
+                    Make("Corner", StrokeFrame, UDim.new(0, 10))
+
+                    local BannerImage = Create("ImageLabel", Card, {
+                        BackgroundColor3 = Color3.new(1, 1, 1),
+                        Size = UDim2.fromScale(1, 0.3),
+                        BackgroundTransparency = 1,
+                        ZIndex = 1
+                    })
+                    Make("Corner", BannerImage, UDim.new(0, 10))
+
+                    local ServerIcon = Create("ImageLabel", Card, {
+                        Size = UDim2.fromOffset(35, 35),
+                        Position = UDim2.new(0, 12, 0.3, 0),
+                        AnchorPoint = Vector2.new(0, 0.5),
+                        Image = Logo,
+                        BackgroundColor3 = Theme["Color Hub 2"],
+                        ZIndex = 2
+                    })
+                    Make("Corner", ServerIcon, UDim.new(0, 8))
+
+                    local IconStroke = InsertTheme(Create("UIStroke", ServerIcon, {
+                        Thickness = 2,
+                        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                        Color = Theme["Color Discord Border"] or Theme["Color Stroke"]
+                    }), "Stroke")
+
+                    local ServerName = InsertTheme(Create("TextLabel", Card, {
+                        Size = UDim2.new(1, -20, 0, 12),
+                        Position = UDim2.new(0, 12, 0.46, 0),
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        BackgroundTransparency = 1,
+                        TextSize = 12,
+                        Text = BName,
+                        Font = Enum.Font.GothamBold,
+                        TextColor3 = Theme["Color Discord Text"],
+                        ZIndex = 3,
+                        TextStrokeTransparency = 0.3,
+                        TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    }), "Text")
+
+                    local StatsFrame
+                    if Online or TotalMembers then
+                        StatsFrame = Create("Frame", Card, {
+                            Size = UDim2.new(1, -20, 0, 10),
+                            Position = UDim2.new(0, 0, 0.54, 0),
+                            BackgroundTransparency = 1,
+                            ZIndex = 2
+                        })
+
+                        local StatsLayout = Create("UIListLayout", StatsFrame, {
+                            HorizontalAlignment = Enum.HorizontalAlignment.Left,
+                            VerticalAlignment = Enum.VerticalAlignment.Center,
+                            FillDirection = Enum.FillDirection.Horizontal,
+                            Padding = UDim.new(0, 6)
+                        })
+
+                        local function AddStat(StatColor, Text)
+                            local Stat = Create("Frame", StatsFrame, {
+                                Size = UDim2.fromScale(0, 1),
+                                AutomaticSize = Enum.AutomaticSize.X,
+                                BackgroundTransparency = 1,
+                                ZIndex = 2
+                            })
+
+                            local Dot = Create("Frame", Stat, {
+                                Size = UDim2.fromOffset(4, 4),
+                                Position = UDim2.new(0, 5, 0.5, 0),
+                                AnchorPoint = Vector2.new(0, 0.5),
+                                BackgroundColor3 = StatColor,
+                                BackgroundTransparency = 0,
+                                ZIndex = 3
+                            })
+                            Make("Corner", Dot, UDim.new(1, 0))
+
+                            InsertTheme(Create("TextLabel", Stat, {
+                                Size = UDim2.new(0, 0, 1, 0),
+                                Position = UDim2.new(0, 14, 0.5, 0),
+                                AnchorPoint = Vector2.new(0, 0.5),
+                                AutomaticSize = Enum.AutomaticSize.X,
+                                BackgroundTransparency = 1,
+                                TextSize = 8,
+                                Text = Text,
+                                Font = Enum.Font.Gotham,
+                                TextColor3 = Theme["Color Discord Stats"],
+                                ZIndex = 4,
+                                TextStrokeTransparency = 0.4,
+                                TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                            }), "DarkText")
+                        end
+
+                        if Online ~= nil then
+                            AddStat(Color3.fromRGB(0, 255, 0), tostring(Online) .. " Online")
+                        end
+                        if TotalMembers ~= nil then
+                            AddStat(Color3.fromRGB(88, 101, 242), tostring(TotalMembers) .. " Members")
+                        end
+                    end
+
+                    local Description = InsertTheme(Create("TextLabel", Card, {
+                        Size = UDim2.new(1, -50, 0, 10),
+                        Position = UDim2.new(0, 12, StatsFrame and 0.62 or 0.58, 0),
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        AutomaticSize = Enum.AutomaticSize.Y,
+                        BackgroundTransparency = 1,
+                        TextSize = 9,
+                        Text = BDescription,
+                        TextWrapped = true,
+                        Font = Enum.Font.Gotham,
+                        TextColor3 = Theme["Color Dark Text"],
+                        ZIndex = 3,
+                        TextStrokeTransparency = 0.4,
+                        TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    }), "Text")
+
+                    local ButtonContainer = Create("Frame", Card, {
+                        Size = UDim2.new(1, 0, 0.3, 0),
+                        Position = UDim2.fromScale(0, 1),
+                        AnchorPoint = Vector2.new(0, 1),
+                        BorderSizePixel = 0,
+                        BackgroundColor3 = Theme["Color Hub 2"],
+                        ZIndex = 2
+                    })
+
+                    if #Description.Text > 0 then
+                        ButtonContainer.Size = UDim2.new(1, 0, 0.4, 0)
+                        Create("UIGradient", ButtonContainer, {
+                            Rotation = -90,
+                            Transparency = NumberSequence.new{
+                                NumberSequenceKeypoint.new(0.00, 0.00),
+                                NumberSequenceKeypoint.new(0.60, 0.00),
+                                NumberSequenceKeypoint.new(1.00, 1.00)
+                            }
+                        })
+                    end
+
+                    local JoinButton = InsertTheme(Create("TextButton", ButtonContainer, {
+                        Position = UDim2.new(0.5, 0, 1, -10),
+                        Size = UDim2.new(1, -20, 0, 20),
+                        AnchorPoint = Vector2.new(0.5, 1),
+                        Text = "Join",
+                        Font = Enum.Font.GothamBold,
+                        TextSize = 12,
+                        BackgroundColor3 = Color3.fromRGB(37, 128, 69),
+                        TextColor3 = Color3.fromRGB(255, 255, 255),
+                        ZIndex = 4,
+                        TextStrokeTransparency = 0.3,
+                        TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    }), "Text")
+                    Make("Corner", JoinButton, UDim.new(0.5, 0))
+
+                    local LastClick = 0
+                    JoinButton.Activated:Connect(function()
+                        if tick() - LastClick < 5 then return end
+                        LastClick = tick()
+                        local OriginalText = JoinButton.Text
+                        JoinButton.Text = "Copied!"
+                        setclipboard(InviteLink)
+                        task.wait(2)
+                        JoinButton.Text = OriginalText
+                    end)
+
+                    if type(BannerColor) == "string" then
+                        BannerImage.ScaleType = Enum.ScaleType.Crop
+                        BannerImage.Image = BannerColor
+                    elseif typeof(BannerColor) == "Color3" then
+                        BannerImage.BackgroundTransparency = 0
+                        BannerImage.BackgroundColor3 = BannerColor
+                    end
+
+                    return {
+                        Frame = CardFrame,
+                        Card = Card,
+                        Name = ServerName,
+                        Description = Description,
+                        JoinButton = JoinButton,
+                        Configs = cardConfigs,
+                        StrokeFrame = StrokeFrame,
+                        Stroke = Stroke
+                    }
+                end
+
+                local card1, card2
+
+                if Configs[1] and type(Configs[1]) == "table" then
+                    card1 = createDiscordCard(Configs[1], 1)
+                    if Configs[2] and type(Configs[2]) == "table" then
+                        card2 = createDiscordCard(Configs[2], 2)
+                    else
+                        card2 = createDiscordCard({
+                            "Empty Server",
+                            "Add your second Discord server here",
+                            "",
+                            Color3.fromRGB(50, 50, 50),
+                            0,
+                            0,
+                            "https://discord.gg/example"
+                        }, 2)
+                    end
+                else
+                    card1 = createDiscordCard(Configs, 1)
+                    card2 = createDiscordCard({
+                        "Empty Server",
+                        "Add your second Discord server here",
+                        "",
+                        Color3.fromRGB(50, 50, 50),
+                        0,
+                        0,
+                        "https://discord.gg/example"
+                    }, 2)
+                end
+
+                table.insert(bearlib.AllElements, {
+                    Name = "Discord Invite Container",
+                    Instance = ContainerFrame,
+                    OriginalParent = Container,
+                    SectionName = CurrentSectionName
+                })
+
+                local DiscordInviteContainer = {}
+                function DiscordInviteContainer:Visible(Bool)
+                    if Bool == nil then
+                        ContainerFrame.Visible = not ContainerFrame.Visible
+                    else
+                        ContainerFrame.Visible = Bool
+                    end
+                end
+                function DiscordInviteContainer:Destroy()
+                    ContainerFrame:Destroy()
+                end
+                function DiscordInviteContainer:UpdateCard1(NewConfigs)
+                    if card1 then
+                        card1.Frame:Destroy()
+                        card1 = createDiscordCard(NewConfigs, 1)
+                    end
+                end
+                function DiscordInviteContainer:UpdateCard2(NewConfigs)
+                    if card2 then
+                        card2.Frame:Destroy()
+                        card2 = createDiscordCard(NewConfigs, 2)
+                    end
+                end
+                function DiscordInviteContainer:GetCard1()
+                    return card1
+                end
+                function DiscordInviteContainer:GetCard2()
+                    return card2
+                end
+                return DiscordInviteContainer
+            end
+
+            function SubTab:AddDiscordInviteOld(Configs)
+                local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
+                local Desc = Configs[2] or Configs.Desc or Configs.Description or ""
+                local Logo = Configs[3] or Configs.Logo or ""
+                local Invite = Configs[4] or Configs.Invite or ""
+
+                local InviteHolder = Create("Frame", Container, {
+                    Size = UDim2.new(1, 0, 0, 65),
+                    Name = "Option",
+                    BackgroundTransparency = 1,
+                    LayoutOrder = GetOrder(),
+                    ZIndex = 1
+                })
+
+                local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
+                    Size = UDim2.new(1, 0, 0, 65),
+                    AnchorPoint = Vector2.new(0, 0),
+                    Position = UDim2.new(0, 0, 0, 0),
+                    BackgroundColor3 = Theme["Color Hub 2"],
+                    ZIndex = 1
+                }), "Frame")
+                Make("Corner", FrameHolder)
+
+                local ImageLabel = Create("ImageLabel", FrameHolder, {
+                    Size = UDim2.new(0, 30, 0, 30),
+                    Position = UDim2.new(0, 7, 0, 7),
+                    Image = Logo,
+                    BackgroundTransparency = 1,
+                    ZIndex = 3
+                })
+                Make("Corner", ImageLabel, UDim.new(0, 4))
+                Make("Stroke", ImageLabel)
+
+                local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
+                    Size = UDim2.new(1, -52, 0, 15),
+                    Position = UDim2.new(0, 44, 0, 7),
+                    Font = Enum.Font.GothamBold,
+                    TextColor3 = Theme["Color Text"],
+                    TextXAlignment = "Left",
+                    BackgroundTransparency = 1,
+                    TextSize = 10,
+                    Text = Title,
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "Text")
+
+                local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
+                    Size = UDim2.new(1, -52, 0, 0),
+                    Position = UDim2.new(0, 44, 0, 22),
+                    TextWrapped = "Y",
+                    AutomaticSize = "Y",
+                    Font = Enum.Font.Gotham,
+                    TextColor3 = Theme["Color Dark Text"],
+                    TextXAlignment = "Left",
+                    BackgroundTransparency = 1,
+                    TextSize = 8,
+                    Text = Desc,
+                    ZIndex = 3,
+                    TextStrokeTransparency = 0.4,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                }), "DarkText")
+
+                local JoinButton = Create("TextButton", FrameHolder, {
+                    Size = UDim2.new(1, -14, 0, 16),
+                    AnchorPoint = Vector2.new(0.5, 1),
+                    Position = UDim2.new(0.5, 0, 1, -7),
+                    Text = "Copy Link",
+                    Font = Enum.Font.GothamBold,
+                    TextSize = 12,
+                    TextColor3 = Color3.fromRGB(220, 220, 220),
+                    BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+                    ZIndex = 4,
+                    TextStrokeTransparency = 0.3,
+                    TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                })
+                Make("Corner", JoinButton, UDim.new(0, 5))
+
+                local ClickDelay
+                JoinButton.Activated:Connect(function()
+                    setclipboard(Invite)
+                    if ClickDelay then return end
+
+                    ClickDelay = true
+                    SetProps(JoinButton, {
+                        Text = "Copied to Clipboard",
+                        BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+                        TextColor3 = Color3.fromRGB(150, 150, 150)
+                    }) task.wait(5)
+                    SetProps(JoinButton, {
+                        Text = "Copy Link",
+                        BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+                        TextColor3 = Color3.fromRGB(220, 220, 220)
+                    }) ClickDelay = false
+                end)
+
+                table.insert(bearlib.AllElements, {
+                    Name = Title,
+                    Instance = InviteHolder,
+                    OriginalParent = Container,
+                    SectionName = CurrentSectionName
+                })
+
+                local DiscordInvite = {}
+                function DiscordInvite:Destroy() InviteHolder:Destroy() end
+                function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
+                return DiscordInvite
+            end
+
             UpdateGroupContainerSize()
             MainScroll.CanvasSize = UDim2.new(0, 0, 0, MainScroll:FindFirstChildOfClass("UIListLayout") and MainScroll:FindFirstChildOfClass("UIListLayout").AbsoluteContentSize.Y or 0)
 
@@ -4422,20 +6052,19 @@ function bearlib:MakeWindow(Configs)
         ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         ToggleStroke.LineJoinMode = Enum.LineJoinMode.Round
         ToggleStroke.Parent = ToggleButton
-        ToggleStroke.Color = Color3.fromRGB(255, 255, 255)
 
-        if ShowVNFlag == true then
-            local Flag = Instance.new("ImageLabel")
-            Flag.Name = "VNFlagIcon"
-            Flag.Parent = ToggleButton
-            Flag.BackgroundTransparency = 1
-            Flag.Image = "rbxassetid://90723031696932"
-            Flag.Size = UDim2.fromOffset(28, 18)
-            Flag.AnchorPoint = Vector2.new(0.5, 0.5)
-            Flag.Position = UDim2.new(1, -2, 0, 2)
-            Flag.ZIndex = 100
-            Flag.Rotation = 15
-        end
+        local RainbowColors = {
+            Color3.fromRGB(255,255,255)
+        }
+
+        local colorIndex = 1
+        task.spawn(function()
+            while ToggleButton and ToggleButton.Parent do
+                ToggleStroke.Color = RainbowColors[colorIndex]
+                colorIndex = colorIndex % #RainbowColors + 1
+                task.wait(0.3)
+            end
+        end)
 
         ToggleButton.MouseButton1Click:Connect(function()
             if MainFrame.Visible then
@@ -4459,14 +6088,24 @@ function bearlib:MakeWindow(Configs)
                 UIFullVisible = true
             end
         end)
+
+        if Theme["ShowVNFlag"] == true then
+            local Flag = Instance.new("ImageLabel")
+            Flag.Name = "VNFlagIcon"
+            Flag.Parent = ToggleButton
+            Flag.BackgroundTransparency = 1
+            Flag.Image = "rbxassetid://90723031696932"
+            Flag.Size = UDim2.fromOffset(28, 18)
+            Flag.AnchorPoint = Vector2.new(0.5, 0.5)
+            Flag.Position = UDim2.new(1, -2, 0, 2)
+            Flag.ZIndex = 100
+            Flag.Rotation = 15
+        end
     end)
 
     return Window
 end
 
--- ============================================
--- HỆ THỐNG NOTIFICATION
--- ============================================
 local NotificationQueue = {}
 local ActiveNotifications = {}
 
@@ -4732,13 +6371,110 @@ function bearlib:Notify(Configs)
     return true
 end
 
+function bearlib:SetUIBorderColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["UI Border Color"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetDiscordBorderColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Discord Border"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetProfileBorderColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Profile Border"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetStrokeColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Stroke"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetTextColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Text"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetHubColor(color)
+    if typeof(color) == "Color3" then
+        self.Theme["Color Hub 2"] = color
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:SetBorderThickness(thickness)
+    if type(thickness) == "number" then
+        self.Theme["Border Thickness"] = thickness
+        RefreshAllUIElements()
+    end
+end
+
+function bearlib:GetBorderColors()
+    return {
+        UI = self.Theme["UI Border Color"],
+        Discord = self.Theme["Color Discord Border"],
+        Profile = self.Theme["Color Profile Border"],
+        Stroke = self.Theme["Color Stroke"],
+        Thickness = self.Theme["Border Thickness"]
+    }
+end
+
+function bearlib:GetToggleColors()
+    return {
+        ToggleOn = self.Theme["Color Toggle On"],
+        ToggleOff = self.Theme["Color Toggle Off"],
+        KnobOn = self.Theme["Color Toggle Knob On"],
+        KnobOff = self.Theme["Color Toggle Knob Off"],
+        Border = self.Theme["Color Toggle Border"]
+    }
+end
+
+function bearlib:ResetBorderColors()
+    self.Theme["UI Border Color"] = Color3.fromRGB(70, 70, 82)
+    self.Theme["Color Discord Border"] = Color3.fromRGB(70, 70, 82)
+    self.Theme["Color Profile Border"] = Color3.fromRGB(70, 70, 82)
+    self.Theme["Color Stroke"] = Color3.fromRGB(45, 45, 55)
+    self.Theme["Border Thickness"] = 1.25
+    RefreshAllUIElements()
+end
+
+function bearlib:ResetToggleColors()
+    self.Theme["Color Toggle On"] = Color3.fromRGB(255, 210, 70)
+    self.Theme["Color Toggle Off"] = Color3.fromRGB(30, 30, 38)
+    self.Theme["Color Toggle Knob On"] = Color3.fromRGB(255, 255, 255)
+    self.Theme["Color Toggle Knob Off"] = Color3.fromRGB(170, 170, 180)
+    self.Theme["Color Toggle Border"] = Color3.fromRGB(70, 70, 82)
+    RefreshAllUIElements()
+end
+
 task.spawn(function()
     task.wait(2)
     bearlib:Notify({
         Title = "Bear Library",
-        Message = "UI Bear Library v1.2.0\nCó 6 theme: Darker, Dark, Purple, Ocean, Sunset, Forest",
+        Message = "UI Bear Library v2.0.0",
         Duration = 10
     })
 end)
+
+if Camera then
+    RootMaid:Add(Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        ViewportSize = Camera.ViewportSize
+        if Theme["Responsive Scale"] ~= false and ScreenGui and ScreenGui:FindFirstChild("Scale") then
+            UIScale = CalculateScale()
+            ScreenGui.Scale.Scale = UIScale
+        end
+    end))
+end
 
 return bearlib
