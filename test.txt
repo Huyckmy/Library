@@ -2056,7 +2056,7 @@ function bearlib:MakeWindow(Configs)
 				Name = "DropdownFrame",
 				ClipsDescendants = true,
 				Active = true
-			})
+			}), "Frame")
 			Make("Corner", DropFrame)
 			Make("Stroke", DropFrame)
 			Make("Gradient", DropFrame, {Rotation = 60})
