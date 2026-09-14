@@ -682,15 +682,15 @@ function bearlib:MakeWindow(Configs)
 	})
 	
 	TopBar = Create("Frame", Components, {
-		Size = UDim2.new(1, 0, 0, 38),
+		Size = UDim2.new(1, 0, 0, 34),
 		BackgroundTransparency = 1,
 		Name = "Top Bar"
 	})
 	
 	local TitleIcon = Create("ImageLabel", TopBar, {
 		Size = UDim2.fromOffset(18, 18),
-		Position = UDim2.new(0, 10, 0.5, 0),
-		AnchorPoint = Vector2.new(0, 0.5),
+		Position = UDim2.new(0, 10, 0, 3),
+		AnchorPoint = Vector2.new(0, 0),
 		BackgroundTransparency = 1,
 		Image = "rbxassetid://76571437829227",
 		ImageColor3 = Color3.fromRGB(255, 255, 255),
