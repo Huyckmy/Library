@@ -707,10 +707,92 @@ function bearlib:MakeWindow(Configs)
 		Name = "Buttons"
 	})
 	
-	-- ĐÃ XÓA NÚT CLOSE VÀ MINIMIZE Ở ĐÂY
+	-- ====================================================
+	-- 3 NÚT TRÊN THANH TIÊU ĐỀ (CLOSE, MINIMIZE, MAXIMIZE)
+	-- ====================================================
+	local CloseButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -10, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10747384394",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Close"
+	})
 	
-	local Minimized, SaveSize, WaitClick
+	local MaximizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -35, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734886735",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Maximize"
+	})
+	
+	local MinimizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -60, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734896206",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Minimize"
+	})
+	
+	SetChildren(ButtonsFolder, {
+		CloseButton,
+		MaximizeButton,
+		MinimizeButton
+	})
+	
+	local Minimized, SaveSize, WaitClick = false, nil, false
+	local IsMaximized = false
+	local OriginalUISize = {UISizeX, UISizeY}
+	local ToggleGui, ToggleButton
 	local Window, FirstTab = {}, false
+	
+	-- ====================================================
+	-- XỬ LÝ MAXIMIZE
+	-- ====================================================
+	local function ToggleMaximize()
+		if not MainFrame then return end
+		
+		if IsMaximized then
+			local defaultX, defaultY = unpack(OriginalUISize or bearlib.Save.UISize)
+			MainFrame.Size = UDim2.fromOffset(defaultX, defaultY)
+			MainFrame.Position = UDim2.new(0.5, -defaultX / 2, 0.5, -defaultY / 2)
+			MaximizeButton.Image = "rbxassetid://10734886735"
+			IsMaximized = false
+			
+			bearlib.Save.UISize = {defaultX, defaultY}
+			SaveJson("bear library OS.json", bearlib.Save)
+		else
+			local currentX = MainFrame.Size.X.Offset
+			local currentY = MainFrame.Size.Y.Offset
+			
+			if not OriginalUISize then
+				OriginalUISize = {currentX, currentY}
+			end
+			
+			local newX = 700
+			local newY = 410
+			
+			newX = math.min(newX, ViewportSize.X - 20)
+			newY = math.min(newY, ViewportSize.Y - 20)
+			
+			MainFrame.Size = UDim2.fromOffset(newX, newY)
+			MainFrame.Position = UDim2.new(0.5, -newX / 2, 0.5, -newY / 2)
+			MaximizeButton.Image = "rbxassetid://10734895698"
+			IsMaximized = true
+		end
+	end
+	
+	MaximizeButton.Activated:Connect(ToggleMaximize)
+	
 	function Window:CloseBtn()
 		local Dialog = Window:Dialog({
 			Title = "",
@@ -718,11 +800,15 @@ function bearlib:MakeWindow(Configs)
 			Options = {
 				{"Tắt Ạ", function()
 					ScreenGui:Destroy()
+					if ToggleGui then
+						ToggleGui:Destroy()
+					end
 				end},
 				{"Không Tắt Ạ"}
 			}
 		})
 	end
+	
 	function Window:MinimizeBtn()
 		if WaitClick then return end
 		WaitClick = true
@@ -742,9 +828,13 @@ function bearlib:MakeWindow(Configs)
 		
 		WaitClick = false
 	end
+	
 	function Window:Minimize()
 		MainFrame.Visible = not MainFrame.Visible
+		ControlSize1.Visible = MainFrame.Visible
+		ControlSize2.Visible = MainFrame.Visible
 	end
+	
 	function Window:AddMinimizeButton(Configs)
 		local Button = MakeDrag(Create("ImageButton", ScreenGui, {
 			Size = UDim2.fromOffset(35, 35),
@@ -773,6 +863,7 @@ function bearlib:MakeWindow(Configs)
 			Button = Button
 		}
 	end
+	
 	function Window:Set(Val1, Val2)
 		if type(Val1) == "string" and type(Val2) == "string" then
 			Title.Text = Val1
@@ -781,6 +872,7 @@ function bearlib:MakeWindow(Configs)
 			Title.Text = Val1
 		end
 	end
+	
 	function Window:Dialog(Configs)
 		if MainFrame:FindFirstChild("Dialog") then return end
 		if Minimized then
@@ -885,6 +977,7 @@ function bearlib:MakeWindow(Configs)
 		end)
 		return Dialog
 	end
+	
 	function Window:SelectTab(TabSelect)
 		if type(TabSelect) == "number" then
 			bearlib.Tabs[TabSelect].func:Enable()
@@ -1939,6 +2032,58 @@ function bearlib:MakeWindow(Configs)
 		
 		return Tab
 	end
+	
+	-- ====================================================
+	-- KẾT NỐI SỰ KIỆN CHO 3 NÚT
+	-- ====================================================
+	CloseButton.Activated:Connect(Window.CloseBtn)
+	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+	
+	-- ====================================================
+	-- NÚT TOGGLE NỔI (FLOATING TOGGLE BUTTON)
+	-- ====================================================
+	task.spawn(function()
+		task.wait(0.5)
+		ToggleGui = Instance.new("ScreenGui")
+		ToggleGui.Name = "BearHub_Toggle_Circle"
+		ToggleGui.Parent = CoreGui
+		ToggleGui.ResetOnSpawn = false
+
+		ToggleButton = Instance.new("ImageButton")
+		ToggleButton.Name = "ToggleButton"
+		ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+		ToggleButton.Position = UDim2.new(0.12, 0, 0.12, 0)
+		ToggleButton.Image = "rbxassetid://75089236463451"
+		ToggleButton.BackgroundColor3 = Theme["Color Hub 2"]
+		ToggleButton.BackgroundTransparency = 0.2
+		ToggleButton.Active = true
+		ToggleButton.Draggable = true
+		ToggleButton.Parent = ToggleGui
+
+		local UICorner = Instance.new("UICorner")
+		UICorner.CornerRadius = UDim.new(1, 0)
+		UICorner.Parent = ToggleButton
+
+		local ToggleStroke = Instance.new("UIStroke")
+		ToggleStroke.Name = "ToggleStroke"
+		ToggleStroke.Color = Theme["Color Theme"]
+		ToggleStroke.Thickness = 1.5
+		ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		ToggleStroke.LineJoinMode = Enum.LineJoinMode.Round
+		ToggleStroke.Parent = ToggleButton
+
+		ToggleButton.MouseButton1Click:Connect(function()
+			if MainFrame.Visible then
+				MainFrame.Visible = false
+				ControlSize1.Visible = false
+				ControlSize2.Visible = false
+			else
+				MainFrame.Visible = true
+				ControlSize1.Visible = true
+				ControlSize2.Visible = true
+			end
+		end)
+	end)
 	
 	return Window
 end
