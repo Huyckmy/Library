@@ -915,7 +915,7 @@ function bearlib:MakeWindow(Configs)
 		BarIcon.AnchorPoint = Vector2.new(0, 0.5)
 		BarIcon.BackgroundTransparency = 1
 		BarIcon.Image = "rbxassetid://76571437829227"
-		BarIcon.ImageColor3 = Theme["Color Text"]
+		BarIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
 		BarIcon.Parent = MinimizedBar
 		BarIcon.ZIndex = 1001
 		
