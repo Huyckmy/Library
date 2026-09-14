@@ -313,25 +313,6 @@ local ScreenGui = Create("ScreenGui", CoreGui, {
 	})
 })
 
-local function UpdateViewportScale()
-	local Camera = workspace.CurrentCamera
-	if not Camera then return end
-	UIScale = Camera.ViewportSize.Y / 450
-	ScreenGui.Scale.Scale = UIScale
-end
-
-local Camera = workspace.CurrentCamera
-if Camera then
-	Camera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateViewportScale)
-end
-workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
-	local NewCamera = workspace.CurrentCamera
-	if NewCamera then
-		NewCamera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateViewportScale)
-		UpdateViewportScale()
-	end
-end)
-
 local ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
 if ScreenFind and ScreenFind ~= ScreenGui then
 	ScreenFind:Destroy()
@@ -371,51 +352,38 @@ local function CreateTween(Configs)
 end
 
 local function MakeDrag(Instance)
-	SetProps(Instance, {
-		Active = true,
-		AutoButtonColor = false
-	})
-
-	local Dragging = false
-	local DragStart
-	local StartPos
-	local DragInput
-
-	local function Update(Input)
-		if not Dragging or not DragStart or not StartPos then return end
-		local Delta = Input.Position - DragStart
-		Instance.Position = UDim2.new(
-			StartPos.X.Scale,
-			StartPos.X.Offset + Delta.X / math.max(UIScale, 0.01),
-			StartPos.Y.Scale,
-			StartPos.Y.Offset + Delta.Y / math.max(UIScale, 0.01)
-		)
-	end
-
-	Instance.InputBegan:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-			Dragging = true
-			DragStart = Input.Position
-			StartPos = Instance.Position
-			DragInput = Input
+	task.spawn(function()
+		SetProps(Instance, {
+			Active = true,
+			AutoButtonColor = false
+		})
+		
+		local DragStart, StartPos, InputOn
+		
+		local function Update(Input)
+			local delta = Input.Position - DragStart
+			local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
+			CreateTween({Instance, "Position", Position, 0.35})
 		end
-	end)
-
-	Instance.InputEnded:Connect(function(Input)
-		if Input == DragInput or Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-			Dragging = false
-			DragInput = nil
-		end
-	end)
-
-	UserInputService.InputChanged:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
-			if Dragging and (DragInput == nil or DragInput.UserInputType == Enum.UserInputType.Touch or Input.UserInputType == Enum.UserInputType.MouseMovement) then
-				Update(Input)
+		
+		Instance.MouseButton1Down:Connect(function()
+			InputOn = true
+		end)
+		
+		Instance.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				StartPos = Instance.Position
+				DragStart = Input.Position
+				
+				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do RunService.Heartbeat:Wait()
+					if InputOn then
+						Update(Input)
+					end
+				end
+				InputOn = false
 			end
-		end
+		end)
 	end)
-
 	return Instance
 end
 
@@ -780,7 +748,7 @@ function bearlib:MakeWindow(Configs)
 	
 	ConnectSave(ControlSize2, function()
 		bearlib.Save.TabSize = MainScroll.Size.X.Offset
-		SaveJson("bear library OS.json", bearlib.Save)
+		SaveJson("Bear library OS.json", bearlib.Save)
 	end)
 	
 	local ButtonsFolder = Create("Folder", TopBar, {
@@ -862,7 +830,7 @@ function bearlib:MakeWindow(Configs)
 		end
 		if Configs.Stroke then
 			Stroke = Make("Stroke", Button)
-			SetProps(Stroke, Configs.Stroke)
+			SetProps(Stroke, Configs.Corner)
 		end
 		
 		SetProps(Button, Configs.Button)
@@ -942,6 +910,7 @@ function bearlib:MakeWindow(Configs)
 			Active = true,
 			BackgroundColor3 = Theme["Color Hub 2"],
 			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundColor3 = Theme["Color Stroke"],
 			Name = "Dialog"
 		}), "Stroke")
 		
@@ -1576,7 +1545,7 @@ function bearlib:MakeWindow(Configs)
 			function Dropdown:Add(...)
 				local NewOptions = {...}
 				if type(NewOptions[1]) == "table" then
-					table.foreach(NewOptions[1], function(_,Name)
+					table.foreach(Option, function(_,Name)
 						AddOption(Name)
 					end)
 				else
@@ -1587,7 +1556,7 @@ function bearlib:MakeWindow(Configs)
 			end
 			function Dropdown:Remove(Option)
 				for index, Value in pairs(GetOptions()) do
-					if (type(Option) == "number" and index == Option) or (type(Option) == "string" and Value.Name == Option) then
+					if type(Option) == "number" and index == Option or Value.Name == "Option" then
 						RemoveOption(index, Value.Value)
 					end
 				end
@@ -1675,8 +1644,7 @@ function bearlib:MakeWindow(Configs)
 			
 			local BaseMousePos = Create("Frame", SliderBar, {
 				Position = UDim2.new(0, 0, 0.5, 0),
-				Visible = false
-			})
+				Visible = false			})
 			
 			local function UpdateLabel(NewValue)
 				local Number = tonumber(NewValue * Increase)
@@ -1817,102 +1785,6 @@ function bearlib:MakeWindow(Configs)
 			function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
 			function TextBox:Destroy() Button:Destroy() end
 			return TextBox
-		end
-		
-		function Tab:AddDiscordInvite(Configs)
-			local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
-			local Desc = Configs.Desc or Configs.Description or ""
-			local Logo = Configs[2] or Configs.Logo or ""
-			local Invite = Configs[3] or Configs.Invite or ""
-			
-			local InviteHolder = Create("Frame", Container, {
-				Size = UDim2.new(1, 0, 0, 80),
-				Name = "Option",
-				BackgroundTransparency = 1
-			})
-			
-			local InviteLabel = Create("TextLabel", InviteHolder, {
-				Size = UDim2.new(1, 0, 0, 15),
-				Position = UDim2.new(0, 5),
-				TextColor3 = Color3.fromRGB(40, 150, 255),
-				Font = Enum.Font.GothamBold,
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextSize = 10,
-				Text = Invite
-			})
-			
-			local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
-				Size = UDim2.new(1, 0, 0, 65),
-				AnchorPoint = Vector2.new(0, 1),
-				Position = UDim2.new(0, 0, 1),
-				BackgroundColor3 = Theme["Color Hub 2"]
-			}), "Frame")Make("Corner", FrameHolder)
-			
-			local ImageLabel = Create("ImageLabel", FrameHolder, {
-				Size = UDim2.new(0, 30, 0, 30),
-				Position = UDim2.new(0, 7, 0, 7),
-				Image = Logo,
-				BackgroundTransparency = 1
-			})Make("Corner", ImageLabel, UDim.new(0, 4))Make("Stroke", ImageLabel)
-			
-			local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
-				Size = UDim2.new(1, -52, 0, 15),
-				Position = UDim2.new(0, 44, 0, 7),
-				Font = Enum.Font.GothamBold,
-				TextColor3 = Theme["Color Text"],
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextSize = 10,
-				Text = Title
-			}), "Text")
-			
-			local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
-				Size = UDim2.new(1, -52, 0, 0),
-				Position = UDim2.new(0, 44, 0, 22),
-				TextWrapped = "Y",
-				AutomaticSize = "Y",
-				Font = Enum.Font.Gotham,
-				TextColor3 = Theme["Color Dark Text"],
-				TextXAlignment = "Left",
-				BackgroundTransparency = 1,
-				TextSize = 8,
-				Text = Desc
-			}), "DarkText")
-			
-			local JoinButton = Create("TextButton", FrameHolder, {
-				Size = UDim2.new(1, -14, 0, 16),
-				AnchorPoint = Vector2.new(0.5, 1),
-				Position = UDim2.new(0.5, 0, 1, -7),
-				Text = "Copy Link",
-				Font = Enum.Font.GothamBold,
-				TextSize = 12,
-				TextColor3 = Color3.fromRGB(220, 220, 220),
-				BackgroundColor3 = Color3.fromRGB(50, 150, 50)
-			})Make("Corner", JoinButton, UDim.new(0, 5))
-			
-			local ClickDelay
-			JoinButton.Activated:Connect(function()
-				setclipboard(Invite)
-				if ClickDelay then return end
-				
-				ClickDelay = true
-				SetProps(JoinButton, {
-					Text = "Copied to Clipboard",
-					BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-					TextColor3 = Color3.fromRGB(150, 150, 150)
-				})task.wait(5)
-				SetProps(JoinButton, {
-					Text = "Copy Link",
-					BackgroundColor3 = Color3.fromRGB(50, 150, 50),
-					TextColor3 = Color3.fromRGB(220, 220, 220)
-				})ClickDelay = false
-			end)
-			
-			local DiscordInvite = {}
-			function DiscordInvite:Destroy() InviteHolder:Destroy() end
-			function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
-			return DiscordInvite
 		end
 		
 		-- ====================================================
