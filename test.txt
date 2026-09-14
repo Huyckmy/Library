@@ -288,6 +288,7 @@ local ControlSize2 = nil
 local TopBar = nil
 local MainScroll = nil
 local Containers = nil
+local DividerLine = nil
 
 local function GetStr(val)
 	if type(val) == "function" then
@@ -601,6 +602,17 @@ function bearlib:SetTheme(NewTheme)
 			Val.Instance[GetColor(Val.Instance)] = Theme["Color Dark Text"]
 		elseif Val.Type == "ScrollBar" then
 			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
+		elseif Val.Type == "Divider" then
+			Val.Instance.BackgroundColor3 = Theme["Color Theme"]
+			Val.Instance.BackgroundTransparency = 0.8
+			if Val.Instance:FindFirstChild("UIGradient") then
+				local gradient = Val.Instance.UIGradient
+				gradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+					ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+				})
+			end
 		end
 	end)
 end
@@ -767,6 +779,42 @@ function bearlib:MakeWindow(Configs)
 		Name = "Containers"
 	})
 	
+	-- ===== THÊM THANH DỌC PHÂN CÁCH =====
+	DividerLine = Create("Frame", MainFrame, {
+		Size = UDim2.new(0, 2, 1, -TopBar.Size.Y.Offset),
+		Position = UDim2.new(0, MainScroll.Size.X.Offset - 1, 1, 0),
+		AnchorPoint = Vector2.new(0, 1),
+		BackgroundColor3 = Theme["Color Theme"],
+		BackgroundTransparency = 0.8,
+		BorderSizePixel = 0,
+		Name = "DividerLine",
+		ZIndex = 10
+	})
+	
+	local dividerGradient = Instance.new("UIGradient")
+	dividerGradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+		ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+	})
+	dividerGradient.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.3, 0.7),
+		NumberSequenceKeypoint.new(0.5, 0.5),
+		NumberSequenceKeypoint.new(0.7, 0.7),
+		NumberSequenceKeypoint.new(1, 1)
+	})
+	dividerGradient.Rotation = 90
+	dividerGradient.Name = "UIGradient"
+	dividerGradient.Parent = DividerLine
+	
+	local dividerCorner = Instance.new("UICorner")
+	dividerCorner.CornerRadius = UDim.new(0, 1)
+	dividerCorner.Parent = DividerLine
+	
+	InsertTheme(DividerLine, "Divider")
+	-- ===== KẾT THÚC THÊM THANH DỌC =====
+	
 	ControlSize1 = MakeDragSmooth(Create("ImageButton", MainFrame, {
 		Size = UDim2.new(0, 35, 0, 35),
 		Position = MainFrame.Size,
@@ -804,6 +852,11 @@ function bearlib:MakeWindow(Configs)
 			
 			MainScroll.Size = UDim2.new(0, newTabX, 1, -TopBar.Size.Y.Offset)
 			Containers.Size = UDim2.new(1, -newTabX, 1, -TopBar.Size.Y.Offset)
+			
+			-- CẬP NHẬT VỊ TRÍ DIVIDER
+			if DividerLine then
+				DividerLine.Position = UDim2.new(0, newTabX - 1, 1, 0)
+			end
 		else
 			bearlib.Save.TabSize = MainScroll.Size.X.Offset
 			SaveJson("bear library OS.json", bearlib.Save)
