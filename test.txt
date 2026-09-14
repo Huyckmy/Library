@@ -10,77 +10,29 @@ local PlayerMouse = Player:GetMouse()
 
 local bearlib = {
 	Themes = {
-		Darker = {
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(25, 25, 25)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(25, 25, 25))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-			["Color Stroke"] = Color3.fromRGB(40, 40, 40),
-			["Color Theme"] = Color3.fromRGB(88, 101, 242),
-			["Color Text"] = Color3.fromRGB(243, 243, 243),
-			["Color Dark Text"] = Color3.fromRGB(180, 180, 180)
-		},
 		Dark = {
 			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(47.5, 47.5, 47.5)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(40, 40, 40))
+				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 15, 30)),
+				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(35, 25, 50)),
+				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 15, 30))
 			}),
-			["Color Hub 2"] = Color3.fromRGB(45, 45, 45),
-			["Color Stroke"] = Color3.fromRGB(65, 65, 65),
-			["Color Theme"] = Color3.fromRGB(65, 150, 255),
-			["Color Text"] = Color3.fromRGB(245, 245, 245),
-			["Color Dark Text"] = Color3.fromRGB(190, 190, 190)
-		},
-		Purple = {
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(27.5, 25, 30)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(27.5, 25, 30))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-			["Color Stroke"] = Color3.fromRGB(40, 40, 40),
+			["Color Hub 2"] = Color3.fromRGB(28, 20, 40),
+			["Color Stroke"] = Color3.fromRGB(60, 40, 90),
 			["Color Theme"] = Color3.fromRGB(150, 0, 255),
-			["Color Text"] = Color3.fromRGB(240, 240, 240),
-			["Color Dark Text"] = Color3.fromRGB(180, 180, 180)
+			["Color Text"] = Color3.fromRGB(240, 230, 255),
+			["Color Dark Text"] = Color3.fromRGB(180, 160, 210)
 		},
-		Ocean = {
+		Light = {
 			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 30, 50)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(25, 45, 65)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 30, 50))
+				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 250, 235)),
+				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 240, 200)),
+				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 250, 235))
 			}),
-			["Color Hub 2"] = Color3.fromRGB(20, 40, 60),
-			["Color Stroke"] = Color3.fromRGB(40, 70, 100),
-			["Color Theme"] = Color3.fromRGB(0, 180, 255),
-			["Color Text"] = Color3.fromRGB(220, 240, 255),
-			["Color Dark Text"] = Color3.fromRGB(150, 200, 230)
-		},
-		Sunset = {
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(50, 20, 30)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 35, 25)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(50, 20, 30))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(55, 25, 30),
-			["Color Stroke"] = Color3.fromRGB(80, 50, 40),
-			["Color Theme"] = Color3.fromRGB(255, 120, 50),
-			["Color Text"] = Color3.fromRGB(255, 230, 210),
-			["Color Dark Text"] = Color3.fromRGB(200, 160, 140)
-		},
-		Forest = {
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 40, 20)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(30, 55, 30)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 40, 20))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(25, 45, 25),
-			["Color Stroke"] = Color3.fromRGB(45, 75, 45),
-			["Color Theme"] = Color3.fromRGB(50, 220, 50),
-			["Color Text"] = Color3.fromRGB(220, 255, 220),
-			["Color Dark Text"] = Color3.fromRGB(160, 210, 160)
+			["Color Hub 2"] = Color3.fromRGB(255, 245, 215),
+			["Color Stroke"] = Color3.fromRGB(230, 200, 120),
+			["Color Theme"] = Color3.fromRGB(255, 190, 0),
+			["Color Text"] = Color3.fromRGB(60, 45, 15),
+			["Color Dark Text"] = Color3.fromRGB(140, 110, 50)
 		}
 	},
 	Info = {
@@ -89,7 +41,7 @@ local bearlib = {
 	Save = {
 		UISize = {550, 380},
 		TabSize = 160,
-		Theme = "Darker"
+		Theme = "Dark"
 	},
 	Settings = {},
 	Connection = {},
@@ -755,26 +707,7 @@ function bearlib:MakeWindow(Configs)
 		Name = "Buttons"
 	})
 	
-	local CloseButton = Create("ImageButton", {
-		Size = UDim2.new(0, 14, 0, 14),
-		Position = UDim2.new(1, -10, 0.5),
-		AnchorPoint = Vector2.new(1, 0.5),
-		BackgroundTransparency = 1,
-		Image = "rbxassetid://10747384394",
-		AutoButtonColor = false,
-		Name = "Close"
-	})
-	
-	local MinimizeButton = SetProps(CloseButton:Clone(), {
-		Position = UDim2.new(1, -35, 0.5),
-		Image = "rbxassetid://10734896206",
-		Name = "Minimize"
-	})
-	
-	SetChildren(ButtonsFolder, {
-		CloseButton,
-		MinimizeButton
-	})
+	-- ĐÃ XÓA NÚT CLOSE VÀ MINIMIZE Ở ĐÂY
 	
 	local Minimized, SaveSize, WaitClick
 	local Window, FirstTab = {}, false
@@ -795,13 +728,11 @@ function bearlib:MakeWindow(Configs)
 		WaitClick = true
 		
 		if Minimized then
-			MinimizeButton.Image = "rbxassetid://110657725541747"
 			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
 			ControlSize1.Visible = true
 			ControlSize2.Visible = true
 			Minimized = false
 		else
-			MinimizeButton.Image = "rbxassetid://110657725541747"
 			SaveSize = MainFrame.Size
 			ControlSize1.Visible = false
 			ControlSize2.Visible = false
@@ -1812,7 +1743,7 @@ function bearlib:MakeWindow(Configs)
 				Font = Enum.Font.GothamBold,
 				TextScaled = true,
 				TextColor3 = Theme["Color Text"],
-				Text = bearlib.Save.Theme or "Darker"
+				Text = bearlib.Save.Theme or "Dark"
 			}), "Text")
 			
 			local Arrow = Create("ImageLabel", SelectedFrame, {
@@ -2009,8 +1940,6 @@ function bearlib:MakeWindow(Configs)
 		return Tab
 	end
 	
-	CloseButton.Activated:Connect(Window.CloseBtn)
-	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
 	return Window
 end
 
