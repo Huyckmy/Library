@@ -59,8 +59,7 @@ local UIScale = ViewportSize.Y / 450
 local Settings = bearlib.Settings
 local Flags = bearlib.Flags
 
-local SetProps, SetChildren, InsertTheme, Create do
-	InsertTheme = function(Instance, Type)
+local SetProps, SetChildren, InsertTheme, Create do	InsertTheme = function(Instance, Type)
 		table.insert(bearlib.Instances, {
 			Instance = Instance,
 			Type = Type
@@ -270,6 +269,26 @@ if ScreenFind and ScreenFind ~= ScreenGui then
 	ScreenFind:Destroy()
 end
 
+-- ===== BIẾN TOÀN CỤC CHO CÁC NÚT ĐIỀU KHIỂN =====
+local MainFrame = nil
+local MinimizeButton = nil
+local MaximizeButton = nil
+local CloseButton = nil
+local ToggleButton = nil
+local ToggleGui = nil
+local MinimizedBar = nil
+local Minimized = false
+local UIFullVisible = true
+local SaveSize = nil
+local IsMaximized = false
+local OriginalUISize = nil
+local WaitClick = false
+local ControlSize1 = nil
+local ControlSize2 = nil
+local TopBar = nil
+local MainScroll = nil
+local Containers = nil
+
 local function GetStr(val)
 	if type(val) == "function" then
 		return val()
@@ -333,6 +352,45 @@ local function MakeDrag(Instance)
 					end
 				end
 				InputOn = false
+			end
+		end)
+	end)
+	return Instance
+end
+
+-- ===== HÀM KÉO MƯỢT CHO CÁC NÚT CONTROL =====
+local function MakeDragSmooth(Instance, onDrag)
+	task.spawn(function()
+		SetProps(Instance, {
+			Active = true,
+			AutoButtonColor = false
+		})
+		
+		local DragStart, StartPos, InputOn
+		
+		Instance.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				InputOn = true
+				StartPos = Instance.Position
+				DragStart = Input.Position
+			end
+		end)
+		
+		Instance.InputEnded:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				InputOn = false
+				if onDrag then
+					onDrag(true)
+				end
+			end
+		end)
+		
+		UserInputService.InputChanged:Connect(function(Input)
+			if InputOn and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+				local delta = Input.Position - DragStart
+				if onDrag then
+					onDrag(false, delta, StartPos)
+				end
 			end
 		end)
 	end)
@@ -575,7 +633,9 @@ function bearlib:MakeWindow(Configs)
 	end;LoadFile()
 	
 	local UISizeX, UISizeY = unpack(bearlib.Save.UISize)
-	local MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
+	OriginalUISize = {UISizeX, UISizeY}
+	
+	MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
 		Size = UDim2.fromOffset(UISizeX, UISizeY),
 		Position = UDim2.new(0.5, -UISizeX/2, 0.5, -UISizeY/2),
 		BackgroundTransparency = 0.03,
@@ -583,7 +643,8 @@ function bearlib:MakeWindow(Configs)
 	}), "Main")
 	Make("Gradient", MainFrame, {
 		Rotation = 45
-	})MakeDrag(MainFrame)
+	})
+	MakeDrag(MainFrame)
 	
 	local MainCorner = Make("Corner", MainFrame)
 	
@@ -595,7 +656,7 @@ function bearlib:MakeWindow(Configs)
 		Name = "Dropdown"
 	})
 	
-	local TopBar = Create("Frame", Components, {
+	TopBar = Create("Frame", Components, {
 		Size = UDim2.new(1, 0, 0, 28),
 		BackgroundTransparency = 1,
 		Name = "Top Bar"
@@ -629,7 +690,51 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
-	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
+	-- ===== THÊM 3 NÚT TRÊN THANH TIÊU ĐỀ =====
+	local ButtonsFolder = Create("Folder", TopBar, {
+		Name = "Buttons"
+	})
+	
+	CloseButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -10, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10747384394",
+		AutoButtonColor = false,
+		Name = "Close"
+	})
+	
+	MaximizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -35, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734886735",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Maximize"
+	})
+	
+	MinimizeButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -60, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10734896206",
+		ImageColor3 = Theme["Color Text"],
+		AutoButtonColor = false,
+		Name = "Minimize"
+	})
+	
+	SetChildren(ButtonsFolder, {
+		CloseButton,
+		MaximizeButton,
+		MinimizeButton
+	})
+	-- ===== KẾT THÚC THÊM 3 NÚT =====
+	
+	MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
 		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
 		ScrollBarImageColor3 = Theme["Color Theme"],
 		Position = UDim2.new(0, 0, 1, 0),
@@ -653,7 +758,7 @@ function bearlib:MakeWindow(Configs)
 		})
 	}), "ScrollBar")
 	
-	local Containers = Create("Frame", Components, {
+	Containers = Create("Frame", Components, {
 		Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset),
 		AnchorPoint = Vector2.new(1, 1),
 		Position = UDim2.new(1, 0, 1, 0),
@@ -662,109 +767,190 @@ function bearlib:MakeWindow(Configs)
 		Name = "Containers"
 	})
 	
-	local ControlSize1, ControlSize2 = MakeDrag(Create("ImageButton", MainFrame, {
+	ControlSize1 = MakeDragSmooth(Create("ImageButton", MainFrame, {
 		Size = UDim2.new(0, 35, 0, 35),
 		Position = MainFrame.Size,
 		Active = true,
 		AnchorPoint = Vector2.new(0.8, 0.8),
 		BackgroundTransparency = 1,
 		Name = "Control Hub Size"
-	})), MakeDrag(Create("ImageButton", MainFrame, {
+	}), function(finished, delta, startPos)
+		if finished then
+			if MainFrame.Visible then
+				bearlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+				OriginalUISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+				SaveJson("bear library OS.json", bearlib.Save)
+			end
+		else
+			local Pos = startPos
+			local newX = math.clamp(Pos.X.Offset + (delta and delta.X or 0) / UIScale, 430, 1000)
+			local newY = math.clamp(Pos.Y.Offset + (delta and delta.Y or 0) / UIScale, 200, 500)
+			ControlSize1.Position = UDim2.fromOffset(newX, newY)
+			MainFrame.Size = ControlSize1.Position
+		end
+	end)
+	
+	ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
 		Size = UDim2.new(0, 20, 1, -30),
 		Position = UDim2.new(0, MainScroll.Size.X.Offset, 1, 0),
 		AnchorPoint = Vector2.new(0.5, 1),
 		Active = true,
 		BackgroundTransparency = 1,
 		Name = "Control Tab Size"
-	}))
-	
-	local function ControlSize()
-		local Pos1, Pos2 = ControlSize1.Position, ControlSize2.Position
-		ControlSize1.Position = UDim2.fromOffset(math.clamp(Pos1.X.Offset, 430, 1000), math.clamp(Pos1.Y.Offset, 200, 500))
-		ControlSize2.Position = UDim2.new(0, math.clamp(Pos2.X.Offset, 135, 250), 1, 0)
-		
-		MainScroll.Size = UDim2.new(0, ControlSize2.Position.X.Offset, 1, -TopBar.Size.Y.Offset)
-		Containers.Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset)
-		MainFrame.Size = ControlSize1.Position
-	end
-	
-	ControlSize1:GetPropertyChangedSignal("Position"):Connect(ControlSize)
-	ControlSize2:GetPropertyChangedSignal("Position"):Connect(ControlSize)
-	
-	ConnectSave(ControlSize1, function()
-		if not Minimized then
-			bearlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+	}), function(finished, delta, startPos)
+		if not finished then
+			local newTabX = math.clamp(startPos.X.Offset + (delta and delta.X or 0) / UIScale, 135, 250)
+			ControlSize2.Position = UDim2.new(0, newTabX, 1, 0)
+			
+			MainScroll.Size = UDim2.new(0, newTabX, 1, -TopBar.Size.Y.Offset)
+			Containers.Size = UDim2.new(1, -newTabX, 1, -TopBar.Size.Y.Offset)
+		else
+			bearlib.Save.TabSize = MainScroll.Size.X.Offset
 			SaveJson("bear library OS.json", bearlib.Save)
 		end
 	end)
 	
-	ConnectSave(ControlSize2, function()
-		bearlib.Save.TabSize = MainScroll.Size.X.Offset
-		SaveJson("Bear library OS.json", bearlib.Save)
-	end)
-	
-	local ButtonsFolder = Create("Folder", TopBar, {
-		Name = "Buttons"
-	})
-	
-	-- ====================================================
-	-- 3 NÚT TRÊN THANH TIÊU ĐỀ (CLOSE, MINIMIZE, MAXIMIZE)
-	-- ====================================================
-	local CloseButton = Create("ImageButton", {
-		Size = UDim2.new(0, 14, 0, 14),
-		Position = UDim2.new(1, -10, 0.5),
-		AnchorPoint = Vector2.new(1, 0.5),
-		BackgroundTransparency = 1,
-		Image = "rbxassetid://10747384394",
-		ImageColor3 = Theme["Color Text"],
-		AutoButtonColor = false,
-		Name = "Close"
-	})
-	
-	local MaximizeButton = Create("ImageButton", {
-		Size = UDim2.new(0, 14, 0, 14),
-		Position = UDim2.new(1, -35, 0.5),
-		AnchorPoint = Vector2.new(1, 0.5),
-		BackgroundTransparency = 1,
-		Image = "rbxassetid://10734886735",
-		ImageColor3 = Theme["Color Text"],
-		AutoButtonColor = false,
-		Name = "Maximize"
-	})
-	
-	local MinimizeButton = Create("ImageButton", {
-		Size = UDim2.new(0, 14, 0, 14),
-		Position = UDim2.new(1, -60, 0.5),
-		AnchorPoint = Vector2.new(1, 0.5),
-		BackgroundTransparency = 1,
-		Image = "rbxassetid://10734896206",
-		ImageColor3 = Theme["Color Text"],
-		AutoButtonColor = false,
-		Name = "Minimize"
-	})
-	
-	SetChildren(ButtonsFolder, {
-		CloseButton,
-		MaximizeButton,
-		MinimizeButton
-	})
-	
-	local Minimized, SaveSize, WaitClick = false, nil, false
-	local IsMaximized = false
-	local OriginalUISize = {UISizeX, UISizeY}
-	local ToggleGui, ToggleButton
 	local Window, FirstTab = {}, false
 	
-	-- ====================================================
-	-- XỬ LÝ MAXIMIZE
-	-- ====================================================
-	local function ToggleMaximize()
+	-- ===== HÀM TẠO MINIMIZED BAR =====
+	function Window:CreateMinimizedBar()
+		MinimizeButton.Image = "rbxassetid://10734924532"
+		
+		local BarWidth = 250
+		local BarHeight = 40
+		
+		MinimizedBar = Instance.new("ImageButton")
+		MinimizedBar.Name = "MinimizedBar"
+		MinimizedBar.Size = UDim2.new(0, BarWidth, 0, BarHeight)
+		MinimizedBar.Position = UDim2.fromOffset(350, -65)
+		MinimizedBar.BackgroundColor3 = Theme["Color Hub 2"]
+		MinimizedBar.BackgroundTransparency = 0
+		MinimizedBar.Parent = ScreenGui
+		MinimizedBar.ZIndex = 1000
+		MinimizedBar.AutoButtonColor = false
+		MinimizedBar.Visible = true
+		
+		local BarCorner = Instance.new("UICorner")
+		BarCorner.CornerRadius = UDim.new(1, 0)
+		BarCorner.Parent = MinimizedBar
+		
+		local BarGradient = Instance.new("UIGradient")
+		BarGradient.Color = Theme["Color Hub 1"]
+		BarGradient.Rotation = 45
+		BarGradient.Parent = MinimizedBar
+		InsertTheme(BarGradient, "Gradient")
+		
+		local BarStroke = Instance.new("UIStroke")
+		BarStroke.Color = Theme["Color Stroke"]
+		BarStroke.Thickness = 1.5
+		BarStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		BarStroke.Parent = MinimizedBar
+		InsertTheme(BarStroke, "Stroke")
+		
+		local BarIcon = Instance.new("ImageLabel")
+		BarIcon.Size = UDim2.new(0, 22, 0, 22)
+		BarIcon.Position = UDim2.new(0, 10, 0.5, 0)
+		BarIcon.AnchorPoint = Vector2.new(0, 0.5)
+		BarIcon.BackgroundTransparency = 1
+		BarIcon.Image = "rbxassetid://76571437829227"
+		BarIcon.ImageColor3 = Theme["Color Text"]
+		BarIcon.Parent = MinimizedBar
+		BarIcon.ZIndex = 1001
+		
+		local BarText = Instance.new("TextLabel")
+		BarText.Size = UDim2.new(1, -20, 1, 0)
+		BarText.Position = UDim2.new(0, 40, 0.5, 0)
+		BarText.AnchorPoint = Vector2.new(0, 0.5)
+		BarText.BackgroundTransparency = 1
+		BarText.Font = Enum.Font.GothamMedium
+		BarText.Text = WTitle
+		BarText.TextColor3 = Theme["Color Text"]
+		BarText.TextSize = 14
+		BarText.TextXAlignment = Enum.TextXAlignment.Left
+		BarText.TextTruncate = Enum.TextTruncate.AtEnd
+		BarText.Parent = MinimizedBar
+		BarText.ZIndex = 1001
+		InsertTheme(BarText, "Text")
+		
+		MakeDrag(MinimizedBar)
+		
+		MinimizedBar.MouseButton1Click:Connect(function()
+			Window:RestoreFromBar()
+		end)
+		
+		MainFrame.Visible = false
+		ControlSize1.Visible = false
+		ControlSize2.Visible = false
+		
+		Minimized = true
+		UIFullVisible = false
+	end
+	
+	-- ===== HÀM MINIMIZE =====
+	function Window:MinimizeBtn()
+		if WaitClick then return end
+		WaitClick = true
+		
+		if Minimized then
+			MinimizeButton.Image = "rbxassetid://10734896206"
+			
+			if MinimizedBar and MinimizedBar.Parent then
+				MinimizedBar.Visible = false
+			end
+			
+			MainFrame.Visible = true
+			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
+			CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+			ControlSize1.Visible = true
+			ControlSize2.Visible = true
+			
+			Minimized = false
+			UIFullVisible = true
+		else
+			SaveSize = MainFrame.Size
+			
+			if not MinimizedBar or not MinimizedBar.Parent then
+				Window:CreateMinimizedBar()
+			else				MinimizedBar.Visible = true
+				MainFrame.Visible = false
+				ControlSize1.Visible = false
+				ControlSize2.Visible = false
+				Minimized = true
+				UIFullVisible = false
+			end
+		end
+		
+		WaitClick = false
+	end
+	
+	-- ===== HÀM RESTORE TỪ MINIMIZED BAR =====
+	function Window:RestoreFromBar()
+		if not Minimized then return end
+		
+		MinimizeButton.Image = "rbxassetid://10734896206"
+		
+		if MinimizedBar and MinimizedBar.Parent then
+			MinimizedBar.Visible = false
+		end
+		
+		MainFrame.Visible = true
+		CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
+		CreateTween({MainFrame, "BackgroundTransparency", 0.03, 0.25})
+		ControlSize1.Visible = true
+		ControlSize2.Visible = true
+		
+		Minimized = false
+		UIFullVisible = true
+	end
+	
+	-- ===== HÀM MAXIMIZE =====
+	function Window:ToggleMaximize()
 		if not MainFrame then return end
 		
 		if IsMaximized then
 			local defaultX, defaultY = unpack(OriginalUISize or bearlib.Save.UISize)
 			MainFrame.Size = UDim2.fromOffset(defaultX, defaultY)
-			MainFrame.Position = UDim2.new(0.5, -defaultX / 2, 0.5, -defaultY / 2)
+			MainFrame.Position = UDim2.new(0.5, -defaultX/2, 0.5, -defaultY/2)
 			MaximizeButton.Image = "rbxassetid://10734886735"
 			IsMaximized = false
 			
@@ -785,83 +971,30 @@ function bearlib:MakeWindow(Configs)
 			newY = math.min(newY, ViewportSize.Y - 20)
 			
 			MainFrame.Size = UDim2.fromOffset(newX, newY)
-			MainFrame.Position = UDim2.new(0.5, -newX / 2, 0.5, -newY / 2)
+			MainFrame.Position = UDim2.new(0.5, -newX/2, 0.5, -newY/2)
 			MaximizeButton.Image = "rbxassetid://10734895698"
 			IsMaximized = true
 		end
 	end
 	
-	MaximizeButton.Activated:Connect(ToggleMaximize)
-	
+	-- ===== HÀM CLOSE =====
 	function Window:CloseBtn()
 		local Dialog = Window:Dialog({
-			Title = "",
-			Text = "Mày Tắt Script Của Bố Mày Có Việc Gì Không ?",
+			Title = "Window",
+			Text = "Đóng window ?",
 			Options = {
-				{"Tắt Ạ", function()
+				{"Đóng", function()
 					ScreenGui:Destroy()
 					if ToggleGui then
 						ToggleGui:Destroy()
 					end
+					if MinimizedBar and MinimizedBar.Parent then
+						MinimizedBar:Destroy()
+					end
 				end},
-				{"Không Tắt Ạ"}
+				{"Không"}
 			}
 		})
-	end
-	
-	function Window:MinimizeBtn()
-		if WaitClick then return end
-		WaitClick = true
-		
-		if Minimized then
-			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
-			ControlSize1.Visible = true
-			ControlSize2.Visible = true
-			Minimized = false
-		else
-			SaveSize = MainFrame.Size
-			ControlSize1.Visible = false
-			ControlSize2.Visible = false
-			CreateTween({MainFrame, "Size", UDim2.fromOffset(MainFrame.Size.X.Offset, 28), 0.25, true})
-			Minimized = true
-		end
-		
-		WaitClick = false
-	end
-	
-	function Window:Minimize()
-		MainFrame.Visible = not MainFrame.Visible
-		ControlSize1.Visible = MainFrame.Visible
-		ControlSize2.Visible = MainFrame.Visible
-	end
-	
-	function Window:AddMinimizeButton(Configs)
-		local Button = MakeDrag(Create("ImageButton", ScreenGui, {
-			Size = UDim2.fromOffset(35, 35),
-			Position = UDim2.fromScale(0.15, 0.15),
-			BackgroundTransparency = 1,
-			BackgroundColor3 = Theme["Color Hub 2"],
-			AutoButtonColor = false
-		}))
-		
-		local Stroke, Corner
-		if Configs.Corner then
-			Corner = Make("Corner", Button)
-			SetProps(Corner, Configs.Corner)
-		end
-		if Configs.Stroke then
-			Stroke = Make("Stroke", Button)
-			SetProps(Stroke, Configs.Corner)
-		end
-		
-		SetProps(Button, Configs.Button)
-		Button.Activated:Connect(Window.Minimize)
-		
-		return {
-			Stroke = Stroke,
-			Corner = Corner,
-			Button = Button
-		}
 	end
 	
 	function Window:Set(Val1, Val2)
@@ -875,9 +1008,6 @@ function bearlib:MakeWindow(Configs)
 	
 	function Window:Dialog(Configs)
 		if MainFrame:FindFirstChild("Dialog") then return end
-		if Minimized then
-			Window:MinimizeBtn()
-		end
 		
 		local DTitle = Configs[1] or Configs.Title or "Dialog"
 		local DText = Configs[2] or Configs.Text or "This is a Dialog"
@@ -977,7 +1107,6 @@ function bearlib:MakeWindow(Configs)
 		end)
 		return Dialog
 	end
-	
 	function Window:SelectTab(TabSelect)
 		if type(TabSelect) == "number" then
 			bearlib.Tabs[TabSelect].func:Enable()
@@ -1811,9 +1940,6 @@ function bearlib:MakeWindow(Configs)
 			return TextBox
 		end
 		
-		-- ====================================================
-		-- CHỨC NĂNG ĐỔI MÀU (THEME SELECTOR)
-		-- ====================================================
 		function Tab:AddThemeSelector(Configs)
 			local TName = Configs[1] or Configs.Name or Configs.Title or "Theme Selector"
 			local TDesc = Configs.Desc or Configs.Description or "Chọn theme cho UI"
@@ -1949,7 +2075,6 @@ function bearlib:MakeWindow(Configs)
 				CreateTween({DropFrame, "Position", NewPos, 0.1})
 			end
 			
-			-- Thêm các theme vào dropdown
 			local function AddThemeOption(ThemeName)
 				local Button = Make("Button", ScrollFrame, {
 					Name = "Option",
@@ -2033,22 +2158,18 @@ function bearlib:MakeWindow(Configs)
 		return Tab
 	end
 	
-	-- ====================================================
-	-- KẾT NỐI SỰ KIỆN CHO 3 NÚT
-	-- ====================================================
+	-- ===== KẾT NỐI CÁC NÚT VỚI HÀM XỬ LÝ =====
 	CloseButton.Activated:Connect(Window.CloseBtn)
 	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+	MaximizeButton.Activated:Connect(Window.ToggleMaximize)
 	
-	-- ====================================================
-	-- NÚT TOGGLE NỔI (FLOATING TOGGLE BUTTON)
-	-- ====================================================
+	-- ===== TẠO NÚT TOGGLE NỔI =====
 	task.spawn(function()
 		task.wait(0.5)
 		ToggleGui = Instance.new("ScreenGui")
 		ToggleGui.Name = "BearHub_Toggle_Circle"
 		ToggleGui.Parent = CoreGui
-		ToggleGui.ResetOnSpawn = false
-
+		
 		ToggleButton = Instance.new("ImageButton")
 		ToggleButton.Name = "ToggleButton"
 		ToggleButton.Size = UDim2.new(0, 50, 0, 50)
@@ -2059,28 +2180,38 @@ function bearlib:MakeWindow(Configs)
 		ToggleButton.Active = true
 		ToggleButton.Draggable = true
 		ToggleButton.Parent = ToggleGui
-
+		
 		local UICorner = Instance.new("UICorner")
 		UICorner.CornerRadius = UDim.new(1, 0)
 		UICorner.Parent = ToggleButton
-
+		
 		local ToggleStroke = Instance.new("UIStroke")
 		ToggleStroke.Name = "ToggleStroke"
-		ToggleStroke.Color = Theme["Color Theme"]
-		ToggleStroke.Thickness = 1.5
+		ToggleStroke.Color = Theme["Color Stroke"]
+		ToggleStroke.Thickness = 1
 		ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		ToggleStroke.LineJoinMode = Enum.LineJoinMode.Round
 		ToggleStroke.Parent = ToggleButton
-
+		
 		ToggleButton.MouseButton1Click:Connect(function()
 			if MainFrame.Visible then
 				MainFrame.Visible = false
 				ControlSize1.Visible = false
 				ControlSize2.Visible = false
+				UIFullVisible = false
+			elseif Minimized then
+				if MinimizedBar and MinimizedBar.Parent then
+					if MinimizedBar.Visible then
+						MinimizedBar.Visible = false
+					else
+						MinimizedBar.Visible = true
+					end
+				end
 			else
 				MainFrame.Visible = true
 				ControlSize1.Visible = true
 				ControlSize2.Visible = true
+				UIFullVisible = true
 			end
 		end)
 	end)
