@@ -579,40 +579,53 @@ end
 
 function bearlib:SetTheme(NewTheme)
 	if not VerifyTheme(NewTheme) then return end
-	
+
 	bearlib.Save.Theme = NewTheme
 	SaveJson("bear library OS.json", bearlib.Save)
 	Theme = bearlib.Themes[NewTheme]
-	
-	Connection:FireConnection("ThemeChanged", NewTheme)
-	table.foreach(bearlib.Instances, function(_,Val)
-		if Val.Type == "Gradient" then
-			Val.Instance.Color = Theme["Color Hub 1"]
-		elseif Val.Type == "Frame" then
-			Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
-		elseif Val.Type == "Stroke" then
-			Val.Instance[GetColor(Val.Instance)] = Theme["Color Stroke"]
-		elseif Val.Type == "Theme" then
-			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
-		elseif Val.Type == "Text" then
-			Val.Instance[GetColor(Val.Instance)] = Theme["Color Text"]
-		elseif Val.Type == "DarkText" then
-			Val.Instance[GetColor(Val.Instance)] = Theme["Color Dark Text"]
-		elseif Val.Type == "ScrollBar" then
-			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
-		elseif Val.Type == "Divider" then
-			Val.Instance.BackgroundColor3 = Theme["Color Theme"]
-			Val.Instance.BackgroundTransparency = 0.8
-			if Val.Instance:FindFirstChild("UIGradient") then
-				local gradient = Val.Instance.UIGradient
-				gradient.Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-					ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
-					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-				})
+
+	Connection:FireConnection("ThemeChanging", NewTheme)
+
+	for _, Val in ipairs(bearlib.Instances) do
+		local Instance = Val.Instance
+		if Instance and Instance.Parent then
+			if Val.Type == "Gradient" then
+				Instance.Color = Theme["Color Hub 1"]
+			elseif Val.Type == "Frame" or Val.Type == "Main" then
+				Instance.BackgroundColor3 = Theme["Color Hub 2"]
+			elseif Val.Type == "Stroke" then
+				if Instance:IsA("UIStroke") then
+					Instance.Color = Theme["Color Stroke"]
+				end
+			elseif Val.Type == "Theme" then
+				local Property = GetColor(Instance)
+				if Property ~= "" then Instance[Property] = Theme["Color Theme"] end
+			elseif Val.Type == "Text" then
+				local Property = GetColor(Instance)
+				if Property ~= "" then Instance[Property] = Theme["Color Text"] end
+			elseif Val.Type == "DarkText" then
+				local Property = GetColor(Instance)
+				if Property ~= "" then Instance[Property] = Theme["Color Dark Text"] end
+			elseif Val.Type == "ScrollBar" then
+				if Instance:IsA("ScrollingFrame") then
+					Instance.ScrollBarImageColor3 = Theme["Color Theme"]
+				end
+			elseif Val.Type == "Divider" then
+				Instance.BackgroundColor3 = Theme["Color Theme"]
+				Instance.BackgroundTransparency = 0.8
+				local gradient = Instance:FindFirstChildOfClass("UIGradient")
+				if gradient then
+					gradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+						ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+					})
+				end
 			end
 		end
-	end)
+	end
+
+	Connection:FireConnection("ThemeChanged", NewTheme)
 end
 
 function bearlib:SetScale(NewScale)
@@ -872,6 +885,7 @@ function bearlib:MakeWindow(Configs)
 		MinimizedBar.BackgroundColor3 = Theme["Color Hub 2"]
 		MinimizedBar.BackgroundTransparency = 0
 		MinimizedBar.Parent = ScreenGui
+		InsertTheme(MinimizedBar, "Frame")
 		MinimizedBar.ZIndex = 1000
 		MinimizedBar.AutoButtonColor = false
 		MinimizedBar.Visible = true
@@ -1489,15 +1503,18 @@ function bearlib:MakeWindow(Configs)
 				Text = ""
 			})
 			
-			local DropFrame = Create("Frame", NoClickFrame, {
+			local DropFrame = InsertTheme(Create("Frame", NoClickFrame, {
 				Size = UDim2.new(SelectedFrame.Size.X, 0, 0),
 				BackgroundTransparency = 0.1,
-				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BackgroundColor3 = Theme["Color Hub 2"],
 				AnchorPoint = Vector2.new(0, 1),
 				Name = "DropdownFrame",
 				ClipsDescendants = true,
 				Active = true
-			})Make("Corner", DropFrame)Make("Stroke", DropFrame)Make("Gradient", DropFrame, {Rotation = 60})
+			}), "Frame")
+			Make("Corner", DropFrame)
+			Make("Stroke", DropFrame)
+			Make("Gradient", DropFrame, {Rotation = 60})
 			
 			local ScrollFrame = InsertTheme(Create("ScrollingFrame", DropFrame, {
 				ScrollBarImageColor3 = Theme["Color Theme"],
@@ -2031,10 +2048,10 @@ function bearlib:MakeWindow(Configs)
 				Text = ""
 			})
 			
-			local DropFrame = Create("Frame", NoClickFrame, {
+			local DropFrame = InsertTheme(Create("Frame", NoClickFrame, {
 				Size = UDim2.new(SelectedFrame.Size.X, 0, 0),
 				BackgroundTransparency = 0.1,
-				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BackgroundColor3 = Theme["Color Hub 2"],
 				AnchorPoint = Vector2.new(0, 1),
 				Name = "DropdownFrame",
 				ClipsDescendants = true,
@@ -2226,14 +2243,15 @@ function bearlib:MakeWindow(Configs)
 		})
 		TabLayoutOrder = TabLayoutOrder + 1
 
-		local GroupButton = Create("TextButton", GroupContainer, {
+		local GroupButton = InsertTheme(Create("TextButton", GroupContainer, {
 			Size = UDim2.new(1, 0, 0, 24),
-			BackgroundTransparency = 1,
+			BackgroundTransparency = 0,
+			BackgroundColor3 = Theme["Color Hub 2"],
 			Text = "",
 			AutoButtonColor = false,
 			LayoutOrder = 1,
 			Name = "GroupButton"
-		})
+		}), "Frame")
 		Make("Corner", GroupButton)
 
 		local Arrow = InsertTheme(Create("TextLabel", GroupButton, {
