@@ -596,6 +596,8 @@ function bearlib:SetTheme(NewTheme)
 			elseif Val.Type == "Stroke" then
 				if Instance:IsA("UIStroke") then
 					Instance.Color = Theme["Color Stroke"]
+				elseif Instance:IsA("Frame") then
+					Instance.BackgroundColor3 = Theme["Color Stroke"]
 				end
 			elseif Val.Type == "Theme" then
 				local Property = GetColor(Instance)
