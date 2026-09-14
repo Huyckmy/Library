@@ -50,6 +50,7 @@ local bearlib = {
 	Options = {},
 	Flags = {},
 	Tabs = {},
+	TabGroups = {},
 	Icons = {}
 }
 
@@ -269,7 +270,6 @@ if ScreenFind and ScreenFind ~= ScreenGui then
 	ScreenFind:Destroy()
 end
 
--- ===== BIẾN TOÀN CỤC CHO CÁC NÚT ĐIỀU KHIỂN =====
 local MainFrame = nil
 local MinimizeButton = nil
 local MaximizeButton = nil
@@ -359,7 +359,6 @@ local function MakeDrag(Instance)
 	return Instance
 end
 
--- ===== HÀM KÉO MƯỢT CHO CÁC NÚT CONTROL =====
 local function MakeDragSmooth(Instance, onDrag)
 	task.spawn(function()
 		SetProps(Instance, {
@@ -566,7 +565,6 @@ local function GetColor(Instance)
 	return ""
 end
 
--- Lấy danh sách theme
 local function GetThemeList()
 	local themes = {}
 	for themeName, _ in pairs(bearlib.Themes) do
@@ -702,7 +700,6 @@ function bearlib:MakeWindow(Configs)
 		}), "DarkText")
 	}), "Text")
 	
-	-- ===== THÊM 3 NÚT TRÊN THANH TIÊU ĐỀ =====
 	local ButtonsFolder = Create("Folder", TopBar, {
 		Name = "Buttons"
 	})
@@ -744,7 +741,6 @@ function bearlib:MakeWindow(Configs)
 		MaximizeButton,
 		MinimizeButton
 	})
-	-- ===== KẾT THÚC THÊM 3 NÚT =====
 	
 	MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
 		Size = UDim2.new(0, bearlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
@@ -766,7 +762,8 @@ function bearlib:MakeWindow(Configs)
 			PaddingTop = UDim.new(0, 10),
 			PaddingBottom = UDim.new(0, 10)
 		}), Create("UIListLayout", {
-			Padding = UDim.new(0, 5)
+			Padding = UDim.new(0, 5),
+			SortOrder = Enum.SortOrder.LayoutOrder
 		})
 	}), "ScrollBar")
 	
@@ -779,7 +776,6 @@ function bearlib:MakeWindow(Configs)
 		Name = "Containers"
 	})
 	
-	-- ===== THÊM THANH DỌC PHÂN CÁCH =====
 	DividerLine = Create("Frame", MainFrame, {
 		Size = UDim2.new(0, 2, 1, -TopBar.Size.Y.Offset),
 		Position = UDim2.new(0, MainScroll.Size.X.Offset - 1, 1, 0),
@@ -813,7 +809,6 @@ function bearlib:MakeWindow(Configs)
 	dividerCorner.Parent = DividerLine
 	
 	InsertTheme(DividerLine, "Divider")
-	-- ===== KẾT THÚC THÊM THANH DỌC =====
 	
 	ControlSize1 = MakeDragSmooth(Create("ImageButton", MainFrame, {
 		Size = UDim2.new(0, 35, 0, 35),
@@ -853,7 +848,6 @@ function bearlib:MakeWindow(Configs)
 			MainScroll.Size = UDim2.new(0, newTabX, 1, -TopBar.Size.Y.Offset)
 			Containers.Size = UDim2.new(1, -newTabX, 1, -TopBar.Size.Y.Offset)
 			
-			-- CẬP NHẬT VỊ TRÍ DIVIDER
 			if DividerLine then
 				DividerLine.Position = UDim2.new(0, newTabX - 1, 1, 0)
 			end
@@ -865,7 +859,6 @@ function bearlib:MakeWindow(Configs)
 	
 	local Window, FirstTab = {}, false
 	
-	-- ===== HÀM TẠO MINIMIZED BAR =====
 	function Window:CreateMinimizedBar()
 		MinimizeButton.Image = "rbxassetid://10734924532"
 		
@@ -939,7 +932,6 @@ function bearlib:MakeWindow(Configs)
 		UIFullVisible = false
 	end
 	
-	-- ===== HÀM MINIMIZE =====
 	function Window:MinimizeBtn()
 		if WaitClick then return end
 		WaitClick = true
@@ -976,7 +968,6 @@ function bearlib:MakeWindow(Configs)
 		WaitClick = false
 	end
 	
-	-- ===== HÀM RESTORE TỪ MINIMIZED BAR =====
 	function Window:RestoreFromBar()
 		if not Minimized then return end
 		
@@ -996,7 +987,6 @@ function bearlib:MakeWindow(Configs)
 		UIFullVisible = true
 	end
 	
-	-- ===== HÀM MAXIMIZE =====
 	function Window:ToggleMaximize()
 		if not MainFrame then return end
 		
@@ -1030,7 +1020,6 @@ function bearlib:MakeWindow(Configs)
 		end
 	end
 	
-	-- ===== HÀM CLOSE =====
 	function Window:CloseBtn()
 		local Dialog = Window:Dialog({
 			Title = "Window",
@@ -1173,12 +1162,18 @@ function bearlib:MakeWindow(Configs)
 	end
 	
 	local ContainerList = {}
+	local TabLayoutOrder = 0
 	function Window:MakeTab(paste, Configs)
 		if type(paste) == "table" then Configs = paste end
 		local TName = Configs[1] or Configs.Title or "Tab!"
+		local GroupParent = Configs.__GroupParent
+		if not GroupParent then
+			TabLayoutOrder = TabLayoutOrder + 1
+		end
 		
-		local TabSelect = Make("Button", MainScroll, {
-			Size = UDim2.new(1, 0, 0, 24)
+		local TabSelect = Make("Button", GroupParent or MainScroll, {
+			Size = UDim2.new(1, 0, 0, 24),
+			LayoutOrder = GroupParent and (#GroupParent:GetChildren() + 1) or TabLayoutOrder
 		})Make("Corner", TabSelect)
 		
 		local LabelTitle = InsertTheme(Create("TextLabel", TabSelect, {
@@ -1253,8 +1248,10 @@ function bearlib:MakeWindow(Configs)
 		
 		FirstTab = true
 		local Tab = {}
-		table.insert(bearlib.Tabs, {TabInfo = {Name = TName}, func = Tab, Cont = Container})
+		table.insert(bearlib.Tabs, {TabInfo = {Name = TName}, func = Tab, Cont = Container, Button = TabSelect, Group = GroupParent})
 		Tab.Cont = Container
+		Tab.Button = TabSelect
+		Tab.Group = GroupParent
 		
 		function Tab:Disable()
 			Container.Parent = nil
@@ -2211,12 +2208,167 @@ function bearlib:MakeWindow(Configs)
 		return Tab
 	end
 	
-	-- ===== KẾT NỐI CÁC NÚT VỚI HÀM XỬ LÝ =====
+	function Window:MakeTabGroup(Configs)
+		Configs = Configs or {}
+		local GName = Configs[1] or Configs.Title or Configs.Name or "Group"
+		local GIcon = Configs[2] or Configs.Icon or ""
+		local GroupContainer = Create("Frame", MainScroll, {
+			Size = UDim2.new(1, 0, 0, 24),
+			BackgroundTransparency = 1,
+			Name = "GroupContainer_" .. tostring(GName),
+			LayoutOrder = TabLayoutOrder + 1,
+			ClipsDescendants = true
+		}, {
+			Create("UIListLayout", {
+				Padding = UDim.new(0, 1),
+				SortOrder = Enum.SortOrder.LayoutOrder
+			})
+		})
+		TabLayoutOrder = TabLayoutOrder + 1
+
+		local GroupButton = Create("TextButton", GroupContainer, {
+			Size = UDim2.new(1, 0, 0, 24),
+			BackgroundTransparency = 1,
+			Text = "",
+			AutoButtonColor = false,
+			LayoutOrder = 1,
+			Name = "GroupButton"
+		})
+		Make("Corner", GroupButton)
+
+		local Arrow = InsertTheme(Create("TextLabel", GroupButton, {
+			Size = UDim2.new(0, 14, 0, 14),
+			Position = UDim2.new(1, -10, 0.5, 0),
+			AnchorPoint = Vector2.new(1, 0.5),
+			BackgroundTransparency = 1,
+			Text = "›",
+			Font = Enum.Font.GothamBold,
+			TextSize = 14,
+			TextColor3 = Theme["Color Text"],
+			TextTransparency = 0.3,
+			Name = "Arrow"
+		}), "Text")
+
+		local Title = InsertTheme(Create("TextLabel", GroupButton, {
+			Size = UDim2.new(1, GIcon ~= "" and -45 or -25, 1),
+			Position = UDim2.new(0, GIcon ~= "" and 28 or 10, 0, 0),
+			BackgroundTransparency = 1,
+			Font = Enum.Font.GothamMedium,
+			Text = GName,
+			TextSize = 10,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextColor3 = Theme["Color Text"],
+			TextTransparency = 0.3,
+			TextTruncate = Enum.TextTruncate.AtEnd,
+			Name = "GroupTitle"
+		}), "Text")
+
+		local Icon
+		if type(GIcon) == "string" and GIcon ~= "" then
+			if not GIcon:find("rbxassetid://") then
+				GIcon = "rbxassetid://" .. GIcon
+			end
+			Icon = InsertTheme(Create("ImageLabel", GroupButton, {
+				Size = UDim2.new(0, 14, 0, 14),
+				Position = UDim2.new(0, 8, 0.5, 0),
+				AnchorPoint = Vector2.new(0, 0.5),
+				BackgroundTransparency = 1,
+				Image = GIcon,
+				ImageColor3 = Theme["Color Text"],
+				ImageTransparency = 0.3,
+				Name = "GroupIcon"
+			}), "Text")
+		end
+
+		local Expanded = false
+		local TabsInGroup = {}
+		local GroupData = {TabSelect = GroupButton, GroupContainer = GroupContainer, SubTabs = TabsInGroup, Arrow = Arrow, GroupTitle = Title, GroupIcon = Icon, isExpanded = false}
+		table.insert(bearlib.TabGroups, GroupData)
+
+		local function UpdateSize()
+			local count = #TabsInGroup
+			GroupContainer.Size = UDim2.new(1, 0, 0, Expanded and (24 + count * 22) or 24)
+		end
+
+		local function UpdateScroll()
+			local layout = MainScroll:FindFirstChildOfClass("UIListLayout")
+			if layout then
+				MainScroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+			end
+		end
+
+		local function ToggleExpand()
+			Expanded = not Expanded
+			GroupData.isExpanded = Expanded
+			for _, data in ipairs(TabsInGroup) do
+				data.Button.Visible = Expanded
+			end
+			CreateTween({Arrow, "Rotation", Expanded and 90 or 0, 0.2})
+			CreateTween({Title, "TextTransparency", Expanded and 0 or 0.3, 0.2})
+			if Icon then CreateTween({Icon, "ImageTransparency", Expanded and 0 or 0.3, 0.2}) end
+			UpdateSize()
+			task.defer(UpdateScroll)
+		end
+
+		GroupButton.Activated:Connect(ToggleExpand)
+
+		local TabGroup = {}
+		function TabGroup:AddTab(TabConfigs)
+			TabConfigs = TabConfigs or {}
+			local Name = TabConfigs[1] or TabConfigs.Title or TabConfigs.Name or "SubTab!"
+			local OriginalParent = GroupContainer
+			TabConfigs.__GroupParent = OriginalParent
+			local Tab = Window:MakeTab(TabConfigs)
+			Tab:Disable()
+			Tab.Button.Size = UDim2.new(1, -25, 0, 21)
+			Tab.Button.Position = UDim2.new(0, 20, 0, 0)
+			Tab.Button.LayoutOrder = #TabsInGroup + 2
+			Tab.Button.Visible = Expanded
+			local label = Tab.Button:FindFirstChildOfClass("TextLabel")
+			if label then
+				label.TextSize = 9
+				label.TextTransparency = 0.5
+				label.Position = UDim2.fromOffset(10, 0)
+			end
+			local selected = Tab.Button:FindFirstChildOfClass("Frame")
+			if selected then
+				selected.Size = UDim2.new(0, 4, 0, 4)
+				selected.BackgroundTransparency = 1
+			end
+			table.insert(TabsInGroup, {Tab = Tab, Button = Tab.Button, Container = Tab.Cont})
+			UpdateSize()
+			UpdateScroll()
+			return Tab
+		end
+
+		function TabGroup:Expand()
+			if not Expanded then ToggleExpand() end
+		end
+		function TabGroup:Collapse()
+			if Expanded then ToggleExpand() end
+		end
+		function TabGroup:Visible(Bool)
+			Funcs:ToggleVisible(GroupContainer, Bool)
+			UpdateScroll()
+		end
+		function TabGroup:Destroy()
+			for _, data in ipairs(TabsInGroup) do
+				if data.Container then data.Container:Destroy() end
+				if data.Button then data.Button:Destroy() end
+			end
+			GroupContainer:Destroy()
+			for i, data in ipairs(bearlib.TabGroups) do
+				if data == GroupData then table.remove(bearlib.TabGroups, i) break end
+			end
+			UpdateScroll()
+		end
+		return TabGroup
+	end
+
 	CloseButton.Activated:Connect(Window.CloseBtn)
 	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
 	MaximizeButton.Activated:Connect(Window.ToggleMaximize)
 	
-	-- ===== TẠO NÚT TOGGLE NỔI =====
 	task.spawn(function()
 		task.wait(0.5)
 		ToggleGui = Instance.new("ScreenGui")
