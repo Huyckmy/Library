@@ -682,7 +682,7 @@ function bearlib:MakeWindow(Configs)
 	})
 	
 	TopBar = Create("Frame", Components, {
-		Size = UDim2.new(1, 0, 0, 28),
+		Size = UDim2.new(1, 0, 0, 38),
 		BackgroundTransparency = 1,
 		Name = "Top Bar"
 	})
@@ -698,11 +698,12 @@ function bearlib:MakeWindow(Configs)
 	})
 
 	local Title = InsertTheme(Create("TextLabel", TopBar, {
-		Position = UDim2.new(0, 34, 0.5, 0),
-		AnchorPoint = Vector2.new(0, 0.5),
+		Position = UDim2.new(0, 34, 0, 3),
+		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = "XY",
 		Text = WTitle,
 		TextXAlignment = "Left",
+		TextYAlignment = "Top",
 		TextSize = 12,
 		TextColor3 = Theme["Color Text"],
 		BackgroundTransparency = 1,
@@ -710,15 +711,14 @@ function bearlib:MakeWindow(Configs)
 		Name = "Title"
 	}, {
 		InsertTheme(Create("TextLabel", {
-			Size = UDim2.fromScale(0, 1),
+			Position = UDim2.new(0, 0, 0, 15),
+			Size = UDim2.fromOffset(0, 10),
 			AutomaticSize = "X",
-			AnchorPoint = Vector2.new(0, 1),
-			Position = UDim2.new(1, 5, 0.9),
 			Text = WMiniText,
 			TextColor3 = Theme["Color Dark Text"],
 			BackgroundTransparency = 1,
 			TextXAlignment = "Left",
-			TextYAlignment = "Bottom",
+			TextYAlignment = "Top",
 			TextSize = 8,
 			Font = Enum.Font.Gotham,
 			Name = "SubTitle"
