@@ -551,18 +551,18 @@ local function ButtonFrame(Instance, Title, Description, HolderSize)
 end
 
 local function GetColor(Instance)
-	if Instance:IsA("UIStroke") then
-		return "Color"
-	elseif Instance:IsA("ScrollingFrame") then
-		return "ScrollBarImageColor3"
-	elseif Instance:IsA("TextLabel") or Instance:IsA("TextButton") or Instance:IsA("TextBox") then
-		return "TextColor3"
+	if Instance:IsA("Frame") then
+		return "BackgroundColor3"
 	elseif Instance:IsA("ImageLabel") then
 		return "ImageColor3"
-	elseif Instance:IsA("Frame") then
-		return "BackgroundColor3"
+	elseif Instance:IsA("TextLabel") then
+		return "TextColor3"
+	elseif Instance:IsA("ScrollingFrame") then
+		return "ScrollBarImageColor3"
+	elseif Instance:IsA("UIStroke") then
+		return "Color"
 	end
-	return nil
+	return ""
 end
 
 local function GetThemeList()
@@ -578,56 +578,41 @@ function bearlib:GetIcon(index)
 end
 
 function bearlib:SetTheme(NewTheme)
-	if not VerifyTheme(NewTheme) then return false end
+	if not VerifyTheme(NewTheme) then return end
+	
 	bearlib.Save.Theme = NewTheme
 	SaveJson("bear library OS.json", bearlib.Save)
 	Theme = bearlib.Themes[NewTheme]
-	Connection:FireConnection("ThemeChanging", NewTheme)
-	for i = #bearlib.Instances, 1, -1 do
-		local Val = bearlib.Instances[i]
-		local Instance = Val.Instance
-		if not Instance or not Instance.Parent then
-			table.remove(bearlib.Instances, i)
-		else
-			if Val.Type == "Gradient" then
-				Instance.Color = Theme["Color Hub 1"]
-			elseif Val.Type == "Frame" or Val.Type == "Main" then
-				Instance.BackgroundColor3 = Theme["Color Hub 2"]
-			elseif Val.Type == "Stroke" then
-				Instance.Color = Theme["Color Stroke"]
-			elseif Val.Type == "Theme" or Val.Type == "ScrollBar" then
-				local prop = GetColor(Instance)
-				if prop then Instance[prop] = Theme["Color Theme"] end
-			elseif Val.Type == "Text" then
-				local prop = GetColor(Instance)
-				if prop then Instance[prop] = Theme["Color Text"] end
-			elseif Val.Type == "DarkText" then
-				local prop = GetColor(Instance)
-				if prop then Instance[prop] = Theme["Color Dark Text"] end
-			elseif Val.Type == "Divider" then
-				Instance.BackgroundColor3 = Theme["Color Theme"]
-				Instance.BackgroundTransparency = 0.8
-				local gradient = Instance:FindFirstChild("UIGradient")
-				if gradient then
-					gradient.Color = ColorSequence.new({
-						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-						ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
-						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-					})
-				end
+	
+	Connection:FireConnection("ThemeChanged", NewTheme)
+	table.foreach(bearlib.Instances, function(_,Val)
+		if Val.Type == "Gradient" then
+			Val.Instance.Color = Theme["Color Hub 1"]
+		elseif Val.Type == "Frame" then
+			Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
+		elseif Val.Type == "Stroke" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Stroke"]
+		elseif Val.Type == "Theme" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
+		elseif Val.Type == "Text" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Text"]
+		elseif Val.Type == "DarkText" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Dark Text"]
+		elseif Val.Type == "ScrollBar" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
+		elseif Val.Type == "Divider" then
+			Val.Instance.BackgroundColor3 = Theme["Color Theme"]
+			Val.Instance.BackgroundTransparency = 0.8
+			if Val.Instance:FindFirstChild("UIGradient") then
+				local gradient = Val.Instance.UIGradient
+				gradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+					ColorSequenceKeypoint.new(0.5, Theme["Color Theme"]),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+				})
 			end
 		end
-	end
-	for _, Instance in ipairs({CloseButton, MaximizeButton, MinimizeButton}) do
-		if Instance and Instance.Parent then
-			Instance.ImageColor3 = Theme["Color Text"]
-		end
-	end
-	if MinimizedBar and MinimizedBar.Parent then
-		MinimizedBar.BackgroundColor3 = Theme["Color Hub 2"]
-	end
-	Connection:FireConnection("ThemeChanged", NewTheme)
-	return true
+	end)
 end
 
 function bearlib:SetScale(NewScale)
