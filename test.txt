@@ -867,30 +867,38 @@ function bearlib:MakeWindow(Configs)
 		Name = "Resize Indicator"
 	})
 
-	local ResizeArcData = {
-		{0.18, 0.82, 18},
-		{0.28, 0.72, 28},
-		{0.38, 0.62, 38},
-		{0.48, 0.52, 48},
-		{0.58, 0.42, 58},
-		{0.68, 0.32, 68}
-	}
+	local ResizeHorizontal = Create("Frame", ResizeIndicator, {
+		Size = UDim2.new(0, 18, 0, 3),
+		Position = UDim2.new(1, -1, 1, -4),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BorderSizePixel = 0,
+		Name = "Resize Horizontal"
+	})
 
-	for i, data in ipairs(ResizeArcData) do
-		local ArcPart = Create("Frame", ResizeIndicator, {
-			Size = UDim2.new(0, 8, 0, 3),
-			Position = UDim2.new(data[1], 0, data[2], 0),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BorderSizePixel = 0,
-			Rotation = data[3],
-			Name = "Arc" .. i
-		})
+	Create("UICorner", ResizeHorizontal, {CornerRadius = UDim.new(1, 0)})
 
-		Create("UICorner", ArcPart, {
-			CornerRadius = UDim.new(1, 0)
-		})
-	end
+	local ResizeVertical = Create("Frame", ResizeIndicator, {
+		Size = UDim2.new(0, 3, 0, 18),
+		Position = UDim2.new(1, -4, 1, -1),
+		AnchorPoint = Vector2.new(0.5, 1),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BorderSizePixel = 0,
+		Name = "Resize Vertical"
+	})
+
+	Create("UICorner", ResizeVertical, {CornerRadius = UDim.new(1, 0)})
+
+	local ResizeJoint = Create("Frame", ResizeIndicator, {
+		Size = UDim2.new(0, 5, 0, 5),
+		Position = UDim2.new(1, -4, 1, -4),
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BorderSizePixel = 0,
+		Name = "Resize Joint"
+	})
+
+	Create("UICorner", ResizeJoint, {CornerRadius = UDim.new(1, 0)})
 
 
 	ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
