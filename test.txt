@@ -867,38 +867,17 @@ function bearlib:MakeWindow(Configs)
 		Name = "Resize Indicator"
 	})
 
-	local ResizeHorizontal = Create("Frame", ResizeIndicator, {
-		Size = UDim2.new(0, 18, 0, 3),
-		Position = UDim2.new(1, -1, 1, -4),
-		AnchorPoint = Vector2.new(1, 0.5),
+	local ResizeBar = Create("Frame", ResizeIndicator, {
+		Size = UDim2.new(0, 25, 0, 4),
+		Position = UDim2.new(1, -1, 1, -3),
+		AnchorPoint = Vector2.new(1, 1),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BorderSizePixel = 0,
-		Name = "Resize Horizontal"
+		Rotation = -45,
+		Name = "Resize Bar"
 	})
 
-	Create("UICorner", ResizeHorizontal, {CornerRadius = UDim.new(1, 0)})
-
-	local ResizeVertical = Create("Frame", ResizeIndicator, {
-		Size = UDim2.new(0, 3, 0, 18),
-		Position = UDim2.new(1, -4, 1, -1),
-		AnchorPoint = Vector2.new(0.5, 1),
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		BorderSizePixel = 0,
-		Name = "Resize Vertical"
-	})
-
-	Create("UICorner", ResizeVertical, {CornerRadius = UDim.new(1, 0)})
-
-	local ResizeJoint = Create("Frame", ResizeIndicator, {
-		Size = UDim2.new(0, 5, 0, 5),
-		Position = UDim2.new(1, -4, 1, -4),
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		BorderSizePixel = 0,
-		Name = "Resize Joint"
-	})
-
-	Create("UICorner", ResizeJoint, {CornerRadius = UDim.new(1, 0)})
+	Create("UICorner", ResizeBar, {CornerRadius = UDim.new(1, 0)})
 
 
 	ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
