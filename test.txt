@@ -857,7 +857,19 @@ function bearlib:MakeWindow(Configs)
 			MainFrame.Size = ControlSize1.Position
 		end
 	end)
-	
+
+	local ResizeIndicator = Create("Frame", ControlSize1, {
+		Size = UDim2.new(0, 14, 0, 3),
+		Position = UDim2.new(1, -2, 1, -2),
+		AnchorPoint = Vector2.new(1, 1),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BorderSizePixel = 0,
+		Rotation = -45,
+		Name = "Resize Indicator"
+	})
+
+	Create("UICorner", ResizeIndicator, {CornerRadius = UDim.new(1, 0)})
+
 	ControlSize2 = MakeDragSmooth(Create("ImageButton", MainFrame, {
 		Size = UDim2.new(0, 20, 1, -30),
 		Position = UDim2.new(0, MainScroll.Size.X.Offset, 1, 0),
