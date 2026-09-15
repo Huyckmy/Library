@@ -859,8 +859,8 @@ function bearlib:MakeWindow(Configs)
 	end)
 
 	local ResizeIndicator = Create("Frame", ControlSize1, {
-		Size = UDim2.new(0, 26, 0, 3),
-		Position = UDim2.new(1, -2, 1, -2),
+		Size = UDim2.new(0, 22, 0, 4),
+		Position = UDim2.new(1, -1, 1, -1),
 		AnchorPoint = Vector2.new(1, 1),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BorderSizePixel = 0,
@@ -869,7 +869,7 @@ function bearlib:MakeWindow(Configs)
 	})
 
 	Create("UICorner", ResizeIndicator, {
-		CornerRadius = UDim.new(1, 0)
+		CornerRadius = UDim.new(0, 2)
 	})
 
 
