@@ -1361,14 +1361,6 @@ function bearlib:MakeWindow(Configs)
 			TextTruncate = "AtEnd"
 		}), "Text")
 		
-		local Selected = InsertTheme(Create("Frame", TabSelect, {
-			Size = FirstTab and UDim2.new(0, 4, 0, 4) or UDim2.new(0, 4, 0, 13),
-			Position = UDim2.new(0, 1, 0.5),
-			AnchorPoint = Vector2.new(0, 0.5),
-			BackgroundColor3 = Theme["Color Theme"],
-			BackgroundTransparency = FirstTab and 1 or 0
-		}), "Theme")Make("Corner", Selected, UDim.new(0.5, 0))
-		
 		local Container = InsertTheme(Create("ScrollingFrame", {
 			Size = UDim2.new(1, 0, 1, 0),
 			Position = UDim2.new(0, 0, 1),
@@ -1415,8 +1407,6 @@ function bearlib:MakeWindow(Configs)
 			TabStroke.Transparency = 0
 			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
 			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
-			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 13), 0.35})
-			CreateTween({Selected, "BackgroundTransparency", 0, 0.35})
 		end
 		TabSelect.Activated:Connect(Tabs)
 		TabSelect.MouseEnter:Connect(function()
@@ -1442,8 +1432,6 @@ function bearlib:MakeWindow(Configs)
 			TabSelect.BackgroundTransparency = 1
 			TabStroke.Transparency = 1
 			CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
-			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 4), 0.35})
-			CreateTween({Selected, "BackgroundTransparency", 1, 0.35})
 		end
 		function Tab:Enable()
 			Tabs()
