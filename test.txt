@@ -251,7 +251,7 @@ local SetProps, SetChildren, InsertTheme, Create do	InsertTheme = function(Insta
 			if type(decode) == "table" then
 				if rawget(decode, "UISize") then bearlib.Save["UISize"] = decode["UISize"] end
 				if rawget(decode, "TabSize") then bearlib.Save["TabSize"] = decode["TabSize"] end
-				if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then bearlib.Save["Theme"] = decode["Theme"] end
+				if rawget(decode, "Theme") and bearlib.Themes[decode["Theme"]] then bearlib.Save["Theme"] = decode["Theme"] end
 			end
 		end
 	end
@@ -552,7 +552,6 @@ local function SaveJson(FileName, save)
 end
 
 local Theme = bearlib.Themes[bearlib.Save.Theme]
-local ThemeSelectors = {}
 
 local function AddEle(Name, Func)
 	bearlib.Elements[Name] = Func
@@ -764,12 +763,6 @@ function bearlib:SetTheme(NewTheme)
 					})
 				end
 			end
-		end
-	end
-
-	for _, Selector in ipairs(ThemeSelectors) do
-		if Selector and Selector.Parent then
-			Selector.Text = NewTheme
 		end
 	end
 
@@ -1654,8 +1647,6 @@ function bearlib:MakeWindow(Configs)
 				Text = "..."
 			}), "Text")
 			
-			table.insert(ThemeSelectors, ActiveLabel)
-
 			local Arrow = Create("ImageLabel", SelectedFrame, {
 				Size = UDim2.new(0, 15, 0, 15),
 				Position = UDim2.new(0, -5, 0.5),
@@ -2348,7 +2339,7 @@ function bearlib:MakeWindow(Configs)
 					ActiveLabel.Text = ThemeName
 					
 					for _, child in pairs(ScrollFrame:GetChildren()) do
-						if child:IsA("Frame") and child.Name == "Option" then
+						if child:IsA("GuiButton") and child.Name == "Option" then
 							local label = child:FindFirstChildOfClass("TextLabel")
 							local selected = child:FindFirstChildOfClass("Frame")
 							if label and selected then
