@@ -1338,8 +1338,15 @@ function bearlib:MakeWindow(Configs)
 		
 		local TabSelect = Make("Button", GroupParent or MainScroll, {
 			Size = UDim2.new(1, 0, 0, 24),
-			LayoutOrder = GroupParent and (#GroupParent:GetChildren() + 1) or TabLayoutOrder
+			LayoutOrder = GroupParent and (#GroupParent:GetChildren() + 1) or TabLayoutOrder,
+			BackgroundTransparency = 1
 		})Make("Corner", TabSelect)
+		local TabStroke = InsertTheme(Create("UIStroke", TabSelect, {
+			Color = Theme["Color Stroke"],
+			Thickness = 1,
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			Transparency = 1
+		}), "Stroke")
 		
 		local LabelTitle = InsertTheme(Create("TextLabel", TabSelect, {
 			Size = UDim2.new(1, -15, 1),
@@ -1404,12 +1411,24 @@ function bearlib:MakeWindow(Configs)
 					Tab.func:Disable()
 				end
 			end)
+			TabSelect.BackgroundTransparency = 0
+			TabStroke.Transparency = 0
 			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
 			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
 			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 13), 0.35})
 			CreateTween({Selected, "BackgroundTransparency", 0, 0.35})
 		end
 		TabSelect.Activated:Connect(Tabs)
+		TabSelect.MouseEnter:Connect(function()
+			if Container.Parent then
+				TabSelect.BackgroundTransparency = 0
+			else
+				TabSelect.BackgroundTransparency = 1
+			end
+		end)
+		TabSelect.MouseLeave:Connect(function()
+			TabSelect.BackgroundTransparency = Container.Parent and 0 or 1
+		end)
 		
 		FirstTab = true
 		local Tab = {}
@@ -1420,6 +1439,8 @@ function bearlib:MakeWindow(Configs)
 		
 		function Tab:Disable()
 			Container.Parent = nil
+			TabSelect.BackgroundTransparency = 1
+			TabStroke.Transparency = 1
 			CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
 			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 4), 0.35})
 			CreateTween({Selected, "BackgroundTransparency", 1, 0.35})
