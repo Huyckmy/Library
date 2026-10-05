@@ -552,6 +552,7 @@ local function SaveJson(FileName, save)
 end
 
 local Theme = bearlib.Themes[bearlib.Save.Theme]
+local ThemeSelectors = {}
 
 local function AddEle(Name, Func)
 	bearlib.Elements[Name] = Func
@@ -763,6 +764,12 @@ function bearlib:SetTheme(NewTheme)
 					})
 				end
 			end
+		end
+	end
+
+	for _, Selector in ipairs(ThemeSelectors) do
+		if Selector and Selector.Parent then
+			Selector.Text = NewTheme
 		end
 	end
 
@@ -1647,6 +1654,8 @@ function bearlib:MakeWindow(Configs)
 				Text = "..."
 			}), "Text")
 			
+			table.insert(ThemeSelectors, ActiveLabel)
+
 			local Arrow = Create("ImageLabel", SelectedFrame, {
 				Size = UDim2.new(0, 15, 0, 15),
 				Position = UDim2.new(0, -5, 0.5),
