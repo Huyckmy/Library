@@ -33,7 +33,146 @@ local bearlib = {
 			["Color Theme"] = Color3.fromRGB(255, 190, 0),
 			["Color Text"] = Color3.fromRGB(60, 45, 15),
 			["Color Dark Text"] = Color3.fromRGB(140, 110, 50)
-		}
+		},
+-- 🌸 Hồng Đào (Sakura)
+Sakura = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(45, 20, 35)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(70, 30, 55)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(45, 20, 35))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(55, 25, 42),
+	["Color Stroke"] = Color3.fromRGB(120, 55, 90),
+	["Color Theme"] = Color3.fromRGB(255, 120, 180),
+	["Color Text"] = Color3.fromRGB(255, 235, 245),
+	["Color Dark Text"] = Color3.fromRGB(210, 160, 190)
+},
+
+-- 🌊 Đại Dương (Ocean)
+Ocean = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 25, 45)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(15, 45, 80)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 25, 45))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(13, 33, 60),
+	["Color Stroke"] = Color3.fromRGB(40, 90, 140),
+	["Color Theme"] = Color3.fromRGB(0, 180, 255),
+	["Color Text"] = Color3.fromRGB(220, 240, 255),
+	["Color Dark Text"] = Color3.fromRGB(130, 170, 210)
+},
+
+-- 🌲 Rừng Xanh (Forest)
+Forest = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 30, 20)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(25, 50, 32)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 30, 20))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(20, 40, 26),
+	["Color Stroke"] = Color3.fromRGB(50, 90, 60),
+	["Color Theme"] = Color3.fromRGB(60, 220, 130),
+	["Color Text"] = Color3.fromRGB(225, 245, 230),
+	["Color Dark Text"] = Color3.fromRGB(150, 195, 165)
+},
+
+-- 🌅 Hoàng Hôn (Sunset)
+Sunset = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 15, 30)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(75, 30, 40)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(40, 15, 30))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(55, 22, 35),
+	["Color Stroke"] = Color3.fromRGB(120, 60, 60),
+	["Color Theme"] = Color3.fromRGB(255, 140, 80),
+	["Color Text"] = Color3.fromRGB(255, 240, 225),
+	["Color Dark Text"] = Color3.fromRGB(220, 165, 140)
+},
+
+-- ❄️ Băng Tuyết (Frost)
+Frost = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(220, 235, 245)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(200, 220, 235)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(220, 235, 245))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(215, 230, 242),
+	["Color Stroke"] = Color3.fromRGB(150, 180, 205),
+	["Color Theme"] = Color3.fromRGB(70, 150, 220),
+	["Color Text"] = Color3.fromRGB(25, 45, 65),
+	["Color Dark Text"] = Color3.fromRGB(90, 120, 145)
+},
+
+-- 🌌 Tím Vũ Trụ (Galaxy)
+Galaxy = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 10, 30)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(30, 18, 60)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 10, 30))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(22, 14, 42),
+	["Color Stroke"] = Color3.fromRGB(70, 45, 120),
+	["Color Theme"] = Color3.fromRGB(170, 100, 255),
+	["Color Text"] = Color3.fromRGB(235, 225, 255),
+	["Color Dark Text"] = Color3.fromRGB(165, 140, 210)
+},
+
+-- 🔥 Lửa Đỏ (Crimson)
+Crimson = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(35, 10, 15)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(60, 18, 22)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(35, 10, 15))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(48, 14, 20),
+	["Color Stroke"] = Color3.fromRGB(110, 35, 45),
+	["Color Theme"] = Color3.fromRGB(255, 60, 75),
+	["Color Text"] = Color3.fromRGB(255, 230, 230),
+	["Color Dark Text"] = Color3.fromRGB(210, 145, 150)
+},
+
+-- 🍃 Bạc Hà (Mint)
+Mint = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 35, 32)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(30, 55, 50)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 35, 32))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(25, 45, 42),
+	["Color Stroke"] = Color3.fromRGB(55, 100, 92),
+	["Color Theme"] = Color3.fromRGB(80, 230, 200),
+	["Color Text"] = Color3.fromRGB(225, 250, 245),
+	["Color Dark Text"] = Color3.fromRGB(150, 200, 190)
+},
+
+-- 🌇 Cam Đào (Peach)
+Peach = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 240, 230)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 225, 210)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 240, 230))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(255, 232, 215),
+	["Color Stroke"] = Color3.fromRGB(235, 175, 145),
+	["Color Theme"] = Color3.fromRGB(255, 130, 90),
+	["Color Text"] = Color3.fromRGB(75, 40, 25),
+	["Color Dark Text"] = Color3.fromRGB(160, 110, 85)
+},
+
+-- 🖤 Than Chì (Graphite)
+Graphite = {
+	["Color Hub 1"] = ColorSequence.new({
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(22, 22, 25)),
+		ColorSequenceKeypoint.new(0.50, Color3.fromRGB(38, 38, 42)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(22, 22, 25))
+	}),
+	["Color Hub 2"] = Color3.fromRGB(30, 30, 34),
+	["Color Stroke"] = Color3.fromRGB(70, 70, 78),
+	["Color Theme"] = Color3.fromRGB(200, 200, 210),
+	["Color Text"] = Color3.fromRGB(240, 240, 245),
+	["Color Dark Text"] = Color3.fromRGB(160, 160, 170)
+}
 	},
 	Info = {
 		Version = "1.1.0"
