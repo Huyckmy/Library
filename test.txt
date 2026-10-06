@@ -1339,15 +1339,41 @@ function bearlib:MakeWindow(Configs)
 		local TabSelect = Make("Button", GroupParent or MainScroll, {
 			Size = UDim2.new(1, 0, 0, 24),
 			LayoutOrder = GroupParent and (#GroupParent:GetChildren() + 1) or TabLayoutOrder,
-			BackgroundTransparency = 1
+			BackgroundTransparency = 1,
+			ClipsDescendants = false
 		})Make("Corner", TabSelect)
-		local TabStroke = InsertTheme(Create("UIStroke", TabSelect, {
+
+		local TabGlass = InsertTheme(Create("Frame", TabSelect, {
+			Size = UDim2.new(1, 0, 1, 0),
+			Position = UDim2.fromScale(0.5, 0.5),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			BackgroundColor3 = Theme["Color Hub 2"],
+			BackgroundTransparency = 0.45,
+			BorderSizePixel = 0,
+			Visible = false,
+			ZIndex = 0,
+			Name = "TabGlass"
+		}), "Frame")
+		Make("Corner", TabGlass, UDim.new(0, 8))
+
+		local TabGlassGradient = Make("Gradient", TabGlass, {
+			Rotation = 90,
+			Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0.2),
+				NumberSequenceKeypoint.new(0.5, 0.45),
+				NumberSequenceKeypoint.new(1, 0.2)
+			})
+		})
+		TabGlassGradient.ZIndex = 0
+
+		local TabStroke = InsertTheme(Create("UIStroke", TabGlass, {
 			Color = Theme["Color Stroke"],
 			Thickness = 1,
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-			Transparency = 1
+			Transparency = 0,
+			Name = "TabStroke"
 		}), "Stroke")
-		
+
 		local LabelTitle = InsertTheme(Create("TextLabel", TabSelect, {
 			Size = UDim2.new(1, -15, 1),
 			Position = UDim2.fromOffset(15, 0),
@@ -1357,8 +1383,9 @@ function bearlib:MakeWindow(Configs)
 			TextColor3 = Theme["Color Text"],
 			TextSize = 10,
 			TextXAlignment = Enum.TextXAlignment.Left,
-			TextTransparency = (FirstTab and 0.3) or 0,
-			TextTruncate = "AtEnd"
+			TextTransparency = 0.3,
+			TextTruncate = "AtEnd",
+			ZIndex = 1
 		}), "Text")
 		
 		local Container = InsertTheme(Create("ScrollingFrame", {
@@ -1387,7 +1414,27 @@ function bearlib:MakeWindow(Configs)
 		
 		table.insert(ContainerList, Container)
 		
-		if not FirstTab then Container.Parent = Containers end
+		if not FirstTab then
+			Container.Parent = Containers
+			SetTabVisual(true)
+		end
+		
+		local function IsInsideTab(TabData, Position)
+			local Button = TabData.Button
+			if not Button or not Button.Visible or not Button.Parent then return false end
+			local Pos = Button.AbsolutePosition
+			local Size = Button.AbsoluteSize
+			return Position.X >= Pos.X and Position.X <= Pos.X + Size.X and Position.Y >= Pos.Y and Position.Y <= Pos.Y + Size.Y
+		end
+		
+		local function SetTabVisual(Active)
+			TabGlass.Visible = Active
+			if Active then
+				CreateTween({LabelTitle, "TextTransparency", 0, 0.2})
+			else
+				CreateTween({LabelTitle, "TextTransparency", 0.3, 0.2})
+			end
+		end
 		
 		local function Tabs()
 			if Container.Parent then return end
@@ -1403,21 +1450,79 @@ function bearlib:MakeWindow(Configs)
 					Tab.func:Disable()
 				end
 			end)
-			TabSelect.BackgroundTransparency = 0
-			TabStroke.Transparency = 0
+			SetTabVisual(true)
 			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
-			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
 		end
-		TabSelect.Activated:Connect(Tabs)
+		
+		local Dragging = false
+		local DragStart = nil
+		local DragTarget = nil
+		local DragInput = nil
+		local DragMoved = false
+		
+		local function FindTabAt(Position)
+			for _,Data in ipairs(bearlib.Tabs) do
+				if IsInsideTab(Data, Position) then
+					return Data
+				end
+			end
+		end
+		
+		TabSelect.InputBegan:Connect(function(Input)
+			if Input.UserInputType ~= Enum.UserInputType.MouseButton1 and Input.UserInputType ~= Enum.UserInputType.Touch then return end
+			Dragging = true
+			DragStart = Input.Position
+			DragInput = Input
+			DragMoved = false
+			DragTarget = nil
+		end)
+		
+		UserInputService.InputChanged:Connect(function(Input)
+			if not Dragging then return end
+			if Input.UserInputType ~= Enum.UserInputType.MouseMovement and Input.UserInputType ~= Enum.UserInputType.Touch then return end
+			if DragInput and Input.UserInputType == Enum.UserInputType.MouseMovement and DragInput.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+			local Delta = Input.Position - DragStart
+			if math.abs(Delta.X) > 4 or math.abs(Delta.Y) > 4 then
+				DragMoved = true
+			end
+			if DragMoved then
+				local Target = FindTabAt(Input.Position)
+				if Target and Target.Button ~= TabSelect then
+					if DragTarget and DragTarget.Button ~= Target.Button then
+						DragTarget.func:Disable()
+					end
+					DragTarget = Target
+					Target.Button.BackgroundTransparency = 1
+					Target.Button:FindFirstChild("TabGlass").Visible = true
+					Target.Button:FindFirstChildOfClass("TextLabel").TextTransparency = 0
+				end
+			end
+		end)
+		
+		UserInputService.InputEnded:Connect(function(Input)
+			if not Dragging then return end
+			if Input.UserInputType ~= Enum.UserInputType.MouseButton1 and Input.UserInputType ~= Enum.UserInputType.Touch then return end
+			Dragging = false
+			if DragMoved and DragTarget then
+				DragTarget.func:Enable()
+			elseif not DragMoved then
+				Tabs()
+			end
+			DragTarget = nil
+			DragInput = nil
+			DragStart = nil
+			DragMoved = false
+		end)
+		
 		TabSelect.MouseEnter:Connect(function()
-			if Container.Parent then
-				TabSelect.BackgroundTransparency = 0
-			else
-				TabSelect.BackgroundTransparency = 1
+			if not Dragging and Container.Parent then
+				SetTabVisual(true)
 			end
 		end)
 		TabSelect.MouseLeave:Connect(function()
-			TabSelect.BackgroundTransparency = Container.Parent and 0 or 1
+			if not Dragging and not Container.Parent then
+				SetTabVisual(false)
+			end
 		end)
 		
 		FirstTab = true
@@ -1429,9 +1534,7 @@ function bearlib:MakeWindow(Configs)
 		
 		function Tab:Disable()
 			Container.Parent = nil
-			TabSelect.BackgroundTransparency = 1
-			TabStroke.Transparency = 1
-			CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
+			SetTabVisual(false)
 		end
 		function Tab:Enable()
 			Tabs()
