@@ -736,9 +736,13 @@ function bearlib:SetTheme(NewTheme)
 			if Val.Type == "TabGlassGradient" then
 				local baseColor = Theme["Color Hub 2"]
 				Instance.Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0, baseColor:Lerp(Theme["Color Glass Light"], 0.28)),
-					ColorSequenceKeypoint.new(0.5, baseColor),
-					ColorSequenceKeypoint.new(1, baseColor:Lerp(Theme["Color Glass Dark"], 0.28))
+					ColorSequenceKeypoint.new(0, Theme["Color Glass Light"]),
+					ColorSequenceKeypoint.new(0.08, baseColor:Lerp(Theme["Color Glass Light"], 0.34)),
+					ColorSequenceKeypoint.new(0.28, baseColor:Lerp(Theme["Color Glass Light"], 0.10)),
+					ColorSequenceKeypoint.new(0.52, baseColor),
+					ColorSequenceKeypoint.new(0.76, baseColor:Lerp(Theme["Color Glass Dark"], 0.12)),
+					ColorSequenceKeypoint.new(0.94, baseColor:Lerp(Theme["Color Glass Dark"], 0.40)),
+					ColorSequenceKeypoint.new(1, Theme["Color Glass Dark"])
 				})
 			elseif Val.Type == "Gradient" then
 				Instance.Color = Theme["Color Hub 1"]
@@ -1405,25 +1409,45 @@ function bearlib:MakeWindow(Configs)
 			if not frame then return end
 			local oldGradient = frame:FindFirstChild("GlassGradient")
 			if oldGradient then oldGradient:Destroy() end
+			local oldHighlight = frame:FindFirstChild("GlassHighlight")
+			if oldHighlight then oldHighlight:Destroy() end
 			local baseColor = Theme["Color Hub 2"]
 			local gradient = Instance.new("UIGradient")
 			gradient.Name = "GlassGradient"
 			gradient.Color = ColorSequence.new({
-				ColorSequenceKeypoint.new(0, baseColor:Lerp(Theme["Color Glass Light"], 0.28)),
-				ColorSequenceKeypoint.new(0.5, baseColor),
-				ColorSequenceKeypoint.new(1, baseColor:Lerp(Theme["Color Glass Dark"], 0.28))
+				ColorSequenceKeypoint.new(0, Theme["Color Glass Light"]),
+				ColorSequenceKeypoint.new(0.08, baseColor:Lerp(Theme["Color Glass Light"], 0.34)),
+				ColorSequenceKeypoint.new(0.28, baseColor:Lerp(Theme["Color Glass Light"], 0.10)),
+				ColorSequenceKeypoint.new(0.52, baseColor),
+				ColorSequenceKeypoint.new(0.76, baseColor:Lerp(Theme["Color Glass Dark"], 0.12)),
+				ColorSequenceKeypoint.new(0.94, baseColor:Lerp(Theme["Color Glass Dark"], 0.40)),
+				ColorSequenceKeypoint.new(1, Theme["Color Glass Dark"])
 			})
 			gradient.Rotation = 90
 			gradient.Parent = frame
 			InsertTheme(gradient, "TabGlassGradient")
-			frame.BackgroundColor3 = baseColor
-			frame.BackgroundTransparency = transparency or 0.45
+			local highlight = Instance.new("Frame")
+			highlight.Name = "GlassHighlight"
+			highlight.BackgroundColor3 = Theme["Color Glass Light"]
+			highlight.BackgroundTransparency = 0.58
+			highlight.BorderSizePixel = 0
+			highlight.Size = UDim2.new(1, -8, 0, 2)
+			highlight.Position = UDim2.fromOffset(4, 2)
+			highlight.ZIndex = frame.ZIndex + 1
+			highlight.Active = false
+			highlight.Selectable = false
+			Make("Corner", highlight, 2)
+			highlight.Parent = frame
+		frame.BackgroundColor3 = baseColor
+		frame.BackgroundTransparency = transparency or 0.18
 		end
 
 		local function RemoveGlassEffect(frame)
 			if not frame then return end
 			local gradient = frame:FindFirstChild("GlassGradient")
 			if gradient then gradient:Destroy() end
+			local highlight = frame:FindFirstChild("GlassHighlight")
+			if highlight then highlight:Destroy() end
 			frame.BackgroundTransparency = 1
 		end
 
@@ -1441,7 +1465,7 @@ function bearlib:MakeWindow(Configs)
 					Tab.func:Disable()
 				end
 			end)
-			ApplyGlassEffect(TabSelect, 0.45)
+			ApplyGlassEffect(TabSelect, 0.18)
 			TabStroke.Transparency = 0
 			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
 			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
