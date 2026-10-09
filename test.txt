@@ -2207,7 +2207,7 @@ function bearlib:MakeWindow(Configs)
 		
 		function Tab:AddThemeSelector(Configs)
 			local TName = Configs[1] or Configs.Name or Configs.Title or "Theme Selector"
-			local TDesc = Configs.Desc or Configs.Description or "Chọn theme cho UI"
+			local TDesc = Configs.Desc or Configs.Description or "Select Theme"
 			
 			local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -180))
 			
