@@ -21150,8 +21150,8 @@ Library.Options = Library.Flags
 
 local function registry()
     local env = type(getgenv) == "function" and getgenv() or _G
-    env.__Bearlib Ui = env.__Bearlib Ui or {}
-    return env.__Bearlib Ui
+    env.__BearlibUi = env.__BearlibUi or {}
+return env.__BearlibUi
 end
 
 -- def: see Components/Window
